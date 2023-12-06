@@ -32,14 +32,11 @@ class User(db.Model):
     Role = db.relationship('Role', backref='users')
 
 class StudentUser(db.Model):
-    UserID = db.Column(db.Integer, db.ForeignKey('user.UserID'), primary_key=True)
-    RoleID = db.Column(db.Integer, db.ForeignKey('role.RoleID'), nullable=False)
+    StudentID = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(255))
     RegNo = db.Column(db.String(50))
     FirstEnrollmentSemester = db.Column(db.String(50))
     UndergraduateCGPALevel = db.Column(db.String(50))
-    Role = db.relationship('Role', backref='student_users')
-    User = db.relationship('User', backref='student_user')
 
 class Project(db.Model):
     ProjectID = db.Column(db.Integer, primary_key=True, autoincrement=True)
