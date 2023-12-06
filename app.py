@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-    return 'Welcome to the PSTU RTC Project Backend!'
+    return 'Welcome to the PSTU RTC Project Backend API!'
 
 # Route to get all users
 @app.route('/get_all_users', methods=['GET'])
