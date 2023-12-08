@@ -1,7 +1,14 @@
-from flask import request, jsonify
+from flask import request, jsonify , Blueprint
 from db import get_db  # Assuming get_db is a local module providing database connection
 
+review_blueprint = Blueprint('review', __name__)
+
+
+# ==========================================  Review Related Routes START =============================
+
+
 # Route to get all reviews for a specific project
+@review_blueprint.route('/get_reviews_for_specific_project/<int:project_id>', methods=['GET'])
 def get_reviews_for_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -12,6 +19,7 @@ def get_reviews_for_specific_project(project_id):
     return jsonify({'reviews': reviews})
 
 # Route to create a new review for a project
+@review_blueprint.route('/create_reviews_specific_project', methods=['POST'])
 def create_reviews_specific_project():
     data = request.get_json()
     conn = get_db()
@@ -25,6 +33,7 @@ def create_reviews_specific_project():
     return jsonify({'message': 'Review created successfully'}), 201
 
 # Route to update a specific project review
+@review_blueprint.route('/update_specific_project_review/<int:review_id>', methods=['PUT'])
 def update_specific_project_review(review_id):
     data = request.get_json()
     conn = get_db()
@@ -38,6 +47,7 @@ def update_specific_project_review(review_id):
     return jsonify({'message': 'Review updated successfully'})
 
 # Route to delete a specific project review
+@review_blueprint.route('/delete_specific_project_review/<int:review_id>', methods=['DELETE'])
 def delete_specific_project_review(review_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -49,6 +59,7 @@ def delete_specific_project_review(review_id):
 
 
 # Route to get all reviews for a specific reviewer user
+@review_blueprint.route('/get_all_reviews_for_specific_reviewer/<int:reviewer_user_id>', methods=['GET'])
 def get_all_reviews_for_specific_reviewer(reviewer_user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -60,6 +71,7 @@ def get_all_reviews_for_specific_reviewer(reviewer_user_id):
 
 
 # Route to delete all reviews for a specific project
+@review_blueprint.route('/delete_all_reviews_for_specific_project/<int:project_id>', methods=['DELETE'])
 def delete_all_reviews_for_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -69,3 +81,4 @@ def delete_all_reviews_for_specific_project(project_id):
     conn.close()
     return jsonify({'message': f'All Reviews for ProjectID {project_id} deleted successfully'})
 
+# ==========================================  Review Related Routes END  =============================

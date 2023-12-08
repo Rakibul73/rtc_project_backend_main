@@ -1,8 +1,15 @@
-from flask import  request, jsonify
+from flask import  request, jsonify , Blueprint
 from db import get_db # local module
 
 
+user_blueprint = Blueprint('user', __name__)
+
+
+# ==========================================  User Related Routes START =============================
+
+
 # Route to get all users
+@user_blueprint.route('/get_all_users', methods=['GET'])
 def get_all_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -13,6 +20,7 @@ def get_all_users():
     return jsonify({'users': users})
 
 # Route to create a new user / register
+@user_blueprint.route('/create_users', methods=['POST'])
 def create_user():
     data = request.get_json()
     conn = get_db()
@@ -26,6 +34,7 @@ def create_user():
     return jsonify({'message': 'User created successfully'}), 201
 
 # Route to get a specific user
+@user_blueprint.route('/get_specific_user/<int:user_id>', methods=['GET'])
 def get_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -39,6 +48,7 @@ def get_specific_user(user_id):
         return jsonify({'message': 'User not found'}), 404
 
 # Route to update a user
+@user_blueprint.route('/update_user/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     data = request.get_json()
     conn = get_db()
@@ -52,6 +62,7 @@ def update_user(user_id):
     return jsonify({'message': 'User updated successfully'})
 
 # Route to delete a user
+@user_blueprint.route('/delete_user/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -64,6 +75,7 @@ def delete_user(user_id):
 
 
 # Route to get user role
+@user_blueprint.route('/get_user_role_of_specific_user/<int:user_id>', methods=['GET'])
 def get_user_role_of_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -82,3 +94,4 @@ def get_user_role_of_specific_user(user_id):
 
 
 
+# ==========================================  User Related Routes END =============================

@@ -1,8 +1,14 @@
-from flask import request, jsonify
+from flask import request, jsonify , Blueprint
 from db import get_db # local module
+
+project_blueprint = Blueprint('project', __name__)
+
+# ==========================================  Project Related Routes START =============================
+
 
 
 # Route to get all projects
+@project_blueprint.route('/projects', methods=['GET'])
 def get_all_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -17,6 +23,7 @@ def get_all_projects():
 
 
 # Route to create a new project
+@project_blueprint.route('/projects', methods=['POST'])
 def create_project():
     data = request.get_json()
     conn = get_db()
@@ -36,6 +43,7 @@ def create_project():
 
 
 # Route to get a specific project
+@project_blueprint.route('/projects/<int:project_id>', methods=['GET'])
 def get_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -50,6 +58,7 @@ def get_specific_project(project_id):
 
 
 # Route to update a project
+@project_blueprint.route('/projects/<int:project_id>', methods=['PUT'])
 def update_project(project_id):
     data = request.get_json()
     conn = get_db()
@@ -65,6 +74,7 @@ def update_project(project_id):
 
 
 # Route to delete a project
+@project_blueprint.route('/projects/<int:project_id>', methods=['DELETE'])
 def delete_project(project_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -75,3 +85,4 @@ def delete_project(project_id):
     conn.close()
     return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully'})
 
+# ==========================================  Project Related Routes END  =============================
