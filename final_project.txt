@@ -1,0 +1,230 @@
+CREATE TABLE StudentUser (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(255),
+    RegNo VARCHAR(50),
+    FirstEnrollmentSemester VARCHAR(50),
+    UndergraduateCGPALevel VARCHAR(50)
+);
+
+INSERT INTO `studentuser` (`StudentID`, `NAME`, `RegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
+('202423', 'Jane Smith', '2021002', 'Spring 2021', '3.8'),
+('203223', 'Bob Johnson', '2021003', 'Fall 2020', '3.2');
+
+
+-- Create Role table
+CREATE TABLE Role (
+  RoleID INT PRIMARY KEY AUTO_INCREMENT,
+  RoleName VARCHAR(50) NOT NULL
+);
+
+-- Create User table
+CREATE TABLE Users (
+  UserID INT PRIMARY KEY AUTO_INCREMENT,
+  Username VARCHAR(255) NOT NULL,
+  Password VARCHAR(255) NOT NULL,
+  Email VARCHAR(255) NOT NULL,
+  FirstName VARCHAR(255),
+  LastName VARCHAR(255),
+  Address VARCHAR(255),
+  Phone VARCHAR(15),
+  SalaryScale INT,
+  HighestAcademicQualificationUniversity VARCHAR(255),
+  HighestAcademicQualificationCountry VARCHAR(255),
+  HighestAcademicQualificationYear INT,
+  AreaOfExpertise VARCHAR(255),
+  ExperienceInResearch INT,
+  Teaching INT,
+  RoleID INT,
+  ProfilePicLocation VARCHAR(255),
+  TotalNumberOfCompleteProjects INT,
+  TotalNumberOfCompletePublications INT,
+  OngoingProjects INT,
+  FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
+);
+
+
+
+
+-- Create Project table
+CREATE TABLE Project (
+  ProjectID INT PRIMARY KEY AUTO_INCREMENT,
+  CodeByRTC VARCHAR(255),
+  DateRecieved DATE,
+  ProjectTitle VARCHAR(255),
+  NatureOfResearchProposal VARCHAR(255),
+  NameOfCollaboratingDepartments VARCHAR(255),
+  AddressOfCollaboratingDepartments VARCHAR(255),
+  NameOfCollaboratingInstitutes VARCHAR(255),
+  AddressOfCollaboratingInstitutes VARCHAR(255),
+  LocationOfFieldActivities VARCHAR(255),
+  DurationOfResearchProjectAnnual INT,
+  DurationOfResearchProjectLongTerm INT,
+  TotalBudgetOfResearchProposalTK INT,
+  ExternalAgencyFundingSourcesName VARCHAR(255),
+  ExternalAgencyFundingSourcesSubmissionDate DATE,
+  ProjectDescription TEXT,
+  ProjectAbstract TEXT,
+  ProjectObjective TEXT,
+  PstuNationalGoal TEXT,
+  PriorResearchOverview TEXT,
+  Methodology TEXT,
+  ExpectedOutput TEXT,
+  SuccessIndicators TEXT,
+  Beneficiaries TEXT,
+  ManPowerExisting VARCHAR(255),
+  ManPowerRequired VARCHAR(255),
+  SmallEquipmentExisting VARCHAR(255),
+  SmallEquipmentRequired VARCHAR(255),
+  ResearchMaterialsExisting VARCHAR(255),
+  ResearchMaterialsRequired VARCHAR(255),
+  OtherExisting VARCHAR(255),
+  OtherRequired VARCHAR(255),
+  ResearchCarriedOutPlace VARCHAR(255),
+  CreatorUserID INT,
+  CreatorUserDate DATE,
+  CreatorUserSealLocation VARCHAR(255),
+  ChairmanOfDepartmentComment TEXT,
+  ChairmanOfDepartmentSignatureLocation VARCHAR(255),
+  ChairmanOfDepartmentSignatureDate DATE,
+  ResultsAndDiscussion TEXT,
+  KeyAchievements TEXT,
+  ProjectStatus VARCHAR(50),
+  TotalPoints INT,
+  ProjectSoftCopyLocation VARCHAR(255),
+  FOREIGN KEY (CreatorUserID) REFERENCES User(UserID)
+);
+
+-- Create ProjectListWithUserID table
+CREATE TABLE ProjectListWithUserID (
+  UserID INT,
+  ProjectID INT,
+  ProjectTitle VARCHAR(255),
+  FOREIGN KEY (UserID) REFERENCES User(UserID),
+  FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID)
+);
+
+-- Create ActivityPlan table
+CREATE TABLE ActivityPlan (
+  ProjectID INT,
+  ActivityID INT,
+  ActivityName VARCHAR(255),
+  StartDate DATE,
+  EndDate DATE,
+  Activity TEXT,
+  PRIMARY KEY (ProjectID, ActivityID),
+  FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID)
+);
+
+-- Create Review table
+CREATE TABLE Review (
+  ReviewID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  ReviewerUserID INT,
+  Comments TEXT,
+  Rating INT,
+  Points INT,
+  FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID),
+  FOREIGN KEY (ReviewerUserID) REFERENCES User(UserID)
+);
+
+-- Create Notification table
+CREATE TABLE Notification (
+  NotificationID INT PRIMARY KEY AUTO_INCREMENT,
+  UserID INT,
+  Message TEXT,
+  Timestamp TIMESTAMP,
+  FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
+
+
+
+
+-- Sample values for Role table
+INSERT INTO Role (RoleName) VALUES
+  ('Admin'),
+  ('Researcher'),
+  ('Reviewer');
+
+-- Sample values for User table
+INSERT INTO User (Username, Password, Email, RoleID, ProfilePicLocation, TotalNumberOfCompleteProjects, TotalNumberOfCompletePublications, OngoingProjects)
+VALUES
+  ('admin_user', 'admin_password', 'admin@example.com', 1, 'admin_profile.jpg', 10, 5, 2),
+  ('researcher_user', 'researcher_password', 'researcher@example.com', 2, 'researcher_profile.jpg', 5, 2, 3),
+  ('reviewer_user', 'reviewer_password', 'reviewer@example.com', 3, 'reviewer_profile.jpg', 8, 4, 1);
+
+
+
+-- Sample values for ProjectListWithUserID table
+INSERT INTO ProjectListWithUserID (UserID, ProjectID, ProjectTitle)
+VALUES
+  (2, 1, 'Machine Learning Project'),
+  (3, 2, 'Data Science Project');
+
+-- Sample values for Project table
+INSERT INTO Project (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal, NameOfCollaboratingDepartments, AddressOfCollaboratingDepartments, NameOfCollaboratingInstitutes, AddressOfCollaboratingInstitutes, LocationOfFieldActivities, DurationOfResearchProjectAnnual, DurationOfResearchProjectLongTerm, TotalBudgetOfResearchProposalTK, ExternalAgencyFundingSourcesName, ExternalAgencyFundingSourcesSubmissionDate, ProjectDescription, ProjectAbstract, ProjectObjective, PstuNationalGoal, PriorResearchOverview, Methodology, ExpectedOutput, SuccessIndicators, Beneficiaries, ManPowerExisting, ManPowerRequired, SmallEquipmentExisting, SmallEquipmentRequired, ResearchMaterialsExisting, ResearchMaterialsRequired, OtherExisting, OtherRequired, ResearchCarriedOutPlace, CreatorUserID, CreatorUserDate, CreatorUserSealLocation, ChairmanOfDepartmentComment, ChairmanOfDepartmentSignatureLocation, ChairmanOfDepartmentSignatureDate, ResultsAndDiscussion, KeyAchievements, ProjectStatus, TotalPoints, ProjectSoftCopyLocation)
+VALUES
+  ('RTC123', '2023-01-01', 'Machine Learning Project', 'Research on ML algorithms', 'Computer Science', '123 Main St, City', 'Institute of Technology', '456 Tech St, Tech City', 'Techville', 12, 24, 50000, 'Tech Foundation', '2023-02-01', 'Detailed description of the project', 'Project abstract goes here', 'Project objective details', 'Contribution to PSTU national goal', 'Overview of prior research', 'Methodology details', 'Expected project output', 'Success indicators', 'Project beneficiaries', 'Existing manpower details', 'Manpower required for the project', 'Existing small equipment details', 'Small equipment required for the project', 'Existing research materials details', 'Research materials required for the project', 'Other existing resources details', 'Other resources required for the project', 'Lab A, Tech Institute', 2, '2023-01-15', 'Seal_Location_Admin.jpg', 'Comment from Chairman goes here', 'Signature_Location_Admin.jpg', '2023-01-20', 'Results and discussion details', 'Key achievements of the project', 'Ongoing', 0, 'project_softcopy_location_machine_learning');
+
+INSERT INTO Project (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal, NameOfCollaboratingDepartments, AddressOfCollaboratingDepartments, NameOfCollaboratingInstitutes, AddressOfCollaboratingInstitutes, LocationOfFieldActivities, DurationOfResearchProjectAnnual, DurationOfResearchProjectLongTerm, TotalBudgetOfResearchProposalTK, ExternalAgencyFundingSourcesName, ExternalAgencyFundingSourcesSubmissionDate, ProjectDescription, ProjectAbstract, ProjectObjective, PstuNationalGoal, PriorResearchOverview, Methodology, ExpectedOutput, SuccessIndicators, Beneficiaries, ManPowerExisting, ManPowerRequired, SmallEquipmentExisting, SmallEquipmentRequired, ResearchMaterialsExisting, ResearchMaterialsRequired, OtherExisting, OtherRequired, ResearchCarriedOutPlace, CreatorUserID, CreatorUserDate, CreatorUserSealLocation, ChairmanOfDepartmentComment, ChairmanOfDepartmentSignatureLocation, ChairmanOfDepartmentSignatureDate, ResultsAndDiscussion, KeyAchievements, ProjectStatus, TotalPoints, ProjectSoftCopyLocation)
+VALUES
+  ('RTC456', '2022-07-01', 'Data Science Project', 'Analysis of large datasets', 'Statistics Department', '789 Data St, City', 'Data Analytics Institute', '101 Analytics St, Analytics City', 'Analyticsville', 10, 18, 35000, 'Data Analytics Foundation', '2022-07-15', 'Detailed description of the project', 'Project abstract goes here', 'Project objective details', 'Contribution to PSTU national goal', 'Overview of prior research', 'Methodology details', 'Expected project output', 'Success indicators', 'Project beneficiaries', 'Existing manpower details', 'Manpower required for the project', 'Existing small equipment details', 'Small equipment required for the project', 'Existing research materials details', 'Research materials required for the project', 'Other existing resources details', 'Other resources required for the project', 'Lab B, Analytics Institute', 3, '2022-07-10', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2022-07-15', 'Results and discussion details', 'Key achievements of the project', 'Completed', 0, 'project_softcopy_location_data_science');
+
+-- Sample values for ActivityPlan table
+INSERT INTO ActivityPlan (ProjectID, ActivityID, ActivityName, StartDate, EndDate, Activity)
+VALUES
+  (1, 1, 'Data Collection', '2023-02-01', '2023-02-15', 'Collect data from various sources'),
+  (1, 2, 'Data Analysis', '2023-02-16', '2023-03-01', 'Perform statistical analysis on collected data'),
+  (2, 1, 'Data Collection', '2022-08-01', '2022-08-15', 'Collect data from various datasets'),
+  (2, 2, 'Data Analysis', '2022-08-16', '2022-09-01', 'Apply machine learning algorithms for analysis');
+
+-- Sample values for Review table
+INSERT INTO Review (ProjectID, ReviewerUserID, Comments, Rating, Points)
+VALUES
+  (1, 3, 'Great work on machine learning project!', 9, 90),
+  (2, 2, 'Thorough analysis of large datasets in data science project', 8, 80);
+
+-- Sample values for Notification table
+INSERT INTO Notification (UserID, Message, Timestamp)
+VALUES
+  (2, 'You have a new project notification.', CURRENT_TIMESTAMP),
+  (3, 'Your project review has been submitted.', CURRENT_TIMESTAMP);
+
+
+
+
+-- Sample values for User table
+INSERT INTO User (Username, Password, Email, RoleID, ProfilePicLocation, TotalNumberOfCompleteProjects, TotalNumberOfCompletePublications, OngoingProjects)
+VALUES
+  -- Admin Users
+  ('admin_user1', 'admin_password1', 'admin1@example.com', 1, 'admin_profile1.jpg', 8, 4, 3),
+  ('admin_user2', 'admin_password2', 'admin2@example.com', 1, 'admin_profile2.jpg', 12, 6, 1),
+  ('admin_user3', 'admin_password3', 'admin3@example.com', 1, 'admin_profile3.jpg', 15, 8, 2),
+
+  -- Researcher Users
+  ('researcher_user1', 'researcher_password1', 'researcher1@example.com', 2, 'researcher_profile1.jpg', 6, 3, 2),
+  ('researcher_user2', 'researcher_password2', 'researcher2@example.com', 2, 'researcher_profile2.jpg', 10, 5, 1),
+  ('researcher_user3', 'researcher_password3', 'researcher3@example.com', 2, 'researcher_profile3.jpg', 8, 4, 3),
+
+  -- Reviewer Users
+  ('reviewer_user1', 'reviewer_password1', 'reviewer1@example.com', 3, 'reviewer_profile1.jpg', 10, 5, 1),
+  ('reviewer_user2', 'reviewer_password2', 'reviewer2@example.com', 3, 'reviewer_profile2.jpg', 7, 3, 2),
+  ('reviewer_user3', 'reviewer_password3', 'reviewer3@example.com', 3, 'reviewer_profile3.jpg', 9, 4, 3);
+
+
+
+
+-- Sample values for Project table
+INSERT INTO Project (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal, NameOfCollaboratingDepartments, AddressOfCollaboratingDepartments, NameOfCollaboratingInstitutes, AddressOfCollaboratingInstitutes, LocationOfFieldActivities, DurationOfResearchProjectAnnual, DurationOfResearchProjectLongTerm, TotalBudgetOfResearchProposalTK, ExternalAgencyFundingSourcesName, ExternalAgencyFundingSourcesSubmissionDate, ProjectDescription, ProjectAbstract, ProjectObjective, PstuNationalGoal, PriorResearchOverview, Methodology, ExpectedOutput, SuccessIndicators, Beneficiaries, ManPowerExisting, ManPowerRequired, SmallEquipmentExisting, SmallEquipmentRequired, ResearchMaterialsExisting, ResearchMaterialsRequired, OtherExisting, OtherRequired, ResearchCarriedOutPlace, CreatorUserID, CreatorUserDate, CreatorUserSealLocation, ChairmanOfDepartmentComment, ChairmanOfDepartmentSignatureLocation, ChairmanOfDepartmentSignatureDate, ResultsAndDiscussion, KeyAchievements, ProjectStatus, TotalPoints, ProjectSoftCopyLocation)
+VALUES
+  ('RTC789', '2022-11-15', 'Environmental Impact Study', 'Study on the impact of industrial activities on the environment', 'Environmental Science Department', '456 Environment St, City', 'Environmental Research Institute', '789 Eco St, Eco City', 'Ecoville', 8, 12, 45000, 'Green Foundation', '2022-11-20', 'Detailed description of the environmental study project', 'Project abstract goes here', 'Project objective details', 'Contribution to sustainable development', 'Overview of prior research on environmental impact', 'Methodology details for environmental study', 'Expected environmental output', 'Success indicators for environmental impact', 'Project beneficiaries', 'Existing manpower for environmental study', 'Manpower required for the environmental study', 'Existing small equipment for environmental study', 'Small equipment required for the environmental study', 'Existing research materials for environmental study', 'Research materials required for the environmental study', 'Other existing resources for environmental study', 'Other resources required for the environmental study', 'Lab C, Eco Institute', 4, '2022-11-10', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2022-11-15', 'Results and discussion details for environmental study', 'Key achievements of the environmental study', 'Ongoing', 0, 'project_softcopy_location_environmental_study'),
+
+  ('RTC101', '2023-03-01', 'Renewable Energy Project', 'Research on harnessing renewable energy sources', 'Energy Department', '101 Power St, City', 'Renewable Energy Institute', '202 Solar St, Solar City', 'Solarville', 10, 18, 60000, 'Green Power Foundation', '2023-03-05', 'Detailed description of the renewable energy project', 'Project abstract goes here', 'Project objective details', 'Contribution to sustainable energy', 'Overview of prior research on renewable energy', 'Methodology details for renewable energy project', 'Expected output from renewable energy research', 'Success indicators for renewable energy project', 'Project beneficiaries', 'Existing manpower for renewable energy project', 'Manpower required for the renewable energy project', 'Existing small equipment for renewable energy project', 'Small equipment required for the renewable energy project', 'Existing research materials for renewable energy project', 'Research materials required for the renewable energy project', 'Other existing resources for renewable energy project', 'Other resources required for the renewable energy project', 'Lab D, Energy Institute', 5, '2023-02-25', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2023-03-01', 'Results and discussion details for renewable energy project', 'Key achievements of the renewable energy project', 'Ongoing', 0, 'project_softcopy_location_renewable_energy'),
+
+  ('RTC202', '2022-09-01', 'Healthcare Data Analytics', 'Analysis of healthcare data using analytics', 'Health Informatics Department', '202 Health St, City', 'Health Analytics Institute', '303 Analytics St, Analytics City', 'Health Analyticsville', 6, 10, 30000, 'Health Analytics Foundation', '2022-09-05', 'Detailed description of the healthcare data analytics project', 'Project abstract goes here', 'Project objective details', 'Contribution to healthcare analytics', 'Overview of prior research on healthcare data', 'Methodology details for healthcare data analytics', 'Expected output from healthcare analytics research', 'Success indicators for healthcare analytics project', 'Project beneficiaries in healthcare', 'Existing manpower for healthcare analytics project', 'Manpower required for the healthcare analytics project', 'Existing small equipment for healthcare analytics project', 'Small equipment required for the healthcare analytics project', 'Existing research materials for healthcare analytics project', 'Research materials required for the healthcare analytics project', 'Other existing resources for healthcare analytics project', 'Other resources required for the healthcare analytics project', 'Lab E, Health Analytics Institute', 6, '2022-08-25', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2022-09-01', 'Results and discussion details for healthcare analytics project', 'Key achievements of the healthcare analytics project', 'Completed', 0, 'project_softcopy_location_healthcare_analytics'),
+
+  ('RTC303', '2023-05-01', 'Smart Agriculture Project', 'Implementation of smart technologies in agriculture', 'Agricultural Engineering Department', '303 Farm St, City', 'Agricultural Technology Institute', '404 Agri St, Agri City', 'Agriville', 12, 24, 75000, 'Green Agriculture Foundation', '2023-05-05', 'Detailed description of the smart agriculture project', 'Project abstract goes here', 'Project objective details', 'Contribution to smart agriculture', 'Overview of prior research on smart agriculture', 'Methodology details for smart agriculture project', 'Expected output from smart agriculture research', 'Success indicators for smart agriculture project', 'Project beneficiaries in agriculture', 'Existing manpower for smart agriculture project', 'Manpower required for the smart agriculture project', 'Existing small equipment for smart agriculture project', 'Small equipment required for the smart agriculture project', 'Existing research materials for smart agriculture project', 'Research materials required for the smart agriculture project', 'Other existing resources for smart agriculture project', 'Other resources required for the smart agriculture project', 'Lab F, Agricultural Technology Institute', 7, '2023-04-25', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2023-05-01', 'Results and discussion details for smart agriculture project', 'Key achievements of the smart agriculture project', 'Ongoing', 0, 'project_softcopy_location_smart_agriculture'),
+
+  ('RTC404', '2022-12-01', 'Cybersecurity Research', 'Investigation into cybersecurity threats and countermeasures', 'Computer Security Department', '404 Cyber St, City', 'Cybersecurity Institute', '505 Secure St, Secure City', 'Secureville', 8, 16, 50000, 'Secure Foundation', '2022-12-05', 'Detailed description of the cybersecurity research project', 'Project abstract goes here', 'Project objective details', 'Contribution to cybersecurity', 'Overview of prior research on cybersecurity', 'Methodology details for cybersecurity research', 'Expected output from cybersecurity research', 'Success indicators for cybersecurity project', 'Project beneficiaries in cybersecurity', 'Existing manpower for cybersecurity project', 'Manpower required for the cybersecurity project', 'Existing small equipment for cybersecurity project', 'Small equipment required for the cybersecurity project', 'Existing research materials for cybersecurity project', 'Research materials required for the cybersecurity project', 'Other existing resources for cybersecurity project', 'Other resources required for the cybersecurity project', 'Lab G, Cybersecurity Institute', 8, '2022-11-25', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2022-12-01', 'Results and discussion details for cybersecurity project', 'Key achievements of the cybersecurity project', 'Ongoing', 0, 'project_softcopy_location_cybersecurity'),
+
+  ('RTC505', '2023-08-01', 'Renewable Water Sources', 'Exploration of renewable sources for water', 'Water Resources Department', '505 Aqua St, City', 'Water Sustainability Institute', '606 Aqua St, Aqua City', 'Aquaville', 10, 20, 70000, 'Green Water Foundation', '2023-08-05', 'Detailed description of the renewable water sources project', 'Project abstract goes here', 'Project objective details', 'Contribution to sustainable water sources', 'Overview of prior research on renewable water sources', 'Methodology details for renewable water sources project', 'Expected output from renewable water sources research', 'Success indicators for renewable water sources project', 'Project beneficiaries in water sustainability', 'Existing manpower for renewable water sources project', 'Manpower required for the renewable water sources project', 'Existing small equipment for renewable water sources project', 'Small equipment required for the renewable water sources project', 'Existing research materials for renewable water sources project', 'Research materials required for the renewable water sources project', 'Other existing resources for renewable water sources project', 'Other resources required for the renewable water sources project', 'Lab H, Water Sustainability Institute', 9, '2023-07-25', 'Seal_Location_Researcher.jpg', 'Comment from Chairman goes here', 'Signature_Location_Researcher.jpg', '2023-08-01', 'Results and discussion details for renewable water sources project', 'Key achievements of the renewable water sources project', 'Ongoing', 0, 'project_softcopy_location_renewable_water_sources');
+
