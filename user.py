@@ -12,7 +12,7 @@ def get_all_users():
     conn.close()
     return jsonify({'users': users})
 
-# Route to create a new user
+# Route to create a new user / register
 def create_user():
     data = request.get_json()
     conn = get_db()

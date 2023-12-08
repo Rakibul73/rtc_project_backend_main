@@ -1,5 +1,5 @@
 from flask import Flask
-import user , project , student , projectuser , review
+import user , project , student , projectuser , review , authetication
 
 app = Flask(__name__)
 
@@ -168,6 +168,28 @@ def delete_all_reviews_for_specific_project(project_id):
     return review.delete_all_reviews_for_specific_project(project_id)
 
 # ==========================================  Review Related Routes END  =============================
+
+
+# ========================================  Login & Register Related Routes START =============================
+
+
+# Route for user registration
+@app.route('/register', methods=['POST'])
+def register_user():
+    return authetication.register_user()
+
+# Route for user login
+@app.route('/login', methods=['POST'])
+def login_user():
+    return authetication.login_user()
+
+
+# Route for user logout
+@app.route('/logout', methods=['POST'])
+def logout_user():
+    return authetication.logout_user()
+
+# ==========================================  Login & Register Related Routes END  =============================
 
 if __name__ == '__main__':
     app.run(debug=True)
