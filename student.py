@@ -12,7 +12,7 @@ student_blueprint = Blueprint('student', __name__)
 def get_all_students():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM StudentUser")
+    cursor.execute("SELECT * FROM studentuser")
     students = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -24,7 +24,7 @@ def create_student():
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    insert_query = "INSERT INTO StudentUser (StudentID , Name, RegNo, FirstEnrollmentSemester, UndergraduateCGPALevel) VALUES (%s, %s, %s, %s , %s)"
+    insert_query = "INSERT INTO studentuser (StudentID , Name, RegNo, FirstEnrollmentSemester, UndergraduateCGPALevel) VALUES (%s, %s, %s, %s , %s)"
     student_data = ( data['StudentID'], data['Name'], data['RegNo'], data['FirstEnrollmentSemester'], data['UndergraduateCGPALevel'])
     cursor.execute(insert_query, student_data)
     conn.commit()
@@ -37,7 +37,7 @@ def create_student():
 def get_specific_student(student_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM StudentUser WHERE StudentID = %s", (student_id,))
+    cursor.execute("SELECT * FROM studentuser WHERE StudentID = %s", (student_id,))
     student = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -52,7 +52,7 @@ def update_student(student_id):
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    update_query = "UPDATE StudentUser SET Name = %s, RegNo = %s, FirstEnrollmentSemester = %s, UndergraduateCGPALevel = %s WHERE StudentID = %s"
+    update_query = "UPDATE studentuser SET Name = %s, RegNo = %s, FirstEnrollmentSemester = %s, UndergraduateCGPALevel = %s WHERE StudentID = %s"
     student_data = (data['Name'], data['RegNo'], data['FirstEnrollmentSemester'], data['UndergraduateCGPALevel'], student_id)
     cursor.execute(update_query, student_data)
     conn.commit()
@@ -65,7 +65,7 @@ def update_student(student_id):
 def delete_student(student_id):
     conn = get_db()
     cursor = conn.cursor()
-    delete_query = "DELETE FROM StudentUser WHERE StudentID = %s"
+    delete_query = "DELETE FROM studentuser WHERE StudentID = %s"
     cursor.execute(delete_query, (student_id,))
     conn.commit()
     cursor.close()

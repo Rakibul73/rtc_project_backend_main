@@ -12,7 +12,7 @@ projectuser_blueprint = Blueprint('projectuser', __name__)
 def get_all_projects_for_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM ProjectListWithUserID WHERE UserID = %s", (user_id))
+    cursor.execute("SELECT * FROM projectlistwithuserid WHERE UserID = %s", (user_id))
     projects_for_specific_user = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -24,7 +24,7 @@ def get_all_projects_for_specific_user(user_id):
 def get_specific_project_for_specific_user(project_id, user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM ProjectListWithUserID WHERE ProjectID = %s AND UserID = %s", (project_id, user_id))
+    cursor.execute("SELECT * FROM projectlistwithuserid WHERE ProjectID = %s AND UserID = %s", (project_id, user_id))
     project_with_user = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -40,7 +40,7 @@ def get_specific_project_for_specific_user(project_id, user_id):
 def delete_project_with_user(project_id, user_id):
     conn = get_db()
     cursor = conn.cursor()
-    delete_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s AND UserID = %s"
+    delete_query = "DELETE FROM projectlistwithuserid WHERE ProjectID = %s AND UserID = %s"
     cursor.execute(delete_query, (project_id, user_id))
     conn.commit()
     cursor.close()
@@ -53,7 +53,7 @@ def delete_project_with_user(project_id, user_id):
 def delete_projects_for_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM ProjectListWithUserID WHERE UserID = %s", (user_id,))
+    cursor.execute("DELETE FROM projectlistwithuserid WHERE UserID = %s", (user_id,))
     conn.commit()
     cursor.close()
     conn.close()
