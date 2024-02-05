@@ -196,7 +196,9 @@ CREATE TABLE `role` (
 INSERT INTO `role` (`RoleID`, `RoleName`) VALUES
 (1, 'Admin'),
 (2, 'Researcher'),
-(3, 'Reviewer');
+(3, 'Reviewer'),
+(4, 'Teacher'),
+(5, 'Student');
 
 -- --------------------------------------------------------
 

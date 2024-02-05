@@ -5,8 +5,12 @@ from projectuser import projectuser_blueprint
 from student import student_blueprint
 from project import project_blueprint
 from user import user_blueprint
+from flask_cors import CORS  # Add this line
+
 
 app = Flask(__name__)
+CORS(app)  # Add this line
+
 
 
 # Set a secret key for session management

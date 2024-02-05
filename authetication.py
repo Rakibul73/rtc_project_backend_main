@@ -21,21 +21,49 @@ def register_user():
     isUserExist = cursor.fetchone()
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     isEmailExist = cursor.fetchone()
+    print("All clear")
     if isUserExist is None and isEmailExist is None:
         # Hash the password before storing it in the database
         password = data.get('password')
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        insert_query = "INSERT INTO users (username, password, email , FirstName , LastName , Phone , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s )"
-        user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["RoleID"])
+        insert_query = "INSERT INTO users (username, password, email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
+        user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["RoleID"])
         cursor.execute(insert_query, user_data)
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'message': 'User registered successfully'}), 201
+        return jsonify({'message': 'User registered successfully' , 'statuscode' : 201 }), 201
     elif isUserExist is not None:
-        return jsonify({'message': 'Username = ' + username + ' already exists'}), 409
+        return jsonify({'message': 'Username = ' + username + ' already exists', 'statuscode' : 409}), 409
     elif isEmailExist is not None:
-        return jsonify({'message': 'Email = ' + email + ' already exists'}), 409
+        return jsonify({'message': 'Email = ' + email + ' already exists' , 'statuscode' : 409}), 409
+
+# @auth_blueprint.route('/register', methods=['POST'])
+# def register_user():
+#     data = request.get_json()
+#     conn = get_db()
+#     cursor = conn.cursor()
+#     username = data.get('username')
+#     email = data.get('email')
+#     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+#     isUserExist = cursor.fetchone()
+#     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+#     isEmailExist = cursor.fetchone()
+#     if isUserExist is None and isEmailExist is None:
+#         # Hash the password before storing it in the database
+#         password = data.get('password')
+#         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+#         insert_query = "INSERT INTO users (username, password, email , FirstName , LastName , Phone , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s )"
+#         user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["RoleID"])
+#         cursor.execute(insert_query, user_data)
+#         conn.commit()
+#         cursor.close()
+#         conn.close()
+#         return jsonify({'message': 'User registered successfully'}), 201
+#     elif isUserExist is not None:
+#         return jsonify({'message': 'Username = ' + username + ' already exists'}), 409
+#     elif isEmailExist is not None:
+#         return jsonify({'message': 'Email = ' + email + ' already exists'}), 409
 
 # Route for user login
 @auth_blueprint.route('/login', methods=['POST'])
@@ -44,7 +72,7 @@ def login_user():
     conn = get_db()
     cursor = conn.cursor()
     username = data.get('username')
-    cursor.execute("SELECT UserID , username FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT UserID, username, RoleID FROM users WHERE username = %s", (username,))
     isUserExist = cursor.fetchone()
 
     if isUserExist:
@@ -53,15 +81,25 @@ def login_user():
         query_result = cursor.fetchone()
         hashed_password = query_result[0]
         if check_password_hash(hashed_password, given_password):
-            # Set up a session for the logged-in user
-            session['user_id'] = isUserExist[0]
-            cursor.close()
-            conn.close()
-            return jsonify({'message': 'Login successful', 'user_id': isUserExist[0] }), 200
+            # Check if the role ID in the request matches the role ID in the database
+            if 'RoleID' in data and data['RoleID'] == isUserExist[2]:
+                # Set up a session for the logged-in user
+                session['user_id'] = isUserExist[0]
+                cursor.close()
+                conn.close()
+                return jsonify({'message': 'Login successful', 'user_id': isUserExist[0] , 'statuscode' : 200}), 200
+            else:
+                cursor.close()
+                conn.close()
+                return jsonify({'message': 'Invalid RoleID', 'statuscode' : 403}), 403
         else:
             cursor.close()
             conn.close()
-            return jsonify({'message': 'Invalid password'}), 401
+            return jsonify({'message': 'Invalid password', 'statuscode' : 401}), 401
+    else:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'User not found' , 'statuscode' : 404}), 404
 
 
 # Route for user logout
