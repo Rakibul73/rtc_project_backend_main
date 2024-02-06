@@ -1,4 +1,5 @@
 from flask import request, jsonify , Blueprint
+from flask_jwt_extended import jwt_required
 from db import get_db  # Assuming get_db is a local module providing database connection
 
 review_blueprint = Blueprint('review', __name__)
@@ -9,6 +10,7 @@ review_blueprint = Blueprint('review', __name__)
 
 # Route to get all reviews for a specific project
 @review_blueprint.route('/get_reviews_for_specific_project/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
 def get_reviews_for_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -20,6 +22,7 @@ def get_reviews_for_specific_project(project_id):
 
 # Route to create a new review for a project
 @review_blueprint.route('/create_reviews_specific_project', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
 def create_reviews_specific_project():
     data = request.get_json()
     conn = get_db()
@@ -34,6 +37,7 @@ def create_reviews_specific_project():
 
 # Route to update a specific project review
 @review_blueprint.route('/update_specific_project_review/<int:review_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
 def update_specific_project_review(review_id):
     data = request.get_json()
     conn = get_db()
@@ -48,6 +52,7 @@ def update_specific_project_review(review_id):
 
 # Route to delete a specific project review
 @review_blueprint.route('/delete_specific_project_review/<int:review_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
 def delete_specific_project_review(review_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -60,6 +65,7 @@ def delete_specific_project_review(review_id):
 
 # Route to get all reviews for a specific reviewer user
 @review_blueprint.route('/get_all_reviews_for_specific_reviewer/<int:reviewer_user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
 def get_all_reviews_for_specific_reviewer(reviewer_user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -72,6 +78,7 @@ def get_all_reviews_for_specific_reviewer(reviewer_user_id):
 
 # Route to delete all reviews for a specific project
 @review_blueprint.route('/delete_all_reviews_for_specific_project/<int:project_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
 def delete_all_reviews_for_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor()

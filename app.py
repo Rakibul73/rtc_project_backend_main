@@ -6,15 +6,17 @@ from student import student_blueprint
 from project import project_blueprint
 from user import user_blueprint
 from flask_cors import CORS  # Add this line
+from flask_jwt_extended import JWTManager
+from functools import wraps
 
 
 app = Flask(__name__)
 CORS(app)  # Add this line
 
 
-
-# Set a secret key for session management
-app.secret_key = 'rakibpstusecretkey'
+# Configure JWT
+app.config['JWT_SECRET_KEY'] = 'rakibpstusecretkey'
+jwt = JWTManager(app)
 
 # Register the authentication blueprint
 app.register_blueprint(auth_blueprint)

@@ -1,5 +1,6 @@
 from flask import request, jsonify , Blueprint
 from db import get_db # local module
+from flask_jwt_extended import jwt_required
 
 project_blueprint = Blueprint('project', __name__)
 
@@ -9,6 +10,7 @@ project_blueprint = Blueprint('project', __name__)
 
 # Route to get all projects
 @project_blueprint.route('/projects', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
 def get_all_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -24,6 +26,7 @@ def get_all_projects():
 
 # Route to create a new project
 @project_blueprint.route('/projects', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
 def create_project():
     data = request.get_json()
     conn = get_db()
@@ -44,6 +47,7 @@ def create_project():
 
 # Route to get a specific project
 @project_blueprint.route('/projects/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
 def get_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -59,6 +63,7 @@ def get_specific_project(project_id):
 
 # Route to update a project
 @project_blueprint.route('/projects/<int:project_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
 def update_project(project_id):
     data = request.get_json()
     conn = get_db()
@@ -75,6 +80,7 @@ def update_project(project_id):
 
 # Route to delete a project
 @project_blueprint.route('/projects/<int:project_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
 def delete_project(project_id):
     conn = get_db()
     cursor = conn.cursor()

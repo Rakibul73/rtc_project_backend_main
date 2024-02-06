@@ -1,4 +1,6 @@
 from flask import  request, jsonify , Blueprint
+from flask_jwt_extended import jwt_required 
+from auth_utils import role_required
 from db import get_db # local module
 
 
@@ -10,6 +12,8 @@ user_blueprint = Blueprint('user', __name__)
 
 # Route to get all users
 @user_blueprint.route('/get_all_users', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 4])  # Only admin and supervisor can access this route
 def get_all_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -21,6 +25,8 @@ def get_all_users():
 
 # Route to create a new user / register
 @user_blueprint.route('/create_users', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])  # Only admin can access this route
 def create_user():
     data = request.get_json()
     conn = get_db()
@@ -35,6 +41,8 @@ def create_user():
 
 # Route to get a specific user
 @user_blueprint.route('/get_specific_user/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([4])
 def get_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -49,6 +57,8 @@ def get_specific_user(user_id):
 
 # Route to update a user
 @user_blueprint.route('/update_user/<int:user_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2])
 def update_user(user_id):
     data = request.get_json()
     conn = get_db()
@@ -63,6 +73,8 @@ def update_user(user_id):
 
 # Route to delete a user
 @user_blueprint.route('/delete_user/<int:user_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
 def delete_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -76,6 +88,8 @@ def delete_user(user_id):
 
 # Route to get user role
 @user_blueprint.route('/get_user_role_of_specific_user/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 4])
 def get_user_role_of_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)

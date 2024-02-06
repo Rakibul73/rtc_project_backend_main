@@ -1,6 +1,7 @@
 from flask import  request, jsonify , session , Blueprint
 from db import get_db # local module
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import jwt_required, create_access_token
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -83,11 +84,11 @@ def login_user():
         if check_password_hash(hashed_password, given_password):
             # Check if the role ID in the request matches the role ID in the database
             if 'RoleID' in data and data['RoleID'] == isUserExist[2]:
-                # Set up a session for the logged-in user
-                session['user_id'] = isUserExist[0]
+                # create an access token with the user ID and return it
+                access_token = create_access_token(identity=isUserExist[0])
                 cursor.close()
                 conn.close()
-                return jsonify({'message': 'Login successful', 'user_id': isUserExist[0] , 'statuscode' : 200}), 200
+                return jsonify({'message': 'Login successful', 'user_id': isUserExist[0] , 'statuscode' : 200 , 'access_token': access_token}), 200
             else:
                 cursor.close()
                 conn.close()
@@ -106,7 +107,6 @@ def login_user():
 @auth_blueprint.route('/logout', methods=['POST'])
 def logout_user():
     # Clear the user session on logout
-    session.clear()
     return jsonify({'message': 'Logout successful'}), 200
 
 # ==========================================  Login & Register Related Routes END  =============================

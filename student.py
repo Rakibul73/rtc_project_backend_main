@@ -1,4 +1,5 @@
 from flask import request, jsonify , Blueprint
+from flask_jwt_extended import jwt_required
 from db import get_db  # local module
 
 student_blueprint = Blueprint('student', __name__)
@@ -9,6 +10,7 @@ student_blueprint = Blueprint('student', __name__)
 
 # Route to get all students
 @student_blueprint.route('/get_all_students', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
 def get_all_students():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -20,6 +22,7 @@ def get_all_students():
 
 # Route to create a new student
 @student_blueprint.route('/create_student', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
 def create_student():
     data = request.get_json()
     conn = get_db()
@@ -34,6 +37,7 @@ def create_student():
 
 # Route to get a specific student
 @student_blueprint.route('/get_specific_student/<int:student_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
 def get_specific_student(student_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -48,6 +52,7 @@ def get_specific_student(student_id):
 
 # Route to update a student
 @student_blueprint.route('/update_student/<int:student_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
 def update_student(student_id):
     data = request.get_json()
     conn = get_db()
@@ -62,6 +67,7 @@ def update_student(student_id):
 
 # Route to delete a student
 @student_blueprint.route('/delete_student/<int:student_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
 def delete_student(student_id):
     conn = get_db()
     cursor = conn.cursor()
