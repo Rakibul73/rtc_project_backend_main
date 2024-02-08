@@ -1,13 +1,170 @@
-from flask import  request, jsonify , session , Blueprint
+from flask import  render_template, request, jsonify , session , Blueprint
 from db import get_db # local module
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import jwt_required, create_access_token
-
+from flask_jwt_extended import create_access_token
+import random
+import string
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 auth_blueprint = Blueprint('auth', __name__)
 
 
 # ========================================  Login & Register Related Routes START =============================
+
+# Function to send email
+def send_email(email, reset_url):
+    sender_email = "tuimorsala01@gmail.com"  # Replace with your email address
+    password = "szfl khwy snmp huic"  # Replace with your email password
+    
+    # Render the HTML template with the reset URL
+    email_body = render_template('email_template_passreset.html', reset_url=reset_url)
+
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = email
+    message['Subject'] = "RTC Project Password Reset Link"
+
+    # Attach HTML email body
+    message.attach(MIMEText(email_body, 'html'))
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(sender_email, password)
+    text = message.as_string()
+    server.sendmail(sender_email, email, text)
+    server.quit()
+
+# Function to generate random string
+def generate_token(length=10):
+    letters = string.ascii_letters + string.digits
+    return ''.join(random.choice(letters) for _ in range(length))
+
+# Route to send password to email
+@auth_blueprint.route('/send_password', methods=['POST'])
+def send_password():
+    data = request.get_json()
+    email = data.get('email')
+    
+    # Check if the email exists in the database
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    cursor.close()
+    
+    if not user:
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
+
+    cursor = conn.cursor()
+    cursor.execute("SELECT PASSWORD FROM users WHERE email = %s", (email,))
+    PASSWORD = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    
+    # send the email with the password
+    try:
+        sender_email = "tuimorsala01@gmail.com"  # Replace with your email address
+        password = "szfl khwy snmp huic"  # Replace with your email password
+        
+        # Render the HTML template with the reset URL
+        email_body = render_template('email_template_pass_forward.html', password=PASSWORD[0])
+
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = email
+        message['Subject'] = "RTC Project Password Request"
+
+        # Attach HTML email body
+        message.attach(MIMEText(email_body, 'html'))
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        text = message.as_string()
+        server.sendmail(sender_email, email, text)
+        server.quit()
+        return jsonify({'message': 'Password sent to email' , 'statuscode' : 200}), 200
+    except:
+        return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
+
+
+
+# Route to request password reset
+@auth_blueprint.route('/reset_password_request', methods=['POST'])
+def reset_password_request():
+    data = request.get_json()
+    email = data.get('email')
+
+    # Check if the email exists in the database
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    cursor.close()
+
+    if not user:
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
+
+    # Generate a random token
+    token = generate_token()
+
+    # Store the token in the database
+    cursor = conn.cursor()
+    insert_query = "INSERT INTO PassReset (Email, ResetToken) VALUES (%s, %s)"
+    user_data = (email, token)
+    cursor.execute(insert_query, user_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # Construct the reset URL
+    reset_url = f"http://localhost:5000/reset_password/{token}"
+
+    # Send the email with the reset URL
+    send_email(email, reset_url)
+
+    return jsonify({'message': 'Password reset email sent' , 'statuscode' : 200}), 200
+
+
+# Route to reset password
+@auth_blueprint.route('/reset_password/<token>', methods=['PUT'])
+def reset_password(token):
+    data = request.get_json()
+    new_password = data.get('new_password')
+
+    # Retrieve the email associated with the token
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT Email FROM PassReset WHERE ResetToken = %s", (token,))
+    email = cursor.fetchone()
+    print(email[0])
+    cursor.close()
+
+    if not email:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Invalid or expired token' , 'statuscode' : 400}), 400
+
+    # Hash the new password
+    hashed_password = generate_password_hash(new_password, method='pbkdf2:sha256')
+    # Update the user's password
+    cursor = conn.cursor()
+    update_query = "UPDATE users SET PASSWORD = %s WHERE Email = %s"
+    user_data = (hashed_password, email[0])
+    cursor.execute(update_query, user_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({'message': 'Password reset successfully' , 'statuscode' : 200 , 'email' : email}), 200
 
 
 # Route for user registration

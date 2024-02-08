@@ -11,6 +11,12 @@ INSERT INTO `studentuser` (`StudentID`, `NAME`, `RegNo`, `FirstEnrollmentSemeste
 ('203223', 'Bob Johnson', '2021003', 'Fall 2020', '3.2');
 
 
+-- Create PassReset table
+CREATE TABLE PassReset (
+  Email VARCHAR(255) NOT NULL,
+  ResetToken VARCHAR(255) NOT NULL
+);
+
 -- Create Role table
 CREATE TABLE Role (
   RoleID INT PRIMARY KEY AUTO_INCREMENT,
