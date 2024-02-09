@@ -118,8 +118,9 @@ def reset_password_request():
 
     # Store the token in the database
     cursor = conn.cursor()
-    insert_query = "INSERT INTO PassReset (Email, ResetToken) VALUES (%s, %s)"
-    user_data = (email, token)
+    insert_query = "INSERT INTO PassReset (Email, ResetToken , Used) VALUES (%s, %s , %s)"
+    # used == 1 means not used
+    user_data = (email, token, 1)
     cursor.execute(insert_query, user_data)
     conn.commit()
     cursor.close()
@@ -143,15 +144,21 @@ def reset_password(token):
     # Retrieve the email associated with the token
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT Email FROM PassReset WHERE ResetToken = %s", (token,))
-    email = cursor.fetchone()
-    print(email[0])
-    cursor.close()
+    cursor.execute("SELECT * FROM PassReset WHERE ResetToken = %s", (token,))
+    result = cursor.fetchone()
+    print(result)
+    email = result[1]
+    used = result[2]
 
     if not email:
         cursor.close()
         conn.close()
         return jsonify({'message': 'Invalid or expired token' , 'statuscode' : 400}), 400
+    
+    if used == 0:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Token already used' , 'statuscode' : 400}), 400
 
     # Hash the new password
     hashed_password = generate_password_hash(new_password, method='pbkdf2:sha256')
@@ -160,6 +167,7 @@ def reset_password(token):
     update_query = "UPDATE users SET PASSWORD = %s WHERE Email = %s"
     user_data = (hashed_password, email[0])
     cursor.execute(update_query, user_data)
+    cursor.execute("UPDATE PassReset SET Used = 0 WHERE ResetToken = %s", (token,))
     conn.commit()
     cursor.close()
     conn.close()

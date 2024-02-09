@@ -14,13 +14,15 @@ INSERT INTO `studentuser` (`StudentID`, `NAME`, `RegNo`, `FirstEnrollmentSemeste
 -- Create PassReset table
 CREATE TABLE PassReset (
   Email VARCHAR(255) NOT NULL,
-  ResetToken VARCHAR(255) NOT NULL
+  ResetToken VARCHAR(255) NOT NULL,
+  Used INT
 );
 
 -- Create Role table
 CREATE TABLE Role (
   RoleID INT PRIMARY KEY AUTO_INCREMENT,
-  RoleName VARCHAR(50) NOT NULL
+  RoleName VARCHAR(50) NOT NULL,
+  Used BOOLEAN DEFAULT FALSE
 );
 
 -- Create User table
