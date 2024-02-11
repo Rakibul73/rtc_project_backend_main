@@ -1,10 +1,26 @@
 from flask import request, jsonify , Blueprint
+from auth_utils import role_required
 from db import get_db # local module
 from flask_jwt_extended import jwt_required
 
 project_blueprint = Blueprint('project', __name__)
 
 # ==========================================  Project Related Routes START =============================
+
+
+# Route to get total number of projects
+@project_blueprint.route('/get_total_number_of_projects', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_total_number_of_projects():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM projects")
+    total_projects = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    print(total_projects['total_projects'])
+    return jsonify({'total_projects': total_projects['total_projects'] , "statuscode" : 200}) , 200
 
 
 
