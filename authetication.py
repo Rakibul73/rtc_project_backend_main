@@ -14,12 +14,12 @@ auth_blueprint = Blueprint('auth', __name__)
 # ========================================  Login & Register Related Routes START =============================
 
 # Function to send email
-def send_email(email, reset_url):
+def send_email(email, reset_otp):
     sender_email = "tuimorsala01@gmail.com"  # Replace with your email address
     password = "szfl khwy snmp huic"  # Replace with your email password
     
     # Render the HTML template with the reset URL
-    email_body = render_template('email_template_passreset.html', reset_url=reset_url)
+    email_body = render_template('email_template_passreset.html', reset_otp=reset_otp)
 
     message = MIMEMultipart()
     message['From'] = sender_email
@@ -127,16 +127,16 @@ def reset_password_request():
     conn.close()
 
     # Construct the reset URL
-    reset_url = f"http://localhost:5000/resetpassscreen/{token}"
+    reset_otp = f"{token}"
 
     # Send the email with the reset URL
-    send_email(email, reset_url)
+    send_email(email, reset_otp)
 
     return jsonify({'message': 'Password reset email sent' , 'statuscode' : 200}), 200
 
 
 # Route to reset password
-@auth_blueprint.route('/reset_password/<token>', methods=['PUT'])
+@auth_blueprint.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
     data = request.get_json()
     new_password = data.get('new_password')
@@ -146,15 +146,16 @@ def reset_password(token):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM PassReset WHERE ResetToken = %s", (token,))
     result = cursor.fetchone()
-    print(result)
-    email = result[1]
-    used = result[2]
-
-    if not email:
+    
+    if result is None:
         cursor.close()
         conn.close()
-        return jsonify({'message': 'Invalid or expired token' , 'statuscode' : 400}), 400
+        return jsonify({'message': 'Invalid token' , 'statuscode' : 404}), 404
     
+    print(result)
+    email = result[0]
+    used = result[2]
+
     if used == 0:
         cursor.close()
         conn.close()
@@ -165,7 +166,7 @@ def reset_password(token):
     # Update the user's password
     cursor = conn.cursor()
     update_query = "UPDATE users SET PASSWORD = %s WHERE Email = %s"
-    user_data = (hashed_password, email[0])
+    user_data = (hashed_password, email)
     cursor.execute(update_query, user_data)
     cursor.execute("UPDATE PassReset SET Used = 0 WHERE ResetToken = %s", (token,))
     conn.commit()
