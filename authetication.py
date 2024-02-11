@@ -127,7 +127,7 @@ def reset_password_request():
     conn.close()
 
     # Construct the reset URL
-    reset_url = f"http://localhost:5000/reset_password/{token}"
+    reset_url = f"http://localhost:5000/resetpassscreen/{token}"
 
     # Send the email with the reset URL
     send_email(email, reset_url)

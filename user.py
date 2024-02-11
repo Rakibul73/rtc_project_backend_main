@@ -10,10 +10,25 @@ user_blueprint = Blueprint('user', __name__)
 # ==========================================  User Related Routes START =============================
 
 
+# Route to get total number of users
+@user_blueprint.route('/get_total_number_of_users', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_total_number_of_users():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT COUNT(*) AS total_users FROM users")
+    total_users = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    print(total_users['total_users'])
+    return jsonify({'total_users': total_users['total_users'] , "statuscode" : 200}) , 200
+
+
 # Route to get all users
 @user_blueprint.route('/get_all_users', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 4])  # Only admin and supervisor can access this route
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
 def get_all_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -21,7 +36,7 @@ def get_all_users():
     users = cursor.fetchall()
     cursor.close()
     conn.close()
-    return jsonify({'users': users})
+    return jsonify({'users': users , "statuscode" : 200}) , 200
 
 # Route to create a new user / register
 @user_blueprint.route('/create_users', methods=['POST'])
@@ -37,12 +52,12 @@ def create_user():
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'User created successfully'}), 201
+    return jsonify({'message': 'User created successfully' , 'statuscode' : 201}), 201
 
 # Route to get a specific user
 @user_blueprint.route('/get_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([4])
+@role_required([1, 2 , 3 , 4 , 5])
 def get_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -50,6 +65,7 @@ def get_specific_user(user_id):
     user = cursor.fetchone()
     cursor.close()
     conn.close()
+    print(jsonify(user))
     if user:
         return jsonify({'user': user})
     else:
@@ -57,8 +73,8 @@ def get_specific_user(user_id):
 
 # Route to update a user
 @user_blueprint.route('/update_user/<int:user_id>', methods=['PUT'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1, 2])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def update_user(user_id):
     data = request.get_json()
     conn = get_db()
@@ -69,7 +85,7 @@ def update_user(user_id):
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'User updated successfully'})
+    return jsonify({'message': 'User updated successfully' , 'statuscode' : 200}), 200
 
 # Route to delete a user
 @user_blueprint.route('/delete_user/<int:user_id>', methods=['DELETE'])
