@@ -8,6 +8,7 @@ from user import user_blueprint
 from flask_cors import CORS  # Add this line
 from flask_jwt_extended import JWTManager
 from functools import wraps
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -16,6 +17,8 @@ CORS(app)  # Add this line
 
 # Configure JWT
 app.config['JWT_SECRET_KEY'] = 'rakibpstusecretkey'
+# Set a longer token expiration time
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)  # Example: 24 hours
 jwt = JWTManager(app)
 
 # Register the authentication blueprint
