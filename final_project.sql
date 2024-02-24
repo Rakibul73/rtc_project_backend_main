@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 04:42 PM
+-- Generation Time: Feb 24, 2024 at 07:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -70,6 +70,44 @@ INSERT INTO `notification` (`NotificationID`, `UserID`, `Message`, `Timestamp`) 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `passreset`
+--
+
+CREATE TABLE `passreset` (
+  `Email` varchar(255) NOT NULL,
+  `ResetToken` varchar(255) NOT NULL,
+  `Used` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `passreset`
+--
+
+INSERT INTO `passreset` (`Email`, `ResetToken`, `Used`) VALUES
+('rakib29185@gmail.com', 'ZMQEAPkbwu', 0),
+('rakib29185@gmail.com', 'nYhQBYeuKn', 0),
+('rakib29185@gmail.com', 'v1gxfAlYTv', 0),
+('rakib29185@gmail.com', 'nakyxWILLb', 0),
+('reviewer2@example.com', 'rtNxu4jhR6', 1),
+('reviewer2@example.com', '2FiWOhxqAL', 1),
+('reviewer2@example.com', 'dV1kMekWaB', 1),
+('reviewer2@example.com', 'uDD5ApCa2n', 0),
+('reviewer2@example.com', '2s8FxoMfHL', 0),
+('reviewer2@example.com', '4BOKkgOd1U', 0),
+('rakib@gmail.com', 'cgHbqRT8fZ', 0),
+('rakib@gmail.com', '9nw2WVkO3n', 0),
+('rakib@gmail.com', 'hg5vFGmwEz', 0),
+('rakib29185@gmail.com', 'LM2wJwsfbU', 0),
+('rakib@gmail.com', 'kbM43DVmmQ', 0),
+('rakib29185@gmail.com', 'oftcYcC0A0', 1),
+('rakib29185@gmail.com', 'D4VRrRLkkD', 1),
+('rakib29185@gmail.com', '0tZLy90AqQ', 1),
+('rakib29185@gmail.com', '2LorrkYplE', 1),
+('rakib@gmail.com', 'ng4RmMFdPY', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `projectlistwithuserid`
 --
 
@@ -128,6 +166,7 @@ CREATE TABLE `projects` (
   `OtherRequired` varchar(255) DEFAULT NULL,
   `ResearchCarriedOutPlace` varchar(255) DEFAULT NULL,
   `CreatorUserID` int(11) DEFAULT NULL,
+  `CoPiUserID` int(11) DEFAULT NULL,
   `CreatorUserDate` date DEFAULT NULL,
   `CreatorUserSealLocation` varchar(255) DEFAULT NULL,
   `ChairmanOfDepartmentComment` text DEFAULT NULL,
@@ -219,7 +258,7 @@ CREATE TABLE `studentuser` (
 --
 
 INSERT INTO `studentuser` (`StudentID`, `NAME`, `RegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
-(234231432, 'John Doe', '2021001', 'Fall 2021', '3.5'),
+(234231432, 'rakib', '1802073', '55', '55'),
 (2032531001, 'Bob Johnson', '2021003', 'Fall 2020', '3.2'),
 (2147483647, 'Jane Smith', '2021002', 'Spring 2021', '3.8');
 
@@ -234,6 +273,11 @@ CREATE TABLE `users` (
   `Username` varchar(255) NOT NULL,
   `PASSWORD` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
+  `Position` varchar(255) NOT NULL,
+  `HighestAcademicQualification` varchar(255) NOT NULL,
+  `Dateofbirth` varchar(255) NOT NULL,
+  `Nid` varchar(255) NOT NULL,
+  `Gender` varchar(255) NOT NULL,
   `FirstName` varchar(255) DEFAULT NULL,
   `LastName` varchar(255) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL,
@@ -267,8 +311,15 @@ INSERT INTO `users` (`UserID`, `Username`, `PASSWORD`, `Email`, `FirstName`, `La
 (8, 'researcher_user2', 'researcher_password2', 'researcher2@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 'researcher_profile2.jpg', 10, 5, 1),
 (9, 'researcher_user3', 'researcher_password3', 'researcher3@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 'researcher_profile3.jpg', 8, 4, 3),
 (10, 'reviewer_user1', 'reviewer_password1', 'reviewer1@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'reviewer_profile1.jpg', 10, 5, 1),
-(11, 'reviewer_user2', 'reviewer_password2', 'reviewer2@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'reviewer_profile2.jpg', 7, 3, 2),
-(12, 'reviewer_user3', 'reviewer_password3', 'reviewer3@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'reviewer_profile3.jpg', 9, 4, 3);
+(11, 'reviewer_user2', 'pbkdf2:sha256:600000$azCNEgIriz5N40uu$5b5f7c14e664e33eb0782864f88963a7e5f117ac477b9cc6d033ae564f613c5b', 'reviewer2@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'reviewer_profile2.jpg', 7, 3, 2),
+(12, 'reviewer_user3', 'reviewer_password3', 'reviewer3@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'reviewer_profile3.jpg', 9, 4, 3),
+(20, 'aaa', 'pbkdf2:sha256:600000$SBhRgbm64zdbYE62$20db8764df4ed396dd8a1b25d324a7512a70706fb173e06d0dcf7e9b4db858ae', 'aaa', 'aaa', 'aaa', NULL, 'aaa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL),
+(22, 'ami', 'pbkdf2:sha256:600000$4auVQhpiHc2yQWAD$2889e6a761a32dac3353d233f2efd866781c7db2d61a56182b0ccc5541e2de16', 'ami', 'a', 'a', NULL, 'a', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(23, 'tumi', 'pbkdf2:sha256:600000$NT3f5alsnLaRGS1E$a2c7d68ac4b812cffededf82f5b54b4c0b67764e03128669dc097ae36781c973', 'q', 'q', 'q', NULL, 'q', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL),
+(24, 'zz', 'pbkdf2:sha256:600000$6Hg6UbPntSABLMLb$e5892830c098358358a13a4f3f3ba8483f09bdbd5d4341bda5d2177124b7dc86', 'rakib29185@gmail.com', 'zzzz', 'zzzz', NULL, 'zzzz', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(25, 'a', 'pbkdf2:sha256:600000$fndkjMZDKn8vGeaV$3f486d34f8b8bcf0244f3c64ff8057704941082d7a390e3e3027be324523ff28', 'a', 'a', 'a', NULL, 'a', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(26, 'z', 'pbkdf2:sha256:600000$dmzQU1QP0ETZkVtW$7303c44313f2850a116412872c3b21c01f8b7a57461946094575ea58773a6141', 'z', 'zzzzz', 'zzzzz', 'z', '0154255222222', 222, 'zzz', 'zzz', 1999, 'zzz', 4, 2, 1, 'zzz/zzz', 20, 11, 1),
+(27, 'rakib', 'pbkdf2:sha256:600000$0XHTnQffuOYwaT2t$c102b09a2ad0e98611097bd96e944fd59cf641b2b52f490dccf09508a6269564', 'rakib@gmail.com', 'Md. Rakibul', 'Islam', 'dumki', '0178248221221', 50000, 'pstu', 'bd', 55, 'science', 5, 15, 1, 'zzz/mmm', 0, 0, 99);
 
 --
 -- Indexes for dumped tables
@@ -354,13 +405,13 @@ ALTER TABLE `review`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables
@@ -389,7 +440,8 @@ ALTER TABLE `projectlistwithuserid`
 -- Constraints for table `projects`
 --
 ALTER TABLE `projects`
-  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`CreatorUserID`) REFERENCES `users` (`UserID`);
+  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`CreatorUserID`) REFERENCES `users` (`UserID`),
+  ADD CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`CoPiUserID`) REFERENCES `users` (`UserID`);
 
 --
 -- Constraints for table `review`

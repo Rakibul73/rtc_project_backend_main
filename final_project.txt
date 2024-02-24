@@ -30,12 +30,17 @@ CREATE TABLE Users (
   UserID INT PRIMARY KEY AUTO_INCREMENT,
   Username VARCHAR(255) NOT NULL,
   Password VARCHAR(255) NOT NULL,
+  Position VARCHAR(255) NOT NULL,
   Email VARCHAR(255) NOT NULL,
   FirstName VARCHAR(255),
   LastName VARCHAR(255),
   Address VARCHAR(255),
+  Gender VARCHAR(255),
+  Nid VARCHAR(255),
   Phone VARCHAR(15),
+  Dateofbirth VARCHAR(255),
   SalaryScale INT,
+  HighestAcademicQualification VARCHAR(255),
   HighestAcademicQualificationUniversity VARCHAR(255),
   HighestAcademicQualificationCountry VARCHAR(255),
   HighestAcademicQualificationYear INT,
@@ -89,6 +94,7 @@ CREATE TABLE Project (
   OtherRequired VARCHAR(255),
   ResearchCarriedOutPlace VARCHAR(255),
   CreatorUserID INT,
+  CoPiUserID INT,
   CreatorUserDate DATE,
   CreatorUserSealLocation VARCHAR(255),
   ChairmanOfDepartmentComment TEXT,
@@ -99,7 +105,8 @@ CREATE TABLE Project (
   ProjectStatus VARCHAR(50),
   TotalPoints INT,
   ProjectSoftCopyLocation VARCHAR(255),
-  FOREIGN KEY (CreatorUserID) REFERENCES User(UserID)
+  FOREIGN KEY (CreatorUserID) REFERENCES User(UserID),
+  FOREIGN KEY (CoPiUserID) REFERENCES User(UserID)
 );
 
 -- Create ProjectListWithUserID table
@@ -154,7 +161,7 @@ INSERT INTO Role (RoleName) VALUES
   ('Reviewer');
 
 -- Sample values for User table
-INSERT INTO User (Username, Password, Email, RoleID, ProfilePicLocation, TotalNumberOfCompleteProjects, TotalNumberOfCompletePublications, OngoingProjects)
+INSERT INTO User (Username, Password, Email, RoleID, ProfilePicLocation, TotalNumberOfCompleteProjects, TotalNumberOfCompletePublications, OngoingProjects )
 VALUES
   ('admin_user', 'admin_password', 'admin@example.com', 1, 'admin_profile.jpg', 10, 5, 2),
   ('researcher_user', 'researcher_password', 'researcher@example.com', 2, 'researcher_profile.jpg', 5, 2, 3),
