@@ -9,6 +9,7 @@ from flask_cors import CORS  # Add this line
 from flask_jwt_extended import JWTManager
 from functools import wraps
 from datetime import timedelta
+from upload import upload_blueprint
 
 
 app = Flask(__name__)
@@ -38,6 +39,9 @@ app.register_blueprint(project_blueprint)
 
 # Register the user blueprint
 app.register_blueprint(user_blueprint)
+
+# Register the upload blueprint
+app.register_blueprint(upload_blueprint)
 
 @app.route('/', methods=['GET'])
 def index():
