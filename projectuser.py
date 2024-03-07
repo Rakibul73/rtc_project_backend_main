@@ -28,6 +28,14 @@ def get_total_number_of_all_dashboard():
     total_admin = cursor.fetchone()
     print(total_admin['total_admin'])
     
+    cursor.execute("SELECT COUNT(*) AS total_project_report FROM projects WHERE ProjectSoftCopyLocation IS NOT NULL")
+    total_project_report = cursor.fetchone()
+    print(total_project_report['total_project_report'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_teacher FROM users WHERE RoleID = 4")
+    total_teacher = cursor.fetchone()
+    print(total_teacher['total_teacher'])
+    
     cursor.execute("SELECT COUNT(*) AS total_researcher FROM users WHERE RoleID = 2")
     total_researcher = cursor.fetchone()
     print(total_researcher['total_researcher'])
@@ -36,17 +44,11 @@ def get_total_number_of_all_dashboard():
     total_reviewer = cursor.fetchone()
     print(total_reviewer['total_reviewer'])
     
-    cursor.execute("SELECT COUNT(*) AS total_teacher FROM users WHERE RoleID = 4")
-    total_teacher = cursor.fetchone()
-    print(total_teacher['total_teacher'])
-    
-    cursor.execute("SELECT COUNT(*) AS total_student FROM studentuser")
+    cursor.execute("SELECT COUNT(*) AS total_student FROM users WHERE RoleID = 5")
     total_student = cursor.fetchone()
     print(total_student['total_student'])
     
-    cursor.execute("SELECT COUNT(*) AS total_project_report FROM projects WHERE ProjectSoftCopyLocation IS NOT NULL")
-    total_project_report = cursor.fetchone()
-    print(total_project_report['total_project_report'])
+    
     
     cursor.close()
     conn.close()

@@ -41,7 +41,7 @@ def get_all_projects():
 
 
 # Route to create a new project
-@project_blueprint.route('/projects', methods=['POST'])
+@project_blueprint.route('/create_projects', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
 def create_project():
     data = request.get_json()
@@ -50,15 +50,24 @@ def create_project():
     
     # Validate input data
     if 'ProjectTitle' not in data or 'CreatorUserID' not in data:
-        return jsonify({'error': 'Incomplete data. Title, CreatorUserID are required.'}), 400
+        return jsonify({'error': 'Incomplete data. Title, CreatorUserID are required.' , "statuscode" : 400}), 400
 
-    insert_query = "INSERT INTO projects (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal , NameOfCollaboratingDepartments , AddressOfCollaboratingDepartments , NameOfCollaboratingInstitutes , AddressOfCollaboratingInstitutes ,  LocationOfFieldActivities , DurationOfResearchProjectAnnual , DurationOfResearchProjectLongTerm , TotalBudgetOfResearchProposalTK , ExternalAgencyFundingSourcesName , ExternalAgencyFundingSourcesSubmissionDate , ProjectDescription , ProjectAbstract , ProjectObjective , PstuNationalGoal , PriorResearchOverview , Methodology , ExpectedOutput , SuccessIndicators , Beneficiaries , ManPowerExisting , ManPowerRequired , SmallEquipmentExisting , SmallEquipmentRequired ,ResearchMaterialsExisting ,  ResearchMaterialsRequired ,OtherExisting , OtherRequired , ResearchCarriedOutPlace , CreatorUserID , CreatorUserDate , CreatorUserSealLocation , ChairmanOfDepartmentComment , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSignatureDate , ResultsAndDiscussion , KeyAchievements , ProjectStatus , TotalPoints , ProjectSoftCopyLocation  ) VALUES (%s, %s , %s , %s , %s , %s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s )"
-    user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal'] , data["NameOfCollaboratingDepartments"] , data["AddressOfCollaboratingDepartments"] , data["NameOfCollaboratingInstitutes"] , data["AddressOfCollaboratingInstitutes"] , data[" LocationOfFieldActivities"] , data["DurationOfResearchProjectAnnual"] , data["DurationOfResearchProjectLongTerm"] , data["TotalBudgetOfResearchProposalTK"] , data["ExternalAgencyFundingSourcesName"] , data["ExternalAgencyFundingSourcesSubmissionDate"] , data["ProjectDescription"] , data["ProjectAbstract"] , data["ProjectObjective"] , data["PstuNationalGoal"] , data["PriorResearchOverview"] , data["Methodology"] , data["ExpectedOutput"] , data["SuccessIndicators"] , data["Beneficiaries"] , data["ManPowerExisting"] , data["ManPowerRequired"] , data["SmallEquipmentExisting"] , data["SmallEquipmentRequired ,ResearchMaterialsExisting"] , data[" ResearchMaterialsRequired ,OtherExisting"] , data["OtherRequired"] , data["ResearchCarriedOutPlace"] , data["CreatorUserID"] , data["CreatorUserDate"] , data["CreatorUserSealLocation"] , data["ChairmanOfDepartmentComment"] , data["ChairmanOfDepartmentSignatureLocation"] , data["ChairmanOfDepartmentSignatureDate"] , data["ResultsAndDiscussion"] , data["KeyAchievements"] , data["ProjectStatus"] , data["TotalPoints"] , data["ProjectSoftCopyLocation"] )
+    insert_query = "INSERT INTO projects (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal , NameOfCollaboratingDepartments , AddressOfCollaboratingDepartments , NameOfCollaboratingInstitutes , AddressOfCollaboratingInstitutes ,  LocationOfFieldActivities , DurationOfResearchProjectAnnual , DurationOfResearchProjectLongTerm , TotalBudgetOfResearchProposalTK , ExternalAgencyFundingSource , ExternalAgencyFundingSourcesName , ExternalAgencyFundingSourcesSubmissionDate , CommitmentOtherResearchProject , CommitmentOtherResearchProjectName , ProjectDescription , ProjectObjective , PstuNationalGoal , PriorResearchOverview , Methodology , MethodologyFileLocation , ExpectedOutput , SuccessIndicators , Beneficiaries , ManPowerExisting , ManPowerRequired , SmallEquipmentExisting , SmallEquipmentRequired ,ResearchMaterialsExisting ,  ResearchMaterialsRequired ,OtherExisting , OtherRequired , CreatorUserID , CoPiUserID , StudentUserID , CreatorUserSealLocation , CreatorUserSignatureLocation , CreatorUserSignatureDate , ChairmanOfDepartmentComment , ChairmanOfDepartmentSealLocation , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSignatureDate) VALUES (%s, %s , %s , %s , %s , %s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s )"
+    user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal '], data['NameOfCollaboratingDepartments '], data['AddressOfCollaboratingDepartments '], data['NameOfCollaboratingInstitutes '], data['AddressOfCollaboratingInstitutes '], data[' LocationOfFieldActivities '], data['DurationOfResearchProjectAnnual '], data['DurationOfResearchProjectLongTerm '], data['TotalBudgetOfResearchProposalTK '], data['ExternalAgencyFundingSource '], data['ExternalAgencyFundingSourcesName '], data['ExternalAgencyFundingSourcesSubmissionDate '], data['CommitmentOtherResearchProject '], data['CommitmentOtherResearchProjectName '], data['ProjectDescription '], data['ProjectObjective '], data['PstuNationalGoal '], data['PriorResearchOverview '], data['Methodology '], data['MethodologyFileLocation '], data['ExpectedOutput '], data['SuccessIndicators '], data['Beneficiaries '], data['ManPowerExisting '], data['ManPowerRequired '], data['SmallEquipmentExisting '], data['SmallEquipmentRequired '], data['ResearchMaterialsExisting '], data[' ResearchMaterialsRequired '], data['OtherExisting '], data['OtherRequired '], data['CreatorUserID '], data['CoPiUserID '], data['StudentUserID '], data['CreatorUserSealLocation '], data['CreatorUserSignatureLocation '], data['CreatorUserSignatureDate '], data['ChairmanOfDepartmentComment '], data['ChairmanOfDepartmentSealLocation '], data['ChairmanOfDepartmentSignatureLocation '], data['ChairmanOfDepartmentSignatureDate '] )
     cursor.execute(insert_query, user_data)
     conn.commit()
+    # After successfully inserting into projects table, update projectlistwithuserid
+    # Assuming project_id is auto-incremented in projects table
+    project_id = cursor.lastrowid
+    # Insert into projectlistwithuserid
+    project_list_query = "INSERT INTO projectlistwithuserid (UserID, ProjectID , ProjectTitle ) VALUES (%s, %s , %s )"
+    project_list_data = (data['CreatorUserID '] , project_id, data['ProjectTitle '] )
+    cursor.execute(project_list_query, project_list_data)
+    conn.commit()
+    
     cursor.close()
     conn.close()
-    return jsonify({'message': 'User created successfully'}), 201
+    return jsonify({'message': 'Project created successfully' , 'statuscode' : 201}), 201
 
 
 # Route to get a specific project
