@@ -79,8 +79,8 @@ def update_user(user_id):
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    update_query = "UPDATE users SET username = %s, FirstName = %s, LastName = %s, Address = %s, Phone = %s, SalaryScale = %s, HighestAcademicQualificationUniversity = %s, HighestAcademicQualificationCountry = %s, HighestAcademicQualificationYear = %s, AreaOfExpertise = %s, ExperienceInResearch = %s, Teaching = %s, RoleID = %s, ProfilePicLocation = %s, TotalNumberOfCompleteProjects = %s, TotalNumberOfCompletePublications = %s, OngoingProjects = %s  WHERE Userid = %s"
-    user_data = (data['username'], data["FirstName"] , data["LastName"] , data["Address"] , data["Phone"] , data["SalaryScale"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["HighestAcademicQualificationYear"] , data["AreaOfExpertise"] , data["ExperienceInResearch"] , data["Teaching"] , data["RoleID"] , data["ProfilePicLocation"] , data["TotalNumberOfCompleteProjects"] , data["TotalNumberOfCompletePublications"] , data["OngoingProjects"] , user_id)
+    update_query = "UPDATE users SET username = %s, FirstName = %s, LastName = %s, Address = %s, Phone = %s, SalaryScale = %s, HighestAcademicQualification = %s, HighestAcademicQualificationUniversity = %s, HighestAcademicQualificationCountry = %s, HighestAcademicQualificationYear = %s, AreaOfExpertise = %s, ExperienceInResearch = %s, Teaching = %s, RoleID = %s, ProfilePicLocation = %s, TotalNumberOfCompleteProjects = %s, TotalNumberOfCompletePublications = %s, OngoingProjects = %s  WHERE Userid = %s"
+    user_data = (data['username'], data["FirstName"] , data["LastName"] , data["Address"] , data["Phone"] , data["SalaryScale"] , data["HighestAcademicQualification"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["HighestAcademicQualificationYear"] , data["AreaOfExpertise"] , data["ExperienceInResearch"] , data["Teaching"] , data["RoleID"] , data["ProfilePicLocation"] , data["TotalNumberOfCompleteProjects"] , data["TotalNumberOfCompletePublications"] , data["OngoingProjects"] , user_id)
     cursor.execute(update_query, user_data)
     conn.commit()
     cursor.close()
@@ -122,6 +122,32 @@ def get_user_role_of_specific_user(user_id):
         return jsonify({'message': 'User not found'}), 404
 
 
+# Route to get all user names and IDs excluding users with the student role
+@user_blueprint.route('/get_all_users_except_students', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2, 3, 4, 5])
+def get_all_users_except_students():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT Userid, Username, FirstName , LastName FROM users WHERE RoleID != 5")  # Assuming student role ID is 5
+    users = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'users': users, "statuscode": 200}), 200
+
+
+# Route to get all user names and IDs only with the student role
+@user_blueprint.route('/get_only_student_users', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2, 3, 4, 5])
+def get_only_student_users():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT Userid, Username, FirstName , LastName FROM users WHERE RoleID = 5")  # Assuming student role ID is 5
+    users = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'users': users, "statuscode": 200}), 200
 
 
 # ==========================================  User Related Routes END =============================
