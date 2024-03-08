@@ -65,6 +65,57 @@ def get_total_number_of_all_dashboard():
         'statuscode' : 200
     }) , 200
 
+# Route to get project dashboard
+@projectuser_blueprint.route('/get_project_dashboard', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_project_dashboard():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT COUNT(*) AS completed_projects FROM projects WHERE ProjectStatus = 'Completed'")
+    completed_projects = cursor.fetchone()
+    print(completed_projects['completed_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM projects")
+    total_projects = cursor.fetchone()
+    print(total_projects['total_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS pending_projects FROM projects WHERE ProjectStatus = 'Pending'")
+    pending_projects = cursor.fetchone()
+    print(pending_projects['pending_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS approved_projects FROM projects WHERE ProjectStatus = 'Approved'")
+    approved_projects = cursor.fetchone()
+    print(approved_projects['approved_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM projects WHERE ProjectStatus = 'Rejected'")
+    rejected_projects = cursor.fetchone()
+    print(rejected_projects['rejected_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS running_projects FROM projects WHERE ProjectStatus = 'Running'")
+    running_projects = cursor.fetchone()
+    print(running_projects['running_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM projects WHERE  ProjectSoftCopyLocation IS NOT NULL")
+    final_report_submitted = cursor.fetchone()
+    print(final_report_submitted['final_report_submitted'])
+
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({
+        'running_projects': running_projects['running_projects'],
+        'rejected_projects': rejected_projects['rejected_projects'],
+        'approved_projects': approved_projects['approved_projects'],
+        'pending_projects': pending_projects['pending_projects'],
+        'final_report_submitted': final_report_submitted['final_report_submitted'],
+        'completed_projects': completed_projects['completed_projects'],
+        'total_projects': total_projects['total_projects'],
+        'statuscode' : 200
+    }) , 200
+
 # Route to get all projects for specific userID
 @projectuser_blueprint.route('/get_all_projects_for_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
