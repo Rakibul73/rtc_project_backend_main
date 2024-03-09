@@ -11,7 +11,7 @@ project_blueprint = Blueprint('project', __name__)
 # Route to get total number of projects
 @project_blueprint.route('/get_total_number_of_projects', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+@role_required([1, 2 , 3 , 4 , 5])
 def get_total_number_of_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -27,6 +27,7 @@ def get_total_number_of_projects():
 # Route to get all projects
 @project_blueprint.route('/projects', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def get_all_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -43,6 +44,7 @@ def get_all_projects():
 # Route to create a new project
 @project_blueprint.route('/create_projects', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def create_project():
     data = request.get_json()
     conn = get_db()
@@ -73,6 +75,7 @@ def create_project():
 # Route to get a specific project
 @project_blueprint.route('/projects/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def get_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -89,6 +92,7 @@ def get_specific_project(project_id):
 # Route to update a project
 @project_blueprint.route('/projects/<int:project_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def update_project(project_id):
     data = request.get_json()
     conn = get_db()
@@ -106,6 +110,7 @@ def update_project(project_id):
 # Route to delete a project
 @project_blueprint.route('/projects/<int:project_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def delete_project(project_id):
     conn = get_db()
     cursor = conn.cursor()

@@ -119,6 +119,7 @@ def get_project_dashboard():
 # Route to get all projects for specific userID
 @projectuser_blueprint.route('/get_all_projects_for_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def get_all_projects_for_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -132,6 +133,7 @@ def get_all_projects_for_specific_user(user_id):
 # Route to get a specific project with userID
 @projectuser_blueprint.route('/get_specific_project_for_specific_user/<int:project_id>/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def get_specific_project_for_specific_user(project_id, user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -149,6 +151,7 @@ def get_specific_project_for_specific_user(project_id, user_id):
 # Route to delete a project with user ID
 @projectuser_blueprint.route('/delete_project_with_user/<int:project_id>/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def delete_project_with_user(project_id, user_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -163,6 +166,7 @@ def delete_project_with_user(project_id, user_id):
 # Route to delete all projects for a specific user
 @projectuser_blueprint.route('/delete_projects_for_specific_user/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
 def delete_projects_for_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
