@@ -10,6 +10,7 @@ from flask_jwt_extended import JWTManager
 from functools import wraps
 from datetime import timedelta
 from upload import upload_blueprint
+from download import download_blueprint
 
 
 app = Flask(__name__)
@@ -42,6 +43,9 @@ app.register_blueprint(user_blueprint)
 
 # Register the upload blueprint
 app.register_blueprint(upload_blueprint)
+
+# Register the download blueprint
+app.register_blueprint(download_blueprint)
 
 @app.route('/', methods=['GET'])
 def index():
