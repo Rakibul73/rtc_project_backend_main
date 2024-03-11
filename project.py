@@ -38,7 +38,7 @@ def get_all_projects():
     cursor.close()
     conn.close()
     
-    return jsonify({'projects': project_list})
+    return jsonify({'projects': project_list  , "statuscode" : 200}) , 200
 
 
 # Route to create a new project
