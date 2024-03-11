@@ -71,3 +71,20 @@ def upload_methodology():
     file.save('upload/methodology/' + file.filename)
     
     return jsonify({'message': 'Methodology file uploaded successfully' , "statuscode" : 200}), 200
+
+@upload_blueprint.route('/nid/upload', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def upload_nid():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part' , "statuscode" : 400}), 400
+    
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({'error': 'No selected file' , "statuscode" : 400}), 400
+    
+    # Save the file to the methodology folder
+    file.save('upload/nid/' + file.filename)
+    
+    return jsonify({'message': 'Nid file uploaded successfully' , "statuscode" : 200}), 200

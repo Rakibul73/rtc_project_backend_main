@@ -31,3 +31,10 @@ def download_profile_pic(filename):
 def download_methodology(filename):
     # Logic for downloading the methodology
     return send_from_directory('upload/methodology', filename)
+
+@download_blueprint.route('/nid/download/<filename>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def download_nid(filename):
+    # Logic for downloading the methodology
+    return send_from_directory('upload/nid', filename)
