@@ -130,7 +130,7 @@ def get_user_role_of_specific_user(user_id):
 def get_all_users_except_students():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT Userid, Username, FirstName , LastName FROM users WHERE RoleID != 5")  # Assuming student role ID is 5
+    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM users WHERE RoleID != 5")  # Assuming student role ID is 5
     users = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -144,7 +144,7 @@ def get_all_users_except_students():
 def get_only_student_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT Userid, Username, FirstName , LastName FROM users WHERE RoleID = 5")  # Assuming student role ID is 5
+    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM users WHERE RoleID = 5")  # Assuming student role ID is 5
     users = cursor.fetchall()
     cursor.close()
     conn.close()
