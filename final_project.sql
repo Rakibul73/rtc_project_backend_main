@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 08, 2024 at 02:08 PM
+-- Generation Time: Mar 11, 2024 at 10:52 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -322,10 +322,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglish`, `Email`, `FirstName`, `LastName`, `PresentAddress`, `Gender`, `Nid`, `Phone`, `Dateofbirth`, `SalaryScale`, `HighestAcademicQualification`, `HighestAcademicQualificationUniversity`, `HighestAcademicQualificationCountry`, `HighestAcademicQualificationYear`, `AreaOfExpertise`, `ExperienceInResearch`, `Teaching`, `ProfilePicLocation`, `TotalNumberOfCompleteProjects`, `TotalNumberOfCompletePublications`, `OngoingProjects`, `StudentID`, `StudentRegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
-(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', '', 'rakib29185@gmail.com', 'Md. Rakibul', 'Islam', 'address', NULL, NULL, '01700000000', NULL, 0, 'cse', 'pstu', 'bd', 2024, 'area', 0, 0, 'propic', 0, 0, 0, NULL, NULL, NULL, NULL),
-(2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', 'taj', 'taj', 'taj', NULL, NULL, NULL, '01400000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 4, 'sobujsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', '', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', NULL, NULL, NULL, '01500000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglish`, `PositionBangla`, `PositionHeldSince`, `Email`, `FirstName`, `LastName`, `FullNameBangla`, `PresentAddress`, `PermanentAddress`, `Gender`, `Nid`, `NidLocation`, `InstituteName`, `InstituteLocation`, `InstituteEmail`, `Phone`, `Dateofbirth`, `SalaryScale`, `HighestAcademicQualification`, `HighestAcademicQualificationUniversity`, `HighestAcademicQualificationCountry`, `HighestAcademicQualificationYear`, `AreaOfExpertise`, `ExperienceInResearch`, `Teaching`, `ProfilePicLocation`, `SignatureLocation`, `SealLocation`, `TotalNumberOfCompleteProjects`, `TotalNumberOfCompletePublications`, `OngoingProjects`, `StudentID`, `StudentRegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
+(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'MD Rakibul', 'Islam', 'd', 'address', 'd', 'd', 'd', 'd', 'd', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', 0, 'cse', 'pstu', 'bd', 2024, 'area', 0, 0, '30000000.jpg', 'd', 'd', 0, 0, 0, 0, 'd', 'd', 'd'),
+(2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', '', '', 'taj', 'taj', 'taj', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01400000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'zzzz.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 4, 'sobujsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', '', '', '', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01500000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
