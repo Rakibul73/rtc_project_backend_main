@@ -1,5 +1,5 @@
 from flask import request, jsonify , Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from auth_utils import role_required
 from db import get_db  #  local module 
 
@@ -116,7 +116,7 @@ def get_project_dashboard():
         'statuscode' : 200
     }) , 200
 
-# Route to get all projects for specific userID
+# Route to get all projectID and ProjectTitle for specific userID
 @projectuser_blueprint.route('/get_all_projects_for_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1, 2 , 3 , 4 , 5])
@@ -128,6 +128,30 @@ def get_all_projects_for_specific_user(user_id):
     cursor.close()
     conn.close()
     return jsonify({'projects_for_specific_user': projects_for_specific_user})
+
+
+# Route to get all projects for a specific user
+@projectuser_blueprint.route('/myprojects/user/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+def get_projects_for_user(user_id):
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    
+    # Check if the current user is authorized to access projects
+    if current_user_id != user_id:
+        return jsonify({'message': 'Unauthorized access to user projects' , 'statuscode': 403}), 403
+    
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Query to get projects for the specified user ID
+    cursor.execute("SELECT * FROM projects WHERE CreatorUserID = %s", (user_id,))
+    project_list = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'projects': project_list, 'statuscode': 200}), 200
 
 
 # Route to get a specific project with userID
