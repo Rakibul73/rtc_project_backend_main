@@ -84,9 +84,9 @@ def get_specific_project(project_id):
     cursor.close()
     conn.close()
     if project_data:
-        return jsonify({'project': project_data})
+        return jsonify({'project': project_data , 'statuscode' : 200}), 200
     else:
-        return jsonify({'message': 'project not found'}), 404
+        return jsonify({'message': 'project not found' , 'statuscode' : 404}), 404
 
 
 # Route to update a project
@@ -104,21 +104,32 @@ def update_project(project_id):
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'Project updated successfully'})
+    return jsonify({'message': 'Project updated successfully', 'statuscode' : 200}), 200
 
 
 # Route to delete a project
 @project_blueprint.route('/projects/<int:project_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])
+@role_required([1])
 def delete_project(project_id):
     conn = get_db()
     cursor = conn.cursor()
+    # Remove from ActivityPlan table based on ProjectID
+    delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
+    cursor.execute(delete_activity_query, (project_id,))
+    # Remove from Review table based on ProjectID
+    delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
+    cursor.execute(delete_review_query, (project_id,))
+    # Remove from ProjectListWithUserID table based on ProjectID
+    delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
+    cursor.execute(delete_project_list_query, (project_id,))
+    # Remove from Projects table based on ProjectID
     delete_query = "DELETE FROM projects WHERE ProjectID = %s"
     cursor.execute(delete_query, (project_id,))
+    
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully'})
+    return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully' , 'statuscode' : 200}), 200
 
 # ==========================================  Project Related Routes END  =============================
