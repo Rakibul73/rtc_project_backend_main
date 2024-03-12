@@ -20,7 +20,7 @@ CORS(app)  # Add this line
 # Configure JWT
 app.config['JWT_SECRET_KEY'] = 'rakibpstusecretkey'
 # Set a longer token expiration time
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)  # Example: 24 hours
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=3)  # Example: 24 hours
 jwt = JWTManager(app)
 
 # Register the authentication blueprint
