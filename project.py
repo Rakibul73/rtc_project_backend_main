@@ -75,7 +75,7 @@ def create_project():
 # Route to get a specific project
 @project_blueprint.route('/projects/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])
+@role_required([1, 2 , 3 , 4])
 def get_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -131,5 +131,44 @@ def delete_project(project_id):
     cursor.close()
     conn.close()
     return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully' , 'statuscode' : 200}), 200
+
+
+# Route to delete multiple projects by IDs
+@project_blueprint.route('/projects/delete_multiple_projects', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def delete_multiple_projects():
+    try:
+        # Get the list of project IDs from the request body
+        data = request.get_json()
+        project_ids = data.get('project_ids', [])
+
+        if not project_ids:
+            return jsonify({'error': 'No project IDs provided'}), 400
+
+        conn = get_db()
+        cursor = conn.cursor()
+
+        for project_id in project_ids:
+            # Remove from ActivityPlan table based on ProjectID
+            delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
+            cursor.execute(delete_activity_query, (project_id,))
+            # Remove from Review table based on ProjectID
+            delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
+            cursor.execute(delete_review_query, (project_id,))
+            # Remove from ProjectListWithUserID table based on ProjectID
+            delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
+            cursor.execute(delete_project_list_query, (project_id,))
+            # Remove from Projects table based on ProjectID
+            delete_query = "DELETE FROM projects WHERE ProjectID = %s"
+            cursor.execute(delete_query, (project_id,))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({'message': 'Projects deleted successfully', 'statuscode': 200}), 200
+    except Exception as e:
+        return jsonify({'error': str(e), 'statuscode': 500}), 500
 
 # ==========================================  Project Related Routes END  =============================
