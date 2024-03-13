@@ -116,7 +116,7 @@ def get_project_dashboard():
         'statuscode' : 200
     }) , 200
 
-# Route to get all projectID and ProjectTitle for specific userID
+# Route to get all projectID and ProjectTitle for specific userID from FROM projectlistwithuserid
 @projectuser_blueprint.route('/get_all_projects_for_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1, 2 , 3 , 4 , 5])
@@ -130,7 +130,7 @@ def get_all_projects_for_specific_user(user_id):
     return jsonify({'projects_for_specific_user': projects_for_specific_user})
 
 
-# Route to get all projects for a specific user
+# Route to get all projects for a  self specific user
 @projectuser_blueprint.route('/myprojects/user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 def get_projects_for_user(user_id):

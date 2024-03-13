@@ -58,6 +58,8 @@ def create_project():
     user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal'], data['NameOfCollaboratingDepartments'], data['AddressOfCollaboratingDepartments'], data['NameOfCollaboratingInstitutes'], data['AddressOfCollaboratingInstitutes'], data['LocationOfFieldActivities'], data['DurationOfResearchProjectAnnual'], data['DurationOfResearchProjectLongTerm'], data['TotalBudgetOfResearchProposalTK'], data['ExternalAgencyFundingSource'], data['ExternalAgencyFundingSourcesName'], data['ExternalAgencyFundingSourcesSubmissionDate'], data['CommitmentOtherResearchProject'], data['CommitmentOtherResearchProjectName'], data['ProjectDescription'], data['ProjectObjective'], data['PstuNationalGoal'], data['PriorResearchOverview'], data['Methodology'], data['MethodologyFileLocation'], data['ExpectedOutput'], data['SuccessIndicators'], data['Beneficiaries'], data['ManPowerExisting'], data['ManPowerRequired'], data['SmallEquipmentExisting'], data['SmallEquipmentRequired'], data['ResearchMaterialsExisting'], data['ResearchMaterialsRequired'], data['OtherExisting'], data['OtherRequired'], data['CreatorUserID'], data['CoPiUserID'], data['StudentUserID'], data['CreatorUserSealLocation'], data['CreatorUserSignatureLocation'], data['CreatorUserSignatureDate'], data['ChairmanOfDepartmentComment'], data['ChairmanOfDepartmentSealLocation'], data['ChairmanOfDepartmentSignatureLocation'], data['ChairmanOfDepartmentSignatureDate'] , "Pending", 0)
     cursor.execute(insert_query, user_data)
     conn.commit()
+    
+    # ProjectStatus = "Pending" , "Approved" , "Rejected" , "Running" , "Completed"
     # After successfully inserting into projects table, update projectlistwithuserid
     # Assuming project_id is auto-incremented in projects table
     project_id = cursor.lastrowid
@@ -89,11 +91,11 @@ def get_specific_project(project_id):
         return jsonify({'message': 'project not found' , 'statuscode' : 404}), 404
 
 
-# Route to update a project
-@project_blueprint.route('/projects/<int:project_id>', methods=['PUT'])
+# Route to update all fields of a project only if user is admin
+@project_blueprint.route('/update_project_admin/<int:project_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])
-def update_project(project_id):
+@role_required([1])
+def update_project_admin(project_id):
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
@@ -170,5 +172,31 @@ def delete_multiple_projects():
         return jsonify({'message': 'Projects deleted successfully', 'statuscode': 200}), 200
     except Exception as e:
         return jsonify({'error': str(e), 'statuscode': 500}), 500
+
+
+
+
+# Route to update basic info of a project of self 
+@project_blueprint.route('/update_project/<int:project_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4])
+def update_project(project_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    update_query = "UPDATE projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s , LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSource = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , CommitmentOtherResearchProject = %s , CommitmentOtherResearchProjectName = %s , ProjectDescription = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , MethodologyFileLocation = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired = %s , ResearchMaterialsExisting = %s , ResearchMaterialsRequired = %s , OtherExisting = %s , OtherRequired = %s , CreatorUserID = %s , CoPiUserID = %s , StudentUserID = %s , CreatorUserSealLocation = %s , CreatorUserSignatureLocation = %s , CreatorUserSignatureDate = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSealLocation = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ProjectStatus = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
+    project_data = ( data['CodeByRTC'] , data['DateRecieved'] , data['ProjectTitle'] , data['NatureOfResearchProposal'] , data['NameOfCollaboratingDepartments'] , data['AddressOfCollaboratingDepartments'] , data['NameOfCollaboratingInstitutes'] , data['AddressOfCollaboratingInstitutes'] , data['LocationOfFieldActivities'] , data['DurationOfResearchProjectAnnual'] , data['DurationOfResearchProjectLongTerm'] , data['TotalBudgetOfResearchProposalTK'] , data['ExternalAgencyFundingSource'] , data['ExternalAgencyFundingSourcesName'] , data['ExternalAgencyFundingSourcesSubmissionDate'] , data['CommitmentOtherResearchProject'] , data['CommitmentOtherResearchProjectName'] , data['ProjectDescription'] , data['ProjectObjective'] , data['PstuNationalGoal'] , data['PriorResearchOverview'] , data['Methodology'] , data['MethodologyFileLocation'] , data['ExpectedOutput'] , data['SuccessIndicators'] , data['Beneficiaries'] , data['ManPowerExisting'] , data['ManPowerRequired'] , data['SmallEquipmentExisting'] , data['SmallEquipmentRequired'] , data['ResearchMaterialsExisting'] , data['ResearchMaterialsRequired'] , data['OtherExisting'] , data['OtherRequired'] , data['CreatorUserID'] , data['CoPiUserID'] , data['StudentUserID'] , data['CreatorUserSealLocation'] , data['CreatorUserSignatureLocation'] , data['CreatorUserSignatureDate'] , data['ChairmanOfDepartmentComment'] , data['ChairmanOfDepartmentSealLocation'] , data['ChairmanOfDepartmentSignatureLocation'] , data['ChairmanOfDepartmentSignatureDate'] , data['ProjectStatus'] , data['ProjectSoftCopyLocation'] , project_id)
+    
+    cursor.execute(update_query, project_data)
+    
+    project_list_query = "UPDATE projectlistwithuserid SET ProjectTitle = %s WHERE ProjectID = %s"
+    project_list_data = (data['ProjectTitle'] , project_id)
+    cursor.execute(project_list_query, project_list_data)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Project updated successfully', 'statuscode' : 200}), 200
+
 
 # ==========================================  Project Related Routes END  =============================
