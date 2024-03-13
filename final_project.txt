@@ -51,6 +51,7 @@ CREATE TABLE Users (
   TotalNumberOfCompleteProjects INT,
   TotalNumberOfCompletePublications INT,
   OngoingProjects INT,
+  ReferencesOfLatestPublications VARCHAR(255),
 
   StudentID INT,
   StudentRegNo VARCHAR(50),
