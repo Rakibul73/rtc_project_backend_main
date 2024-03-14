@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2024 at 11:14 PM
+-- Generation Time: Mar 14, 2024 at 11:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -208,6 +208,30 @@ INSERT INTO `role` (`RoleID`, `RoleName`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tempusers`
+--
+
+CREATE TABLE `tempusers` (
+  `UserID` int(11) NOT NULL,
+  `RoleID` int(11) DEFAULT NULL,
+  `Username` varchar(255) NOT NULL,
+  `PASSWORD` varchar(255) NOT NULL,
+  `FirstName` varchar(255) DEFAULT NULL,
+  `LastName` varchar(255) DEFAULT NULL,
+  `Email` varchar(255) NOT NULL,
+  `Phone` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tempusers`
+--
+
+INSERT INTO `tempusers` (`UserID`, `RoleID`, `Username`, `PASSWORD`, `FirstName`, `LastName`, `Email`, `Phone`) VALUES
+(1, 4, 'muradsir', 'pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81', 'Golam Md. Muradul', 'Bashir', 'tuimorsala01@gmail.com', '01718323601');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -261,8 +285,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglish`, `PositionBangla`, `PositionHeldSince`, `Email`, `FirstName`, `LastName`, `FullNameBangla`, `PresentAddress`, `PermanentAddress`, `Gender`, `Nid`, `NidLocation`, `InstituteName`, `InstituteLocation`, `InstituteEmail`, `Phone`, `Dateofbirth`, `SalaryScale`, `HighestAcademicQualification`, `HighestAcademicQualificationUniversity`, `HighestAcademicQualificationCountry`, `HighestAcademicQualificationYear`, `AreaOfExpertise`, `ReferencesOfLatestPublications`, `ExperienceInResearch`, `Teaching`, `ProfilePicLocation`, `SignatureLocation`, `SealLocation`, `TotalNumberOfCompleteProjects`, `TotalNumberOfCompletePublications`, `OngoingProjects`, `StudentID`, `StudentRegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
 (1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'MD Rakibul', 'Islam', 'd', 'address', 'd', 'd', 'd', '22.png', 'd', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, '30000000.jpg', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
 (2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', '', '', 'taj', 'taj', 'taj', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01400000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 4, 'sobujsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', 'f', 'f', '5', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', 'hf', 'f', 'f', 'f', 'ff', '', 'f', 'f', 'f', '01500000000', '2024-03-20 00:00:00.000', 0, 'f', 'ff', 'f', 0, 'f', 'researchgate , google scholars', 0, 0, NULL, NULL, 'shanto  .jpg', 0, 0, 0, 0, '3', 'f', 'f'),
-(4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01725225225', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(3, 4, 'sobujsirsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', 'f', 'f', '5', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', 'hf', 'f', 'f', 'f', 'ff', '', 'f', 'f', 'f', '01500000000', '2024-03-20 00:00:00.000', 0, 'f', 'ff', 'f', 0, 'f', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'shanto  .jpg', 0, 0, 0, 0, '3', 'f', 'f'),
+(4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01725225225', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 4, 'sobujsir', 'pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389', '', '', '', 'rakibul16@cse.pstu.ac.bd', 'Dr. Md.', 'Samsuzzaman', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01712653210', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -312,6 +337,13 @@ ALTER TABLE `role`
   ADD PRIMARY KEY (`RoleID`);
 
 --
+-- Indexes for table `tempusers`
+--
+ALTER TABLE `tempusers`
+  ADD PRIMARY KEY (`UserID`),
+  ADD KEY `RoleID` (`RoleID`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -347,10 +379,16 @@ ALTER TABLE `role`
   MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `tempusers`
+--
+ALTER TABLE `tempusers`
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -389,6 +427,12 @@ ALTER TABLE `projects`
 ALTER TABLE `review`
   ADD CONSTRAINT `review_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `projects` (`ProjectID`),
   ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`ReviewerUserID`) REFERENCES `users` (`UserID`);
+
+--
+-- Constraints for table `tempusers`
+--
+ALTER TABLE `tempusers`
+  ADD CONSTRAINT `tempusers_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `role` (`RoleID`);
 
 --
 -- Constraints for table `users`
