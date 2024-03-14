@@ -201,4 +201,58 @@ def delete_projects_for_specific_user(user_id):
     return jsonify({'message': 'All projects for user with id ' + str(user_id) + ' deleted successfully'})
 
 
+
+# Route to get total number of all dashboard
+@projectuser_blueprint.route('/user_management_overview', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])  # Only admin and supervisor can access this route
+def user_management_overview():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT COUNT(*) AS total_users FROM users")
+    total_users = cursor.fetchone()
+    print(total_users['total_users'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_pending_users FROM TempUsers")
+    total_pending_users = cursor.fetchone()
+    print(total_pending_users['total_pending_users'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_admin FROM users WHERE RoleID = 1")
+    total_admin = cursor.fetchone()
+    print(total_admin['total_admin'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_teacher FROM users WHERE RoleID = 4")
+    total_teacher = cursor.fetchone()
+    print(total_teacher['total_teacher'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_researcher FROM users WHERE RoleID = 2")
+    total_researcher = cursor.fetchone()
+    print(total_researcher['total_researcher'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_reviewer FROM users WHERE RoleID = 3")
+    total_reviewer = cursor.fetchone()
+    print(total_reviewer['total_reviewer'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_student FROM users WHERE RoleID = 5")
+    total_student = cursor.fetchone()
+    print(total_student['total_student'])
+    
+    
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({
+        'total_users': total_users['total_users'],
+        'total_pending_users': total_pending_users['total_pending_users'],
+        'total_admin': total_admin['total_admin'],
+        'total_researcher': total_researcher['total_researcher'],
+        'total_reviewer': total_reviewer['total_reviewer'],
+        'total_teacher': total_teacher['total_teacher'],
+        'total_student': total_student['total_student'],
+        'statuscode' : 200
+    }) , 200
+
+
 # ==========================================  Project_User Related Routes END  =============================
