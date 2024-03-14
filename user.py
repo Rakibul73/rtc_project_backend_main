@@ -25,6 +25,37 @@ def get_total_number_of_users():
     return jsonify({'total_users': total_users['total_users'] , "statuscode" : 200}) , 200
 
 
+# Route to get all pending users
+@user_blueprint.route('/get_all_pending_users', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_all_pending_users():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM TempUsers")
+    TempUsers = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'TempUsers': TempUsers , "statuscode" : 200}) , 200
+
+
+# Route to get a specific pending user
+@user_blueprint.route('/get_specific_pending_user/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_specific_pending_user(user_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM TempUsers WHERE UserID = %s", (user_id,))
+    TempUser = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    print(jsonify(TempUser))
+    if TempUser:
+        return jsonify({'TempUser': TempUser})
+    else:
+        return jsonify({'message': 'TempUser not found'}), 404
+
 # Route to get all users
 @user_blueprint.route('/get_all_users', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
@@ -88,6 +119,20 @@ def update_user(user_id):
     conn.close()
     return jsonify({'message': 'User updated successfully' , 'statuscode' : 200}), 200
 
+# Route to delete a Temp user
+@user_blueprint.route('/delete_temp_user/<int:user_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def delete_temp_user(user_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    delete_query = "DELETE FROM TempUsers WHERE Userid = %s"
+    cursor.execute(delete_query, (user_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Pending User with id ' + str(user_id) + ' deleted successfully' , 'statuscode' : 200}), 200
+
 # Route to delete a user
 @user_blueprint.route('/delete_user/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
@@ -149,6 +194,32 @@ def get_only_student_users():
     cursor.close()
     conn.close()
     return jsonify({'users': users, "statuscode": 200}), 200
+
+
+# Route to Approve a Temp user means to move it from TempUsers to Users
+@user_blueprint.route('/approve_temp_user/<int:user_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def approve_temp_user(user_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM TempUsers WHERE UserID = %s", (user_id,))
+    TempUser = cursor.fetchone()
+    print(TempUser[2])
+    # save it in a Users table and delete it from TempUsers table
+    if TempUser:
+        insert_query = "INSERT INTO users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
+        user_data = (TempUser[2], TempUser[3], TempUser[6] , TempUser[4], TempUser[5] , TempUser[7] , TempUser[1])
+        cursor.execute(insert_query, user_data)
+    
+    
+    delete_query = "DELETE FROM TempUsers WHERE Userid = %s"
+    cursor.execute(delete_query, (user_id,))
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Pending UserID ' + str(user_id) + ' approved successfully' , 'statuscode' : 200}), 200
 
 
 # ==========================================  User Related Routes END =============================

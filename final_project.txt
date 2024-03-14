@@ -12,6 +12,22 @@ CREATE TABLE Role (
   RoleName VARCHAR(50) NOT NULL
 );
 
+
+-- Create TempUser table
+CREATE TABLE TempUsers (
+  UserID INT PRIMARY KEY AUTO_INCREMENT,
+  RoleID INT,
+  Username VARCHAR(255) NOT NULL,
+  Password VARCHAR(255) NOT NULL,
+  FirstName VARCHAR(255),
+  LastName VARCHAR(255),
+  Email VARCHAR(255) NOT NULL,
+  Phone VARCHAR(15),
+  FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
+);
+
+
+
 -- Create User table
 CREATE TABLE Users (
   UserID INT PRIMARY KEY AUTO_INCREMENT,
