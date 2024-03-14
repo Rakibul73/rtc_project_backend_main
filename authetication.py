@@ -193,13 +193,13 @@ def register_user():
         # Hash the password before storing it in the database
         password = data.get('password')
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        insert_query = "INSERT INTO users (username, password, email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
+        insert_query = "INSERT INTO TempUsers (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
         user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["RoleID"])
         cursor.execute(insert_query, user_data)
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'message': 'User registered successfully' , 'statuscode' : 201 }), 201
+        return jsonify({'message': 'User registered successfully. Admin will activate your account soon' , 'statuscode' : 201 }), 201
     elif isUserExist is not None:
         return jsonify({'message': 'Username = ' + username + ' already exists', 'statuscode' : 409}), 409
     elif isEmailExist is not None:
