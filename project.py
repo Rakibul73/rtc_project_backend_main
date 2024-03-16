@@ -27,7 +27,7 @@ def get_total_number_of_projects():
 # Route to get all projects
 @project_blueprint.route('/projects', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])
+@role_required([1])
 def get_all_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
