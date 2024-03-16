@@ -219,13 +219,25 @@ def get_only_student_users():
 
 
 # Function to send email
-def send_email(email , username):
+def send_email(email , username , roleid):
     sender_email = "tuimorsala01@gmail.com"  # Replace with Admin email address
     password = "szfl khwy snmp huic"  # Replace with Admin email password
     # To get this gmail password, Go to the App passwords of your Google account,
     
+    rolename = "Admin"
+    if roleid == 1:
+        rolename = "Admin"
+    elif roleid == 2:
+        rolename = "Researcher"
+    elif roleid == 3:
+        rolename = "Reviewer"
+    elif roleid == 4:
+        rolename = "Teacher"
+    elif roleid == 5:
+        rolename = "Student"
+    
     # Render the HTML template with the reset URL
-    email_body = render_template('email_template_approved_user_notification.html' , username = username)
+    email_body = render_template('email_template_approved_user_notification.html' , username = username , rolename=rolename)
 
     message = MIMEMultipart()
     message['From'] = sender_email
@@ -264,7 +276,7 @@ def approve_temp_user(user_id):
     cursor.execute(delete_query, (user_id,))
     conn.commit()
     
-    send_email(TempUser[6] , TempUser[2])
+    send_email(TempUser[6] , TempUser[2] , TempUser[1])
     
     cursor.close()
     conn.close()
