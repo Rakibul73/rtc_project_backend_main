@@ -28,7 +28,7 @@ def get_total_number_of_users():
 # Route to get all pending users
 @user_blueprint.route('/get_all_pending_users', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+@role_required([1])  # Only admin and supervisor can access this route
 def get_all_pending_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -42,7 +42,7 @@ def get_all_pending_users():
 # Route to get a specific pending user
 @user_blueprint.route('/get_specific_pending_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])
+@role_required([1])
 def get_specific_pending_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
