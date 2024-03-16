@@ -15,8 +15,9 @@ auth_blueprint = Blueprint('auth', __name__)
 
 # Function to send email
 def send_email(email, reset_otp):
-    sender_email = "tuimorsala01@gmail.com"  # Replace with your email address
-    password = "szfl khwy snmp huic"  # Replace with your email password
+    sender_email = "tuimorsala01@gmail.com"  # Replace with Admin email address
+    password = "szfl khwy snmp huic"  # Replace with Admin email password
+    # To get this gmail password, Go to the App passwords of your Google account,
     
     # Render the HTML template with the reset URL
     email_body = render_template('email_template_passreset.html', reset_otp=reset_otp)
