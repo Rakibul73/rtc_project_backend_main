@@ -1,4 +1,7 @@
-from flask import  request, jsonify , Blueprint
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+from flask import  render_template, request, jsonify , Blueprint
 from flask_jwt_extended import jwt_required 
 from auth_utils import role_required
 from db import get_db # local module
@@ -55,6 +58,24 @@ def get_specific_pending_user(user_id):
         return jsonify({'TempUser': TempUser})
     else:
         return jsonify({'message': 'TempUser not found'}), 404
+
+
+# Route to update a specific pending user
+@user_blueprint.route('/update_pending_user/<int:user_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def update_pending_user(user_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    print(data)
+    update_query = "UPDATE TempUsers SET Username = %s , Email = %s , FirstName = %s , LastName = %s , Phone = %s , RoleID = %s  WHERE UserID = %s"
+    temp_user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['Phone'] , data['RoleID'] , user_id)
+    cursor.execute(update_query, temp_user_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'TempUser updated successfully' , 'statuscode' : 200}), 200
 
 # Route to get all users
 @user_blueprint.route('/get_all_users', methods=['GET'])
@@ -196,6 +217,32 @@ def get_only_student_users():
     return jsonify({'users': users, "statuscode": 200}), 200
 
 
+
+# Function to send email
+def send_email(email , username):
+    sender_email = "tuimorsala01@gmail.com"  # Replace with Admin email address
+    password = "szfl khwy snmp huic"  # Replace with Admin email password
+    # To get this gmail password, Go to the App passwords of your Google account,
+    
+    # Render the HTML template with the reset URL
+    email_body = render_template('email_template_approved_user_notification.html' , username = username)
+
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = email
+    message['Subject'] = "Your RTC Project Account is Approved"
+
+    # Attach HTML email body
+    message.attach(MIMEText(email_body, 'html'))
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(sender_email, password)
+    text = message.as_string()
+    server.sendmail(sender_email, email, text)
+    server.quit()
+
+
 # Route to Approve a Temp user means to move it from TempUsers to Users
 @user_blueprint.route('/approve_temp_user/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
@@ -216,6 +263,8 @@ def approve_temp_user(user_id):
     delete_query = "DELETE FROM TempUsers WHERE Userid = %s"
     cursor.execute(delete_query, (user_id,))
     conn.commit()
+    
+    send_email(TempUser[6] , TempUser[2])
     
     cursor.close()
     conn.close()
