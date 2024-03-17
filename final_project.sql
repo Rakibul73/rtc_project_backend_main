@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2024 at 07:12 PM
+-- Generation Time: Mar 17, 2024 at 11:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,6 +50,13 @@ CREATE TABLE `notification` (
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`NotificationID`, `SenderUserID`, `ReceiverUserID`, `Message`, `Timestamp`) VALUES
+(1, 4, 1, 'Teacher ID: 4 requests deletion of Project ID: 55', '2024-03-17 10:19:08');
+
 -- --------------------------------------------------------
 
 --
@@ -84,7 +91,6 @@ INSERT INTO `projectlistwithuserid` (`UserID`, `ProjectID`, `ProjectTitle`) VALU
 (4, 52, 'Project Title3'),
 (4, 53, 'Project Title6h'),
 (4, 54, 'gfhgfg'),
-(4, 55, 'gff  hgfhgf ff hgj'),
 (1, 56, 'Project Title3'),
 (1, 57, 'Project Title3'),
 (3, 58, 'Project Titledd'),
@@ -160,7 +166,7 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`ProjectID`, `CodeByRTC`, `DateRecieved`, `ProjectTitle`, `NatureOfResearchProposal`, `NameOfCollaboratingDepartments`, `AddressOfCollaboratingDepartments`, `NameOfCollaboratingInstitutes`, `AddressOfCollaboratingInstitutes`, `LocationOfFieldActivities`, `DurationOfResearchProjectAnnual`, `DurationOfResearchProjectLongTerm`, `TotalBudgetOfResearchProposalTK`, `ExternalAgencyFundingSource`, `ExternalAgencyFundingSourcesName`, `ExternalAgencyFundingSourcesSubmissionDate`, `CommitmentOtherResearchProject`, `CommitmentOtherResearchProjectName`, `ProjectDescription`, `ProjectObjective`, `PstuNationalGoal`, `PriorResearchOverview`, `Methodology`, `MethodologyFileLocation`, `ExpectedOutput`, `SuccessIndicators`, `Beneficiaries`, `ManPowerExisting`, `ManPowerRequired`, `SmallEquipmentExisting`, `SmallEquipmentRequired`, `ResearchMaterialsExisting`, `ResearchMaterialsRequired`, `OtherExisting`, `OtherRequired`, `ResearchCarriedOutPlace`, `CreatorUserID`, `CoPiUserID`, `StudentUserID`, `CreatorUserSealLocation`, `CreatorUserSignatureLocation`, `CreatorUserSignatureDate`, `ChairmanOfDepartmentComment`, `ChairmanOfDepartmentSealLocation`, `ChairmanOfDepartmentSignatureLocation`, `ChairmanOfDepartmentSignatureDate`, `ResultsAndDiscussion`, `KeyAchievements`, `ProjectStatus`, `TotalPoints`, `ProjectSoftCopyLocation`) VALUES
-(40, '4654655', '2024-03-07 00:00:00.000', 'Project Titlesd', 'Independent', 'Faculty of Business Administration', 'PSTU patuakhalids', 'Faculty of Business Administration', 'PSTU patuakhalids', 'PSTU patuakhalif', '2024-03-19 00:00:00.000 - 2024-03-21 00:00:00.000', '2024-03-19 00:00:00.000 - 2024-03-22 00:00:00.000', 10000001, 'Submitted', 'dfsf', '2024-03-23 00:00:00.000', 'Yes', 'dsfdsf', 'Introduction, Identification of Problem & Justification of The Research Proposald', 'Specific Objectives of The Proposald', 'Relevance to The Strategic Plan of Pstu & National Development Goalsd', 'Brief Review of Works Already Performed / in Progress Elsewhere With List of Referenceds', 'Methodologyd', 'Screenshot (367).png', 'Expected Outputsdd', 'Success Indicatorsdd', 'Beneficiariesdd', 'Existingd', 'Requiredd', 'Existingd', 'Requiredd', 'Existingd', 'Requiredd', 'Existingd', 'Requiredd', NULL, 1, 3, 1, 'shanto.jpg', '17.png', '2024-03-25 00:00:00.000', 'Comments of the Chairman of the Departmentf', '6.png', '15.png', '2024-03-26 00:00:00.000', NULL, NULL, 'Pending', NULL, 'coin.txt'),
+(40, '4654655', '2024-03-07 00:00:00.000', 'Project Titlesd', 'Independent', 'Faculty of Business Administration', 'PSTU patuakhalids', 'Faculty of Business Administration', 'PSTU patuakhalids', 'PSTU patuakhalif', '2024-03-19 00:00:00.000 - 2024-03-21 00:00:00.000', '2024-03-19 00:00:00.000 - 2024-03-22 00:00:00.000', 10000001, 'Submitted', 'dfsf', '2024-03-23 00:00:00.000', 'Yes', 'dsfdsf', 'Introduction, Identification of Problem & Justification of The Research Proposald', 'Specific Objectives of The Proposald', 'Relevance to The Strategic Plan of Pstu & National Development Goalsd', 'Brief Review of Works Already Performed / in Progress Elsewhere With List of Referenceds', 'Methodologyd', 'Screenshot (367).png', 'Expected Outputsdd', 'Success Indicatorsdd', 'Beneficiariesdd', 'Existingd', 'Requiredd', 'Existingd', 'Requiredd', 'Existingd', 'Requiredd', 'Existingd', 'Requiredd', NULL, 1, 3, 1, 'shanto.jpg', '17.png', '2024-03-25 00:00:00.000', 'Comments of the Chairman of the Departmentf', '6.png', '15.png', '2024-03-26 00:00:00.000', NULL, NULL, 'Completed', NULL, 'coin.txt'),
 (51, '46546532343234', '2024-03-16 00:00:00.000', 'Project Titledsfdsf', 'Applied', 'Faculty of Business Administration', 'PSTU patuakhalidfsf', 'Faculty of Business Administration', 'PSTU patuakhalidfsf', 'PSTU patuakhalidsfds', '2024-03-05 00:00:00.000 - 2024-03-07 00:00:00.000', '2024-03-11 00:00:00.000 - 2024-03-12 00:00:00.000', 2147483647, 'Submitted', 'dsfsdf', '2024-03-23 00:00:00.000', 'No', '', 'Introduction, Identification of Problem & Justification osdsff The Research Proposal', 'Specific Objectives of The Proposalsdfsdf', 'Relevance to The Strategic Plan of Pstu & National Develsdfdsfopment Goals', 'Brief Review of Works Already Performed / in Progress Elsewhsdfdsfere With List of References', 'Methodologydsfdsf', 'Screenshot (370).png', 'Expected Outputsfdsf', 'Success Indicatorssdf', 'Beneficiariesfdsfds', 'Existingdsf', 'fRequired', 'Existingf', 'Requirefd', 'Existingf', 'Requiredf', 'Existingf', 'Requirfed', NULL, 1, 3, 2, 'Screenshot (362).png', 'Screenshot (370).png', '2024-03-03 00:00:00.000', 'Comments of the Chairman of the Departmenfft', 'Screenshot (367).png', 'Screenshot (360).png', '2024-03-17 00:00:00.000', NULL, NULL, 'Pending', 0, NULL),
 (52, '4654653', '2024-03-12 00:00:00.000', 'Project Title3', 'Independent', 'Faculty of Fisheries', 'PSTU patuakhali3', 'Faculty of Fisheries', 'PSTU patuakhali3', 'PSTU patuakhalidd', '2024-03-12 00:00:00.000 - 2024-03-14 00:00:00.000', '2024-03-19 00:00:00.000 - 2024-03-23 00:00:00.000', 10000002, 'Submitted', 'sd', '2024-03-30 00:00:00.000', 'No', '', 'Introduction, Identification of Problem & Justification of Tdhe Research Proposal', 'Specific Objectives of The Proposald', 'Relevance to The Strategic Plan of Pstu & National Development Gdoals', 'Brief Review of Works Already Performed / in Progress Edlsewhere With List of References', 'Methodologyd', '23.png', 'Expected Outputsd', 'Success Indicatorsd', 'Beneficiariesd', 'Existinge', 'Requirede', 'Existingee', 'Requirede', 'Existinge', 'Requirede', 'Existinge', 'Requirede', NULL, 4, 3, 2, '', '', '2024-03-06 00:00:00.000', 'Comments of the Chairman of the Departmenwst', '9.png', '16.png', '2024-03-27 00:00:00.000', NULL, NULL, 'Pending', 0, NULL),
 (53, '465465232', '2024-03-08 00:00:00.000', 'Project Title6h', 'Fundamental', 'Faculty of Animal Science and Veterinary Medicine', 'PSTU patuakhalid', 'Faculty of Animal Science and Veterinary Medicine', 'PSTU patuakhalid', 'PSTU patuakhalid', '2024-03-12 00:00:00.000 - 2024-03-13 00:00:00.000', '2024-03-10 00:00:00.000 - 2024-03-16 00:00:00.000', 10000008, 'Not Submitted', '', 'null', 'Yes', 'dd', 'Introduction, Identification of Problem & Justification of The Research Proposalcc', 'Specific Objectives of The Proposalcc', 'Relevance to The Strategic Plan of Pstu & National Develpment Goals', 'Brief Review of Works Already Performed / in Progresewhere With List of References', 'Methodolo', '23.png', 'Expected Otputs', 'Success Indictors', 'Beneficiarie', 'Existin', 'Require', 'Existin', 'Require', 'Existin', 'Require', 'Existin', 'Require', NULL, 4, 1, 2, '', '', '2024-03-08 00:00:00.000', 'Comments of the Chairman of the Departmen', '8.png', '15.png', '2024-03-30 00:00:00.000', NULL, NULL, 'Pending', 0, NULL),
@@ -389,7 +395,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `projects`
