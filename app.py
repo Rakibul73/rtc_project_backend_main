@@ -11,6 +11,7 @@ from functools import wraps
 from datetime import timedelta
 from upload import upload_blueprint
 from download import download_blueprint
+from notification import notification_blueprint
 
 
 app = Flask(__name__)
@@ -46,6 +47,9 @@ app.register_blueprint(upload_blueprint)
 
 # Register the download blueprint
 app.register_blueprint(download_blueprint)
+
+# Register the Notification blueprint
+app.register_blueprint(notification_blueprint)
 
 @app.route('/', methods=['GET'])
 def index():
