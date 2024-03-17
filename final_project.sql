@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2024 at 11:36 AM
+-- Generation Time: Mar 17, 2024 at 10:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,15 +47,19 @@ CREATE TABLE `notification` (
   `SenderUserID` int(11) DEFAULT NULL,
   `ReceiverUserID` int(11) DEFAULT NULL,
   `Message` text DEFAULT NULL,
-  `Timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `IsRead` int(11) DEFAULT NULL,
+  `Timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notification`
 --
 
-INSERT INTO `notification` (`NotificationID`, `SenderUserID`, `ReceiverUserID`, `Message`, `Timestamp`) VALUES
-(1, 4, 1, 'Teacher ID: 4 requests deletion of Project ID: 55', '2024-03-17 10:19:08');
+INSERT INTO `notification` (`NotificationID`, `SenderUserID`, `ReceiverUserID`, `Message`, `IsRead`, `Timestamp`) VALUES
+(1, 4, 1, 'Teacher ID: 4 requests deletion of Project ID: 55', 0, '2024-03-17 10:19:08'),
+(2, 5, 1, 'Need Reviewer', 0, '2024-03-17 18:57:14'),
+(3, 5, 7, 'Need reviewr point', 0, '2024-03-17 19:23:35'),
+(4, 8, 1, 'assign reviewer', 0, '2024-03-17 19:25:07');
 
 -- --------------------------------------------------------
 
@@ -395,7 +399,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `projects`

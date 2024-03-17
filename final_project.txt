@@ -179,7 +179,8 @@ CREATE TABLE Notification (
   SenderUserID INT,
   ReceiverUserID INT,
   Message TEXT,
-  Timestamp TIMESTAMP,
+  Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  IsRead INT,
   FOREIGN KEY (SenderUserID) REFERENCES Users(UserID),
   FOREIGN KEY (ReceiverUserID) REFERENCES Users(UserID)
 );
