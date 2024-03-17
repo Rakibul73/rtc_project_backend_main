@@ -26,7 +26,7 @@ def request_project_deletion_to_admin(project_id):
     # Create a notification for admin
     try:
         notification_msg = f"Teacher ID: {current_user_id} requests deletion of Project ID: {project_id}"
-        cursor.execute("INSERT INTO Notification (SenderUserID, ReceiverUserID, Message) VALUES (%s, %s, %s)", (current_user_id, 1, notification_msg))
+        cursor.execute("INSERT INTO Notification (SenderUserID, ReceiverUserID, Message , IsRead) VALUES (%s, %s, %s , %s)", (current_user_id, 1, notification_msg , False))
         conn.commit()
     except Exception as e:
         cursor.close()
@@ -100,4 +100,78 @@ def delete_project_request(notification_id):
     cursor.close()
     conn.close()
     return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully' , 'statuscode' : 200}), 200
+
+
+#  Route for get self notification in  descending order based on timestamp
+@notification_blueprint.route('/get_self_notification', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_self_notification():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    # get curent user id
+    current_user_id = get_jwt_identity()
+    cursor.execute("SELECT * FROM Notification WHERE ReceiverUserID = %s ORDER BY Timestamp DESC", (current_user_id,))
+    MyNotifications = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'MyNotifications': MyNotifications , "statuscode" : 200}) , 200
+
+
+@notification_blueprint.route('/mark_as_unread/<int:notification_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only teachers can request project deletion
+def mark_as_unread(notification_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("UPDATE Notification SET IsRead = 0 WHERE NotificationID = %s", (notification_id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Notification marked as unread successfully' , 'statuscode' : 200}), 200
+
+
+@notification_blueprint.route('/mark_as_read/<int:notification_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only teachers can request project deletion
+def mark_as_read(notification_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute("UPDATE Notification SET IsRead = 1 WHERE NotificationID = %s", (notification_id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Notification marked as read successfully' , 'statuscode' : 200}), 200
+
+@notification_blueprint.route('/get_all_notification', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])  # Only admin and supervisor can access this route
+def get_all_notification():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Notification ORDER BY Timestamp DESC")
+    AllNotifications = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'AllNotifications': AllNotifications , "statuscode" : 200}) , 200
+
+
+@notification_blueprint.route('/mark_all_as_read', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only teachers can request project deletion
+def mark_all_as_read():
+    conn = get_db()
+    cursor = conn.cursor()
+    # get curent user id
+    current_user_id = get_jwt_identity()
+    cursor.execute("UPDATE Notification SET IsRead = 1 WHERE ReceiverUserID = %s", (current_user_id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Notification marked as read successfully' , 'statuscode' : 200}), 200
+
 
