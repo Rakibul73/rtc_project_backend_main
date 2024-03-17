@@ -170,23 +170,20 @@ def delete_user(user_id):
 
 
 # Route to get user role
-@user_blueprint.route('/get_user_role_of_specific_user/<int:user_id>', methods=['GET'])
+@user_blueprint.route('/get_user_name_of_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 4])
-def get_user_role_of_specific_user(user_id):
+@role_required([1, 2 , 3 , 4 , 5])
+def get_user_name_of_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT RoleID , Username, FirstName , LastName  FROM users WHERE Userid = %s", (user_id,))
-    user_role = cursor.fetchone()
-    # from RoleID fetch RoleName
-    cursor.execute("SELECT RoleName FROM role WHERE RoleID = %s", (user_role['RoleID'],))
-    role_name = cursor.fetchone()
+    cursor.execute("SELECT Username FROM users WHERE Userid = %s", (user_id,))
+    user_name = cursor.fetchone()
     cursor.close()
     conn.close()
-    if user_role:
-        return jsonify({"RoleID": user_role['RoleID'] , "Role_name" : role_name['RoleName'] , "Username" : user_role['Username'] , "FirstName" : user_role['FirstName'] , "LastName" : user_role['LastName']})
+    if user_name:
+        return jsonify({"Username" : user_name['Username'] , "statuscode" : 200}), 200
     else:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'message': 'User not found' , "statuscode" : 404}), 404
 
 
 # Route to get all user names and IDs excluding users with the student role
