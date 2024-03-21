@@ -26,7 +26,7 @@ def request_project_deletion_to_admin(project_id):
     
     # Create a notification for admin
     try:
-        notification_msg = f"Teacher ID: {current_user_id} requests deletion of Project ID: {project_id}"
+        notification_msg = f"ProjectDeletionRequest: Teacher ID: {current_user_id} requests deletion of Project ID: {project_id}"
         cursor.execute("INSERT INTO Notification (SenderUserID, ReceiverUserID, Message , IsRead) VALUES (%s, %s, %s , %s)", (current_user_id, 1, notification_msg , False))
         conn.commit()
     except Exception as e:
@@ -41,8 +41,8 @@ def request_project_deletion_to_admin(project_id):
 def extract_ids_from_notification(notification_message):
     # Extract sender ID and project ID from the notification message
     parts = notification_message.split()
-    sender_id = parts[2]  # Assuming the format is "Teacher ID: {sender_id} requests deletion of Project ID: {project_id}"
-    project_id = parts[8]
+    sender_id = parts[3]  # Assuming the format is "ProjectDeletionRequest: Teacher ID: {sender_id} requests deletion of Project ID: {project_id}"
+    project_id = parts[9]
     return int(sender_id), int(project_id)
 
 # Route for admin to delete project requested for deletion
