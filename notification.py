@@ -5,6 +5,7 @@ from db import get_db
 
 notification_blueprint = Blueprint('notification', __name__)
 
+# Route to request project deletion to admin 
 @notification_blueprint.route('/request_project_deletion_to_admin/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
 @role_required([2 , 3 , 4 , 5])  # Only teachers can request project deletion
