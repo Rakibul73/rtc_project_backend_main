@@ -162,7 +162,7 @@ def get_all_notification():
 
 @notification_blueprint.route('/mark_all_as_read', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])  # Only teachers can request project deletion
+@role_required([1, 2 , 3 , 4 , 5]) 
 def mark_all_as_read():
     conn = get_db()
     cursor = conn.cursor()
@@ -176,3 +176,18 @@ def mark_all_as_read():
     return jsonify({'message': 'Notification marked as read successfully' , 'statuscode' : 200}), 200
 
 
+# Route to get a specific notification
+@notification_blueprint.route('/get_specific_notification/<int:notification_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4])
+def get_specific_notification(notification_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Notification WHERE NotificationID = %s", (notification_id,))
+    notification_data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if notification_data:
+        return jsonify({'Notification': notification_data , 'statuscode' : 200}), 200
+    else:
+        return jsonify({'message': 'Notification not found' , 'statuscode' : 404}), 404
