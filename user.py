@@ -217,8 +217,8 @@ def get_only_student_users():
 
 # Function to send email
 def send_email(email , username , roleid):
-    sender_email = "tuimorsala01@gmail.com"  # Replace with Admin email address
-    password = "szfl khwy snmp huic"  # Replace with Admin email password
+    sender_email = "raqib.185.17@gmail.com"  # Replace with Admin email address
+    password = "ozct kzkj dgje aufs"  # Replace with Admin email password
     # To get this gmail password, Go to the App passwords of your Google account,
     
     rolename = "Admin"
