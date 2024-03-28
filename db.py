@@ -1,6 +1,12 @@
 import mysql.connector
 
-
+# for pythonanywhere server
+# db_config = {
+#     'host': 'rakib73.mysql.pythonanywhere-services.com',
+#     'user': 'rakib73',
+#     'password': 'rakib73rakib73',
+#     'database': 'rakib73$final_project'
+# }
 
 db_config = {
     'host': 'localhost',
