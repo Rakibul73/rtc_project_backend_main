@@ -69,8 +69,8 @@ def send_password():
     
     # send the email with the password
     try:
-        sender_email = "tuimorsala01@gmail.com"  # Replace with your email address
-        password = "szfl khwy snmp huic"  # Replace with your email password
+        sender_email = "raqib.185.17@gmail.com"  # Replace with your email address
+        password = "ozct kzkj dgje aufs"  # Replace with your email password
         
         # Render the HTML template with the reset URL
         email_body = render_template('email_template_pass_forward.html', password=PASSWORD[0])
@@ -206,33 +206,6 @@ def register_user():
     elif isEmailExist is not None:
         return jsonify({'message': 'Email = ' + email + ' already exists' , 'statuscode' : 409}), 409
 
-# @auth_blueprint.route('/register', methods=['POST'])
-# def register_user():
-#     data = request.get_json()
-#     conn = get_db()
-#     cursor = conn.cursor()
-#     username = data.get('username')
-#     email = data.get('email')
-#     cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
-#     isUserExist = cursor.fetchone()
-#     cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
-#     isEmailExist = cursor.fetchone()
-#     if isUserExist is None and isEmailExist is None:
-#         # Hash the password before storing it in the database
-#         password = data.get('password')
-#         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-#         insert_query = "INSERT INTO Users (username, password, email , FirstName , LastName , Phone , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s )"
-#         user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["RoleID"])
-#         cursor.execute(insert_query, user_data)
-#         conn.commit()
-#         cursor.close()
-#         conn.close()
-#         return jsonify({'message': 'User registered successfully'}), 201
-#     elif isUserExist is not None:
-#         return jsonify({'message': 'Username = ' + username + ' already exists'}), 409
-#     elif isEmailExist is not None:
-#         return jsonify({'message': 'Email = ' + email + ' already exists'}), 409
-
 # Route for user login
 @auth_blueprint.route('/login', methods=['POST'])
 def login_user():
@@ -273,7 +246,8 @@ def login_user():
 # Route for user logout
 @auth_blueprint.route('/logout', methods=['POST'])
 def logout_user():
-    # Clear the user session on logout
+    # Clear the jwt token from the cookies
+    
     return jsonify({'message': 'Logout successful'}), 200
 
 # ==========================================  Login & Register Related Routes END  =============================
