@@ -1,26 +1,26 @@
 from flask import request, jsonify , Blueprint
 from auth_utils import role_required
 from db import get_db # local module
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 project_blueprint = Blueprint('project', __name__)
 
 # ==========================================  Project Related Routes START =============================
 
 
-# Route to get total number of projects
-@project_blueprint.route('/get_total_number_of_projects', methods=['GET'])
-@jwt_required()  # Protect the route with JWT
-@role_required([1, 2 , 3 , 4 , 5])
-def get_total_number_of_projects():
-    conn = get_db()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
-    total_projects = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    print(total_projects['total_projects'])
-    return jsonify({'total_projects': total_projects['total_projects'] , "statuscode" : 200}) , 200
+# # Route to get total number of projects
+# @project_blueprint.route('/get_total_number_of_projects', methods=['GET'])
+# @jwt_required()  # Protect the route with JWT
+# @role_required([1, 2 , 3 , 4 , 5])
+# def get_total_number_of_projects():
+#     conn = get_db()
+#     cursor = conn.cursor(dictionary=True)
+#     cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
+#     total_projects = cursor.fetchone()
+#     cursor.close()
+#     conn.close()
+#     print(total_projects['total_projects'])
+#     return jsonify({'total_projects': total_projects['total_projects'] , "statuscode" : 200}) , 200
 
 
 
@@ -91,22 +91,22 @@ def get_specific_project(project_id):
         return jsonify({'message': 'project not found' , 'statuscode' : 404}), 404
 
 
-# Route to update all fields of a project only if user is admin
-@project_blueprint.route('/update_project_admin/<int:project_id>', methods=['PUT'])
-@jwt_required()  # Protect the route with JWT
-@role_required([1])
-def update_project_admin(project_id):
-    data = request.get_json()
-    conn = get_db()
-    cursor = conn.cursor()
-    update_query = "UPDATE Projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s ,  LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , ProjectDescription = %s , ProjectAbstract = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired ,ResearchMaterialsExisting = %s ,  ResearchMaterialsRequired ,OtherExisting = %s , OtherRequired = %s , ResearchCarriedOutPlace = %s , CreatorUserID = %s , CreatorUserDate = %s , CreatorUserSealLocation = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ResultsAndDiscussion = %s , KeyAchievements = %s , ProjectStatus = %s , TotalPoints = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
-    user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal'] , data["NameOfCollaboratingDepartments"] , data["AddressOfCollaboratingDepartments"] , data["NameOfCollaboratingInstitutes"] , data["AddressOfCollaboratingInstitutes"] , data[" LocationOfFieldActivities"] , data["DurationOfResearchProjectAnnual"] , data["DurationOfResearchProjectLongTerm"] , data["TotalBudgetOfResearchProposalTK"] , data["ExternalAgencyFundingSourcesName"] , data["ExternalAgencyFundingSourcesSubmissionDate"] , data["ProjectDescription"] , data["ProjectAbstract"] , data["ProjectObjective"] , data["PstuNationalGoal"] , data["PriorResearchOverview"] , data["Methodology"] , data["ExpectedOutput"] , data["SuccessIndicators"] , data["Beneficiaries"] , data["ManPowerExisting"] , data["ManPowerRequired"] , data["SmallEquipmentExisting"] , data["SmallEquipmentRequired ,ResearchMaterialsExisting"] , data[" ResearchMaterialsRequired ,OtherExisting"] , data["OtherRequired"] , data["ResearchCarriedOutPlace"] , data["CreatorUserID"] , data["CreatorUserDate"] , data["CreatorUserSealLocation"] , data["ChairmanOfDepartmentComment"] , data["ChairmanOfDepartmentSignatureLocation"] , data["ChairmanOfDepartmentSignatureDate"] , data["ResultsAndDiscussion"] , data["KeyAchievements"] , data["ProjectStatus"] , data["TotalPoints"] , data["ProjectSoftCopyLocation"] , project_id)
+# # Route to update all fields of a project only if user is admin
+# @project_blueprint.route('/update_project_admin/<int:project_id>', methods=['PUT'])
+# @jwt_required()  # Protect the route with JWT
+# @role_required([1])
+# def update_project_admin(project_id):
+#     data = request.get_json()
+#     conn = get_db()
+#     cursor = conn.cursor()
+#     update_query = "UPDATE Projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s ,  LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , ProjectDescription = %s , ProjectAbstract = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired ,ResearchMaterialsExisting = %s ,  ResearchMaterialsRequired ,OtherExisting = %s , OtherRequired = %s , ResearchCarriedOutPlace = %s , CreatorUserID = %s , CreatorUserDate = %s , CreatorUserSealLocation = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ResultsAndDiscussion = %s , KeyAchievements = %s , ProjectStatus = %s , TotalPoints = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
+#     user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal'] , data["NameOfCollaboratingDepartments"] , data["AddressOfCollaboratingDepartments"] , data["NameOfCollaboratingInstitutes"] , data["AddressOfCollaboratingInstitutes"] , data[" LocationOfFieldActivities"] , data["DurationOfResearchProjectAnnual"] , data["DurationOfResearchProjectLongTerm"] , data["TotalBudgetOfResearchProposalTK"] , data["ExternalAgencyFundingSourcesName"] , data["ExternalAgencyFundingSourcesSubmissionDate"] , data["ProjectDescription"] , data["ProjectAbstract"] , data["ProjectObjective"] , data["PstuNationalGoal"] , data["PriorResearchOverview"] , data["Methodology"] , data["ExpectedOutput"] , data["SuccessIndicators"] , data["Beneficiaries"] , data["ManPowerExisting"] , data["ManPowerRequired"] , data["SmallEquipmentExisting"] , data["SmallEquipmentRequired ,ResearchMaterialsExisting"] , data[" ResearchMaterialsRequired ,OtherExisting"] , data["OtherRequired"] , data["ResearchCarriedOutPlace"] , data["CreatorUserID"] , data["CreatorUserDate"] , data["CreatorUserSealLocation"] , data["ChairmanOfDepartmentComment"] , data["ChairmanOfDepartmentSignatureLocation"] , data["ChairmanOfDepartmentSignatureDate"] , data["ResultsAndDiscussion"] , data["KeyAchievements"] , data["ProjectStatus"] , data["TotalPoints"] , data["ProjectSoftCopyLocation"] , project_id)
     
-    cursor.execute(update_query, user_data)
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return jsonify({'message': 'Project updated successfully', 'statuscode' : 200}), 200
+#     cursor.execute(update_query, user_data)
+#     conn.commit()
+#     cursor.close()
+#     conn.close()
+#     return jsonify({'message': 'Project updated successfully', 'statuscode' : 200}), 200
 
 
 # Route to delete a project
@@ -135,43 +135,43 @@ def delete_project(project_id):
     return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully' , 'statuscode' : 200}), 200
 
 
-# Route to delete multiple projects by IDs
-@project_blueprint.route('/projects/delete_multiple_projects', methods=['DELETE'])
-@jwt_required()  # Protect the route with JWT
-@role_required([1])
-def delete_multiple_projects():
-    try:
-        # Get the list of project IDs from the request body
-        data = request.get_json()
-        project_ids = data.get('project_ids', [])
+# # Route to delete multiple projects by IDs
+# @project_blueprint.route('/projects/delete_multiple_projects', methods=['DELETE'])
+# @jwt_required()  # Protect the route with JWT
+# @role_required([1])
+# def delete_multiple_projects():
+#     try:
+#         # Get the list of project IDs from the request body
+#         data = request.get_json()
+#         project_ids = data.get('project_ids', [])
 
-        if not project_ids:
-            return jsonify({'error': 'No project IDs provided'}), 400
+#         if not project_ids:
+#             return jsonify({'error': 'No project IDs provided'}), 400
 
-        conn = get_db()
-        cursor = conn.cursor()
+#         conn = get_db()
+#         cursor = conn.cursor()
 
-        for project_id in project_ids:
-            # Remove from ActivityPlan table based on ProjectID
-            delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
-            cursor.execute(delete_activity_query, (project_id,))
-            # Remove from Review table based on ProjectID
-            delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
-            cursor.execute(delete_review_query, (project_id,))
-            # Remove from ProjectListWithUserID table based on ProjectID
-            delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
-            cursor.execute(delete_project_list_query, (project_id,))
-            # Remove from Projects table based on ProjectID
-            delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
-            cursor.execute(delete_query, (project_id,))
+#         for project_id in project_ids:
+#             # Remove from ActivityPlan table based on ProjectID
+#             delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
+#             cursor.execute(delete_activity_query, (project_id,))
+#             # Remove from Review table based on ProjectID
+#             delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
+#             cursor.execute(delete_review_query, (project_id,))
+#             # Remove from ProjectListWithUserID table based on ProjectID
+#             delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
+#             cursor.execute(delete_project_list_query, (project_id,))
+#             # Remove from Projects table based on ProjectID
+#             delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
+#             cursor.execute(delete_query, (project_id,))
 
-        conn.commit()
-        cursor.close()
-        conn.close()
+#         conn.commit()
+#         cursor.close()
+#         conn.close()
 
-        return jsonify({'message': 'Projects deleted successfully', 'statuscode': 200}), 200
-    except Exception as e:
-        return jsonify({'error': str(e), 'statuscode': 500}), 500
+#         return jsonify({'message': 'Projects deleted successfully', 'statuscode': 200}), 200
+#     except Exception as e:
+#         return jsonify({'error': str(e), 'statuscode': 500}), 500
 
 
 
@@ -197,6 +197,83 @@ def update_project(project_id):
     cursor.close()
     conn.close()
     return jsonify({'message': 'Project updated successfully', 'statuscode' : 200}), 200
+
+
+# Route to get admin project dashboard
+@project_blueprint.route('/get_admin_project_dashboard', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])  # Only admin can access this route
+def get_admin_project_dashboard():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT COUNT(*) AS completed_projects FROM Projects WHERE ProjectStatus = 'Completed'")
+    completed_projects = cursor.fetchone()
+    print(completed_projects['completed_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
+    total_projects = cursor.fetchone()
+    print(total_projects['total_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS pending_projects FROM Projects WHERE ProjectStatus = 'Pending'")
+    pending_projects = cursor.fetchone()
+    print(pending_projects['pending_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS approved_projects FROM Projects WHERE ProjectStatus = 'Approved'")
+    approved_projects = cursor.fetchone()
+    print(approved_projects['approved_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM Projects WHERE ProjectStatus = 'Rejected'")
+    rejected_projects = cursor.fetchone()
+    print(rejected_projects['rejected_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS running_projects FROM Projects WHERE ProjectStatus = 'Running'")
+    running_projects = cursor.fetchone()
+    print(running_projects['running_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL")
+    final_report_submitted = cursor.fetchone()
+    print(final_report_submitted['final_report_submitted'])
+
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({
+        'running_projects': running_projects['running_projects'],
+        'rejected_projects': rejected_projects['rejected_projects'],
+        'approved_projects': approved_projects['approved_projects'],
+        'pending_projects': pending_projects['pending_projects'],
+        'final_report_submitted': final_report_submitted['final_report_submitted'],
+        'completed_projects': completed_projects['completed_projects'],
+        'total_projects': total_projects['total_projects'],
+        'statuscode' : 200
+    }) , 200
+
+
+
+# Route to get all projects for a  self specific user
+@project_blueprint.route('/myprojects/user/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+def get_projects_for_user(user_id):
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    
+    # Check if the current user is authorized to access projects
+    if current_user_id != user_id:
+        return jsonify({'message': 'Unauthorized access to user projects' , 'statuscode': 403}), 403
+    
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Query to get projects for the specified user ID
+    cursor.execute("SELECT * FROM Projects WHERE CreatorUserID = %s", (user_id,))
+    project_list = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'projects': project_list, 'statuscode': 200}), 200
 
 
 # ==========================================  Project Related Routes END  =============================

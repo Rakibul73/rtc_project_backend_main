@@ -42,58 +42,6 @@ def generate_token(length=10):
     letters = string.ascii_letters + string.digits
     return ''.join(random.choice(letters) for _ in range(length))
 
-# Route to send password to email
-@auth_blueprint.route('/send_password', methods=['POST'])
-def send_password():
-    data = request.get_json()
-    email = data.get('email')
-    
-    # Check if the email exists in the database
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
-    user = cursor.fetchone()
-    cursor.close()
-    
-    if not user:
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
-
-    cursor = conn.cursor()
-    cursor.execute("SELECT PASSWORD FROM Users WHERE email = %s", (email,))
-    PASSWORD = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    
-    # send the email with the password
-    try:
-        sender_email = "raqib.185.17@gmail.com"  # Replace with your email address
-        password = "ozct kzkj dgje aufs"  # Replace with your email password
-        
-        # Render the HTML template with the reset URL
-        email_body = render_template('email_template_pass_forward.html', password=PASSWORD[0])
-
-        message = MIMEMultipart()
-        message['From'] = sender_email
-        message['To'] = email
-        message['Subject'] = "RTC Project Password Request"
-
-        # Attach HTML email body
-        message.attach(MIMEText(email_body, 'html'))
-
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, password)
-        text = message.as_string()
-        server.sendmail(sender_email, email, text)
-        server.quit()
-        return jsonify({'message': 'Password sent to email' , 'statuscode' : 200}), 200
-    except:
-        return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
-
-
 
 # Route to request password reset
 @auth_blueprint.route('/reset_password_request', methods=['POST'])
