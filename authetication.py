@@ -1,7 +1,7 @@
-from flask import  render_template, request, jsonify , session , Blueprint
+from flask import  render_template, request, jsonify , Blueprint
 from db import get_db # local module
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, unset_jwt_cookies
 import random
 import string
 import smtplib
@@ -245,9 +245,11 @@ def login_user():
 
 # Route for user logout
 @auth_blueprint.route('/logout', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
 def logout_user():
-    # Clear the jwt token from the cookies
-    
-    return jsonify({'message': 'Logout successful'}), 200
+    # Clear the JWT token from the client-side cookies
+    response = jsonify({'message': 'Logout successful' , 'statuscode' : 200})
+    unset_jwt_cookies(response)
+    return response, 200
 
 # ==========================================  Login & Register Related Routes END  =============================
