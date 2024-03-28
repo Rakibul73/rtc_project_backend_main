@@ -15,7 +15,7 @@ project_blueprint = Blueprint('project', __name__)
 def get_total_number_of_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT COUNT(*) AS total_projects FROM projects")
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
     total_projects = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -32,7 +32,7 @@ def get_all_projects():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT * FROM projects")
+    cursor.execute("SELECT * FROM Projects")
     project_list = cursor.fetchall()
     
     cursor.close()
@@ -54,7 +54,7 @@ def create_project():
     if 'ProjectTitle' not in data or 'CreatorUserID' not in data:
         return jsonify({'error': 'Incomplete data. Title, CreatorUserID are required.' , "statuscode" : 400}), 400
 
-    insert_query = "INSERT INTO projects (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal , NameOfCollaboratingDepartments , AddressOfCollaboratingDepartments , NameOfCollaboratingInstitutes , AddressOfCollaboratingInstitutes ,  LocationOfFieldActivities , DurationOfResearchProjectAnnual , DurationOfResearchProjectLongTerm , TotalBudgetOfResearchProposalTK , ExternalAgencyFundingSource , ExternalAgencyFundingSourcesName , ExternalAgencyFundingSourcesSubmissionDate , CommitmentOtherResearchProject , CommitmentOtherResearchProjectName , ProjectDescription , ProjectObjective , PstuNationalGoal , PriorResearchOverview , Methodology , MethodologyFileLocation , ExpectedOutput , SuccessIndicators , Beneficiaries , ManPowerExisting , ManPowerRequired , SmallEquipmentExisting , SmallEquipmentRequired ,ResearchMaterialsExisting ,  ResearchMaterialsRequired ,OtherExisting , OtherRequired , CreatorUserID , CoPiUserID , StudentUserID , CreatorUserSealLocation , CreatorUserSignatureLocation , CreatorUserSignatureDate , ChairmanOfDepartmentComment , ChairmanOfDepartmentSealLocation , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSignatureDate , ProjectStatus , TotalPoints) VALUES (%s, %s , %s , %s , %s , %s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s , %s )"
+    insert_query = "INSERT INTO Projects (CodeByRTC, DateRecieved, ProjectTitle, NatureOfResearchProposal , NameOfCollaboratingDepartments , AddressOfCollaboratingDepartments , NameOfCollaboratingInstitutes , AddressOfCollaboratingInstitutes ,  LocationOfFieldActivities , DurationOfResearchProjectAnnual , DurationOfResearchProjectLongTerm , TotalBudgetOfResearchProposalTK , ExternalAgencyFundingSource , ExternalAgencyFundingSourcesName , ExternalAgencyFundingSourcesSubmissionDate , CommitmentOtherResearchProject , CommitmentOtherResearchProjectName , ProjectDescription , ProjectObjective , PstuNationalGoal , PriorResearchOverview , Methodology , MethodologyFileLocation , ExpectedOutput , SuccessIndicators , Beneficiaries , ManPowerExisting , ManPowerRequired , SmallEquipmentExisting , SmallEquipmentRequired ,ResearchMaterialsExisting ,  ResearchMaterialsRequired ,OtherExisting , OtherRequired , CreatorUserID , CoPiUserID , StudentUserID , CreatorUserSealLocation , CreatorUserSignatureLocation , CreatorUserSignatureDate , ChairmanOfDepartmentComment , ChairmanOfDepartmentSealLocation , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSignatureDate , ProjectStatus , TotalPoints) VALUES (%s, %s , %s , %s , %s , %s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s ,%s, %s , %s , %s , %s , %s )"
     user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal'], data['NameOfCollaboratingDepartments'], data['AddressOfCollaboratingDepartments'], data['NameOfCollaboratingInstitutes'], data['AddressOfCollaboratingInstitutes'], data['LocationOfFieldActivities'], data['DurationOfResearchProjectAnnual'], data['DurationOfResearchProjectLongTerm'], data['TotalBudgetOfResearchProposalTK'], data['ExternalAgencyFundingSource'], data['ExternalAgencyFundingSourcesName'], data['ExternalAgencyFundingSourcesSubmissionDate'], data['CommitmentOtherResearchProject'], data['CommitmentOtherResearchProjectName'], data['ProjectDescription'], data['ProjectObjective'], data['PstuNationalGoal'], data['PriorResearchOverview'], data['Methodology'], data['MethodologyFileLocation'], data['ExpectedOutput'], data['SuccessIndicators'], data['Beneficiaries'], data['ManPowerExisting'], data['ManPowerRequired'], data['SmallEquipmentExisting'], data['SmallEquipmentRequired'], data['ResearchMaterialsExisting'], data['ResearchMaterialsRequired'], data['OtherExisting'], data['OtherRequired'], data['CreatorUserID'], data['CoPiUserID'], data['StudentUserID'], data['CreatorUserSealLocation'], data['CreatorUserSignatureLocation'], data['CreatorUserSignatureDate'], data['ChairmanOfDepartmentComment'], data['ChairmanOfDepartmentSealLocation'], data['ChairmanOfDepartmentSignatureLocation'], data['ChairmanOfDepartmentSignatureDate'] , "Pending", 0)
     cursor.execute(insert_query, user_data)
     conn.commit()
@@ -64,7 +64,7 @@ def create_project():
     # Assuming project_id is auto-incremented in projects table
     project_id = cursor.lastrowid
     # Insert into projectlistwithuserid
-    project_list_query = "INSERT INTO projectlistwithuserid (UserID, ProjectID , ProjectTitle ) VALUES (%s, %s , %s )"
+    project_list_query = "INSERT INTO ProjectListWithUserID (UserID, ProjectID , ProjectTitle ) VALUES (%s, %s , %s )"
     project_list_data = (data['CreatorUserID'] , project_id, data['ProjectTitle'] )
     cursor.execute(project_list_query, project_list_data)
     conn.commit()
@@ -81,7 +81,7 @@ def create_project():
 def get_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM projects WHERE ProjectID = %s", (project_id,))
+    cursor.execute("SELECT * FROM Projects WHERE ProjectID = %s", (project_id,))
     project_data = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -99,7 +99,7 @@ def update_project_admin(project_id):
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    update_query = "UPDATE projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s ,  LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , ProjectDescription = %s , ProjectAbstract = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired ,ResearchMaterialsExisting = %s ,  ResearchMaterialsRequired ,OtherExisting = %s , OtherRequired = %s , ResearchCarriedOutPlace = %s , CreatorUserID = %s , CreatorUserDate = %s , CreatorUserSealLocation = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ResultsAndDiscussion = %s , KeyAchievements = %s , ProjectStatus = %s , TotalPoints = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
+    update_query = "UPDATE Projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s ,  LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , ProjectDescription = %s , ProjectAbstract = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired ,ResearchMaterialsExisting = %s ,  ResearchMaterialsRequired ,OtherExisting = %s , OtherRequired = %s , ResearchCarriedOutPlace = %s , CreatorUserID = %s , CreatorUserDate = %s , CreatorUserSealLocation = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ResultsAndDiscussion = %s , KeyAchievements = %s , ProjectStatus = %s , TotalPoints = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
     user_data = ( data['CodeByRTC'], data['DateRecieved'], data['ProjectTitle'], data['NatureOfResearchProposal'] , data["NameOfCollaboratingDepartments"] , data["AddressOfCollaboratingDepartments"] , data["NameOfCollaboratingInstitutes"] , data["AddressOfCollaboratingInstitutes"] , data[" LocationOfFieldActivities"] , data["DurationOfResearchProjectAnnual"] , data["DurationOfResearchProjectLongTerm"] , data["TotalBudgetOfResearchProposalTK"] , data["ExternalAgencyFundingSourcesName"] , data["ExternalAgencyFundingSourcesSubmissionDate"] , data["ProjectDescription"] , data["ProjectAbstract"] , data["ProjectObjective"] , data["PstuNationalGoal"] , data["PriorResearchOverview"] , data["Methodology"] , data["ExpectedOutput"] , data["SuccessIndicators"] , data["Beneficiaries"] , data["ManPowerExisting"] , data["ManPowerRequired"] , data["SmallEquipmentExisting"] , data["SmallEquipmentRequired ,ResearchMaterialsExisting"] , data[" ResearchMaterialsRequired ,OtherExisting"] , data["OtherRequired"] , data["ResearchCarriedOutPlace"] , data["CreatorUserID"] , data["CreatorUserDate"] , data["CreatorUserSealLocation"] , data["ChairmanOfDepartmentComment"] , data["ChairmanOfDepartmentSignatureLocation"] , data["ChairmanOfDepartmentSignatureDate"] , data["ResultsAndDiscussion"] , data["KeyAchievements"] , data["ProjectStatus"] , data["TotalPoints"] , data["ProjectSoftCopyLocation"] , project_id)
     
     cursor.execute(update_query, user_data)
@@ -126,7 +126,7 @@ def delete_project(project_id):
     delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
     cursor.execute(delete_project_list_query, (project_id,))
     # Remove from Projects table based on ProjectID
-    delete_query = "DELETE FROM projects WHERE ProjectID = %s"
+    delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
     cursor.execute(delete_query, (project_id,))
     
     conn.commit()
@@ -162,7 +162,7 @@ def delete_multiple_projects():
             delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
             cursor.execute(delete_project_list_query, (project_id,))
             # Remove from Projects table based on ProjectID
-            delete_query = "DELETE FROM projects WHERE ProjectID = %s"
+            delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
             cursor.execute(delete_query, (project_id,))
 
         conn.commit()
@@ -184,12 +184,12 @@ def update_project(project_id):
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    update_query = "UPDATE projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s , LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSource = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , CommitmentOtherResearchProject = %s , CommitmentOtherResearchProjectName = %s , ProjectDescription = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , MethodologyFileLocation = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired = %s , ResearchMaterialsExisting = %s , ResearchMaterialsRequired = %s , OtherExisting = %s , OtherRequired = %s , CreatorUserID = %s , CoPiUserID = %s , StudentUserID = %s , CreatorUserSealLocation = %s , CreatorUserSignatureLocation = %s , CreatorUserSignatureDate = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSealLocation = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ProjectStatus = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
+    update_query = "UPDATE Projects SET CodeByRTC = %s , DateRecieved = %s , ProjectTitle = %s , NatureOfResearchProposal = %s , NameOfCollaboratingDepartments = %s , AddressOfCollaboratingDepartments = %s , NameOfCollaboratingInstitutes = %s , AddressOfCollaboratingInstitutes = %s , LocationOfFieldActivities = %s , DurationOfResearchProjectAnnual = %s , DurationOfResearchProjectLongTerm = %s , TotalBudgetOfResearchProposalTK = %s , ExternalAgencyFundingSource = %s , ExternalAgencyFundingSourcesName = %s , ExternalAgencyFundingSourcesSubmissionDate = %s , CommitmentOtherResearchProject = %s , CommitmentOtherResearchProjectName = %s , ProjectDescription = %s , ProjectObjective = %s , PstuNationalGoal = %s , PriorResearchOverview = %s , Methodology = %s , MethodologyFileLocation = %s , ExpectedOutput = %s , SuccessIndicators = %s , Beneficiaries = %s , ManPowerExisting = %s , ManPowerRequired = %s , SmallEquipmentExisting = %s , SmallEquipmentRequired = %s , ResearchMaterialsExisting = %s , ResearchMaterialsRequired = %s , OtherExisting = %s , OtherRequired = %s , CreatorUserID = %s , CoPiUserID = %s , StudentUserID = %s , CreatorUserSealLocation = %s , CreatorUserSignatureLocation = %s , CreatorUserSignatureDate = %s , ChairmanOfDepartmentComment = %s , ChairmanOfDepartmentSealLocation = %s , ChairmanOfDepartmentSignatureLocation = %s , ChairmanOfDepartmentSignatureDate = %s , ProjectStatus = %s , ProjectSoftCopyLocation = %s  WHERE ProjectID = %s"
     project_data = ( data['CodeByRTC'] , data['DateRecieved'] , data['ProjectTitle'] , data['NatureOfResearchProposal'] , data['NameOfCollaboratingDepartments'] , data['AddressOfCollaboratingDepartments'] , data['NameOfCollaboratingInstitutes'] , data['AddressOfCollaboratingInstitutes'] , data['LocationOfFieldActivities'] , data['DurationOfResearchProjectAnnual'] , data['DurationOfResearchProjectLongTerm'] , data['TotalBudgetOfResearchProposalTK'] , data['ExternalAgencyFundingSource'] , data['ExternalAgencyFundingSourcesName'] , data['ExternalAgencyFundingSourcesSubmissionDate'] , data['CommitmentOtherResearchProject'] , data['CommitmentOtherResearchProjectName'] , data['ProjectDescription'] , data['ProjectObjective'] , data['PstuNationalGoal'] , data['PriorResearchOverview'] , data['Methodology'] , data['MethodologyFileLocation'] , data['ExpectedOutput'] , data['SuccessIndicators'] , data['Beneficiaries'] , data['ManPowerExisting'] , data['ManPowerRequired'] , data['SmallEquipmentExisting'] , data['SmallEquipmentRequired'] , data['ResearchMaterialsExisting'] , data['ResearchMaterialsRequired'] , data['OtherExisting'] , data['OtherRequired'] , data['CreatorUserID'] , data['CoPiUserID'] , data['StudentUserID'] , data['CreatorUserSealLocation'] , data['CreatorUserSignatureLocation'] , data['CreatorUserSignatureDate'] , data['ChairmanOfDepartmentComment'] , data['ChairmanOfDepartmentSealLocation'] , data['ChairmanOfDepartmentSignatureLocation'] , data['ChairmanOfDepartmentSignatureDate'] , data['ProjectStatus'] , data['ProjectSoftCopyLocation'] , project_id)
     
     cursor.execute(update_query, project_data)
     
-    project_list_query = "UPDATE projectlistwithuserid SET ProjectTitle = %s WHERE ProjectID = %s"
+    project_list_query = "UPDATE ProjectListWithUserID SET ProjectTitle = %s WHERE ProjectID = %s"
     project_list_data = (data['ProjectTitle'] , project_id)
     cursor.execute(project_list_query, project_list_data)
     

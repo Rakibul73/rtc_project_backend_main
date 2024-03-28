@@ -89,7 +89,7 @@ def delete_project_request(notification_id):
         delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
         cursor.execute(delete_project_list_query, (project_id,))
         # Remove from Projects table based on ProjectID
-        delete_query = "DELETE FROM projects WHERE ProjectID = %s"
+        delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
         cursor.execute(delete_query, (project_id,))
         
         conn.commit()

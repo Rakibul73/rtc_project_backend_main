@@ -22,7 +22,7 @@ def role_required(allowed_roles):
 def get_role_id_from_database(user_id):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT RoleID FROM users WHERE UserID = %s", (user_id,))
+    cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (user_id,))
     RoleID = cursor.fetchone()
     return RoleID[0]
 

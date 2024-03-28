@@ -51,7 +51,7 @@ def send_password():
     # Check if the email exists in the database
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
     user = cursor.fetchone()
     cursor.close()
     
@@ -62,7 +62,7 @@ def send_password():
         return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
 
     cursor = conn.cursor()
-    cursor.execute("SELECT PASSWORD FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT PASSWORD FROM Users WHERE email = %s", (email,))
     PASSWORD = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -104,7 +104,7 @@ def reset_password_request():
     # Check if the email exists in the database
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
     user = cursor.fetchone()
     cursor.close()
 
@@ -166,7 +166,7 @@ def reset_password(token):
     hashed_password = generate_password_hash(new_password, method='pbkdf2:sha256')
     # Update the user's password
     cursor = conn.cursor()
-    update_query = "UPDATE users SET PASSWORD = %s WHERE Email = %s"
+    update_query = "UPDATE Users SET PASSWORD = %s WHERE Email = %s"
     user_data = (hashed_password, email)
     cursor.execute(update_query, user_data)
     cursor.execute("UPDATE PassReset SET Used = 0 WHERE ResetToken = %s", (token,))
@@ -185,9 +185,9 @@ def register_user():
     cursor = conn.cursor()
     username = data.get('username')
     email = data.get('email')
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
     isUserExist = cursor.fetchone()
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
     isEmailExist = cursor.fetchone()
     print("All clear")
     if isUserExist is None and isEmailExist is None:
@@ -213,15 +213,15 @@ def register_user():
 #     cursor = conn.cursor()
 #     username = data.get('username')
 #     email = data.get('email')
-#     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+#     cursor.execute("SELECT * FROM Users WHERE username = %s", (username,))
 #     isUserExist = cursor.fetchone()
-#     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+#     cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
 #     isEmailExist = cursor.fetchone()
 #     if isUserExist is None and isEmailExist is None:
 #         # Hash the password before storing it in the database
 #         password = data.get('password')
 #         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-#         insert_query = "INSERT INTO users (username, password, email , FirstName , LastName , Phone , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s )"
+#         insert_query = "INSERT INTO Users (username, password, email , FirstName , LastName , Phone , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s )"
 #         user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["RoleID"])
 #         cursor.execute(insert_query, user_data)
 #         conn.commit()
@@ -240,12 +240,12 @@ def login_user():
     conn = get_db()
     cursor = conn.cursor()
     username = data.get('username')
-    cursor.execute("SELECT UserID, username, RoleID FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT UserID, username, RoleID FROM Users WHERE username = %s", (username,))
     isUserExist = cursor.fetchone()
 
     if isUserExist:
         given_password = data.get('password')
-        cursor.execute("SELECT password FROM users WHERE username = %s", (username,))
+        cursor.execute("SELECT password FROM Users WHERE username = %s", (username,))
         query_result = cursor.fetchone()
         hashed_password = query_result[0]
         if check_password_hash(hashed_password, given_password):

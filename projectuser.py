@@ -16,35 +16,35 @@ def get_total_number_of_all_dashboard():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT COUNT(*) AS total_users FROM users")
+    cursor.execute("SELECT COUNT(*) AS total_users FROM Users")
     total_users = cursor.fetchone()
     print(total_users['total_users'])
     
-    cursor.execute("SELECT COUNT(*) AS total_projects FROM projects")
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
     total_projects = cursor.fetchone()
     print(total_projects['total_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS total_admin FROM users WHERE RoleID = 1")
+    cursor.execute("SELECT COUNT(*) AS total_admin FROM Users WHERE RoleID = 1")
     total_admin = cursor.fetchone()
     print(total_admin['total_admin'])
     
-    cursor.execute("SELECT COUNT(*) AS total_project_report FROM projects WHERE ProjectSoftCopyLocation IS NOT NULL")
+    cursor.execute("SELECT COUNT(*) AS total_project_report FROM Projects WHERE ProjectSoftCopyLocation IS NOT NULL")
     total_project_report = cursor.fetchone()
     print(total_project_report['total_project_report'])
     
-    cursor.execute("SELECT COUNT(*) AS total_teacher FROM users WHERE RoleID = 4")
+    cursor.execute("SELECT COUNT(*) AS total_teacher FROM Users WHERE RoleID = 4")
     total_teacher = cursor.fetchone()
     print(total_teacher['total_teacher'])
     
-    cursor.execute("SELECT COUNT(*) AS total_researcher FROM users WHERE RoleID = 2")
+    cursor.execute("SELECT COUNT(*) AS total_researcher FROM Users WHERE RoleID = 2")
     total_researcher = cursor.fetchone()
     print(total_researcher['total_researcher'])
     
-    cursor.execute("SELECT COUNT(*) AS total_reviewer FROM users WHERE RoleID = 3")
+    cursor.execute("SELECT COUNT(*) AS total_reviewer FROM Users WHERE RoleID = 3")
     total_reviewer = cursor.fetchone()
     print(total_reviewer['total_reviewer'])
     
-    cursor.execute("SELECT COUNT(*) AS total_student FROM users WHERE RoleID = 5")
+    cursor.execute("SELECT COUNT(*) AS total_student FROM Users WHERE RoleID = 5")
     total_student = cursor.fetchone()
     print(total_student['total_student'])
     
@@ -73,31 +73,31 @@ def get_admin_project_dashboard():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT COUNT(*) AS completed_projects FROM projects WHERE ProjectStatus = 'Completed'")
+    cursor.execute("SELECT COUNT(*) AS completed_projects FROM Projects WHERE ProjectStatus = 'Completed'")
     completed_projects = cursor.fetchone()
     print(completed_projects['completed_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS total_projects FROM projects")
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
     total_projects = cursor.fetchone()
     print(total_projects['total_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS pending_projects FROM projects WHERE ProjectStatus = 'Pending'")
+    cursor.execute("SELECT COUNT(*) AS pending_projects FROM Projects WHERE ProjectStatus = 'Pending'")
     pending_projects = cursor.fetchone()
     print(pending_projects['pending_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS approved_projects FROM projects WHERE ProjectStatus = 'Approved'")
+    cursor.execute("SELECT COUNT(*) AS approved_projects FROM Projects WHERE ProjectStatus = 'Approved'")
     approved_projects = cursor.fetchone()
     print(approved_projects['approved_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM projects WHERE ProjectStatus = 'Rejected'")
+    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM Projects WHERE ProjectStatus = 'Rejected'")
     rejected_projects = cursor.fetchone()
     print(rejected_projects['rejected_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS running_projects FROM projects WHERE ProjectStatus = 'Running'")
+    cursor.execute("SELECT COUNT(*) AS running_projects FROM Projects WHERE ProjectStatus = 'Running'")
     running_projects = cursor.fetchone()
     print(running_projects['running_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM projects WHERE  ProjectSoftCopyLocation IS NOT NULL")
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL")
     final_report_submitted = cursor.fetchone()
     print(final_report_submitted['final_report_submitted'])
 
@@ -127,7 +127,7 @@ def get_self_project_dashboard():
     # Get the current user's ID from JWT
     current_user_id = get_jwt_identity()
     
-    cursor.execute("SELECT COUNT(*) AS completed_projects FROM projects WHERE ProjectStatus = 'Completed' AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS completed_projects FROM Projects WHERE ProjectStatus = 'Completed' AND CreatorUserID = %s", (current_user_id,))
     completed_projects = cursor.fetchone()
     print(completed_projects['completed_projects'])
     
@@ -135,23 +135,23 @@ def get_self_project_dashboard():
     total_projects = cursor.fetchone()
     print(total_projects['total_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS pending_projects FROM projects WHERE ProjectStatus = 'Pending' AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS pending_projects FROM Projects WHERE ProjectStatus = 'Pending' AND CreatorUserID = %s", (current_user_id,))
     pending_projects = cursor.fetchone()
     print(pending_projects['pending_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS approved_projects FROM projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS approved_projects FROM Projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s", (current_user_id,))
     approved_projects = cursor.fetchone()
     print(approved_projects['approved_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM projects WHERE ProjectStatus = 'Rejected' AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM Projects WHERE ProjectStatus = 'Rejected' AND CreatorUserID = %s", (current_user_id,))
     rejected_projects = cursor.fetchone()
     print(rejected_projects['rejected_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS running_projects FROM projects WHERE ProjectStatus = 'Running' AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS running_projects FROM Projects WHERE ProjectStatus = 'Running' AND CreatorUserID = %s", (current_user_id,))
     running_projects = cursor.fetchone()
     print(running_projects['running_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM projects WHERE  ProjectSoftCopyLocation IS NOT NULL AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL AND CreatorUserID = %s", (current_user_id,))
     final_report_submitted = cursor.fetchone()
     print(final_report_submitted['final_report_submitted'])
 
@@ -177,7 +177,7 @@ def get_self_project_dashboard():
 def get_all_projects_for_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM projectlistwithuserid WHERE UserID = %s", (user_id))
+    cursor.execute("SELECT * FROM ProjectListWithUserID WHERE UserID = %s", (user_id))
     projects_for_specific_user = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -199,7 +199,7 @@ def get_projects_for_user(user_id):
     cursor = conn.cursor(dictionary=True)
     
     # Query to get projects for the specified user ID
-    cursor.execute("SELECT * FROM projects WHERE CreatorUserID = %s", (user_id,))
+    cursor.execute("SELECT * FROM Projects WHERE CreatorUserID = %s", (user_id,))
     project_list = cursor.fetchall()
     
     cursor.close()
@@ -215,7 +215,7 @@ def get_projects_for_user(user_id):
 def get_specific_project_for_specific_user(project_id, user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM projectlistwithuserid WHERE ProjectID = %s AND UserID = %s", (project_id, user_id))
+    cursor.execute("SELECT * FROM ProjectListWithUserID WHERE ProjectID = %s AND UserID = %s", (project_id, user_id))
     project_with_user = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -233,7 +233,7 @@ def get_specific_project_for_specific_user(project_id, user_id):
 def delete_project_with_user(project_id, user_id):
     conn = get_db()
     cursor = conn.cursor()
-    delete_query = "DELETE FROM projectlistwithuserid WHERE ProjectID = %s AND UserID = %s"
+    delete_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s AND UserID = %s"
     cursor.execute(delete_query, (project_id, user_id))
     conn.commit()
     cursor.close()
@@ -248,7 +248,7 @@ def delete_project_with_user(project_id, user_id):
 def delete_projects_for_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM projectlistwithuserid WHERE UserID = %s", (user_id,))
+    cursor.execute("DELETE FROM ProjectListWithUserID WHERE UserID = %s", (user_id,))
     conn.commit()
     cursor.close()
     conn.close()
@@ -264,7 +264,7 @@ def user_management_overview():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT COUNT(*) AS total_users FROM users")
+    cursor.execute("SELECT COUNT(*) AS total_users FROM Users")
     total_users = cursor.fetchone()
     print(total_users['total_users'])
     
@@ -272,23 +272,23 @@ def user_management_overview():
     total_pending_users = cursor.fetchone()
     print(total_pending_users['total_pending_users'])
     
-    cursor.execute("SELECT COUNT(*) AS total_admin FROM users WHERE RoleID = 1")
+    cursor.execute("SELECT COUNT(*) AS total_admin FROM Users WHERE RoleID = 1")
     total_admin = cursor.fetchone()
     print(total_admin['total_admin'])
     
-    cursor.execute("SELECT COUNT(*) AS total_teacher FROM users WHERE RoleID = 4")
+    cursor.execute("SELECT COUNT(*) AS total_teacher FROM Users WHERE RoleID = 4")
     total_teacher = cursor.fetchone()
     print(total_teacher['total_teacher'])
     
-    cursor.execute("SELECT COUNT(*) AS total_researcher FROM users WHERE RoleID = 2")
+    cursor.execute("SELECT COUNT(*) AS total_researcher FROM Users WHERE RoleID = 2")
     total_researcher = cursor.fetchone()
     print(total_researcher['total_researcher'])
     
-    cursor.execute("SELECT COUNT(*) AS total_reviewer FROM users WHERE RoleID = 3")
+    cursor.execute("SELECT COUNT(*) AS total_reviewer FROM Users WHERE RoleID = 3")
     total_reviewer = cursor.fetchone()
     print(total_reviewer['total_reviewer'])
     
-    cursor.execute("SELECT COUNT(*) AS total_student FROM users WHERE RoleID = 5")
+    cursor.execute("SELECT COUNT(*) AS total_student FROM Users WHERE RoleID = 5")
     total_student = cursor.fetchone()
     print(total_student['total_student'])
     

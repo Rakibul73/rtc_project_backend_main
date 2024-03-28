@@ -20,7 +20,7 @@ user_blueprint = Blueprint('user', __name__)
 def get_total_number_of_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT COUNT(*) AS total_users FROM users")
+    cursor.execute("SELECT COUNT(*) AS total_users FROM Users")
     total_users = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -84,7 +84,7 @@ def update_pending_user(user_id):
 def get_all_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM users")
+    cursor.execute("SELECT * FROM Users")
     users = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -98,7 +98,7 @@ def create_user():
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    insert_query = "INSERT INTO users (username, password, email , FirstName , LastName , Address , Phone , SalaryScale , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , HighestAcademicQualificationYear , AreaOfExpertise , ExperienceInResearch , Teaching , RoleID , ProfilePicLocation , TotalNumberOfCompleteProjects , TotalNumberOfCompletePublications , OngoingProjects ) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s )"
+    insert_query = "INSERT INTO Users (username, password, email , FirstName , LastName , Address , Phone , SalaryScale , HighestAcademicQualificationUniversity , HighestAcademicQualificationCountry , HighestAcademicQualificationYear , AreaOfExpertise , ExperienceInResearch , Teaching , RoleID , ProfilePicLocation , TotalNumberOfCompleteProjects , TotalNumberOfCompletePublications , OngoingProjects ) VALUES (%s, %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s , %s )"
     user_data = (data['username'], data['password'], data['email'] , data["FirstName"] , data["LastName"] , data["Address"] , data["Phone"] , data["SalaryScale"] , data["HighestAcademicQualificationUniversity"] , data["HighestAcademicQualificationCountry"] , data["HighestAcademicQualificationYear"] , data["AreaOfExpertise"] , data["ExperienceInResearch"] , data["Teaching"] , data["RoleID"] , data["ProfilePicLocation"] , data["TotalNumberOfCompleteProjects"] , data["TotalNumberOfCompletePublications"] , data["OngoingProjects"])
     cursor.execute(insert_query, user_data)
     conn.commit()
@@ -113,7 +113,7 @@ def create_user():
 def get_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM users WHERE Userid = %s", (user_id,))
+    cursor.execute("SELECT * FROM Users WHERE Userid = %s", (user_id,))
     user = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -132,7 +132,7 @@ def update_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
     print(data)
-    update_query = "UPDATE users SET Username = %s , Email = %s , FirstName = %s , LastName = %s , FullNameBangla = %s , PositionEnglish = %s , PositionBangla = %s , PositionHeldSince = %s , Gender = %s , Dateofbirth = %s , Phone = %s , Nid = %s , NidLocation = %s , InstituteName = %s , InstituteLocation = %s , InstituteEmail = %s , PresentAddress = %s , PermanentAddress = %s , ProfilePicLocation = %s , SignatureLocation = %s , SealLocation = %s , SalaryScale = %s , HighestAcademicQualification = %s , HighestAcademicQualificationUniversity = %s , HighestAcademicQualificationCountry = %s , HighestAcademicQualificationYear = %s , AreaOfExpertise = %s , ExperienceInResearch = %s , Teaching = %s , TotalNumberOfCompleteProjects = %s , TotalNumberOfCompletePublications = %s , OngoingProjects = %s , StudentID = %s , StudentRegNo = %s , FirstEnrollmentSemester = %s , UndergraduateCGPALevel = %s  WHERE Userid = %s"
+    update_query = "UPDATE Users SET Username = %s , Email = %s , FirstName = %s , LastName = %s , FullNameBangla = %s , PositionEnglish = %s , PositionBangla = %s , PositionHeldSince = %s , Gender = %s , Dateofbirth = %s , Phone = %s , Nid = %s , NidLocation = %s , InstituteName = %s , InstituteLocation = %s , InstituteEmail = %s , PresentAddress = %s , PermanentAddress = %s , ProfilePicLocation = %s , SignatureLocation = %s , SealLocation = %s , SalaryScale = %s , HighestAcademicQualification = %s , HighestAcademicQualificationUniversity = %s , HighestAcademicQualificationCountry = %s , HighestAcademicQualificationYear = %s , AreaOfExpertise = %s , ExperienceInResearch = %s , Teaching = %s , TotalNumberOfCompleteProjects = %s , TotalNumberOfCompletePublications = %s , OngoingProjects = %s , StudentID = %s , StudentRegNo = %s , FirstEnrollmentSemester = %s , UndergraduateCGPALevel = %s  WHERE Userid = %s"
     user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['FullNameBangla'] , data['PositionEnglish'] , data['PositionBangla'] , data['PositionHeldSince'] , data['Gender'] , data['Dateofbirth'] , data['Phone'] , data['Nid'] , data['NidLocation'] , data['InstituteName'] , data['InstituteLocation'] , data['InstituteEmail'] , data['PresentAddress'] , data['PermanentAddress'] , data['ProfilePicLocation'] , data['SignatureLocation'] , data['SealLocation'] , data['SalaryScale'] , data['HighestAcademicQualification'] , data['HighestAcademicQualificationUniversity'] , data['HighestAcademicQualificationCountry'] , data['HighestAcademicQualificationYear'] , data['AreaOfExpertise'] , data['ExperienceInResearch'] , data['Teaching'] , data['TotalNumberOfCompleteProjects'] , data['TotalNumberOfCompletePublications'] , data['OngoingProjects'] , data['StudentID'] , data['StudentRegNo'] , data['FirstEnrollmentSemester'] , data['UndergraduateCGPALevel'] , user_id)
     cursor.execute(update_query, user_data)
     conn.commit()
@@ -161,7 +161,7 @@ def delete_temp_user(user_id):
 def delete_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
-    delete_query = "DELETE FROM users WHERE Userid = %s"
+    delete_query = "DELETE FROM Users WHERE Userid = %s"
     cursor.execute(delete_query, (user_id,))
     conn.commit()
     cursor.close()
@@ -176,7 +176,7 @@ def delete_user(user_id):
 def get_user_name_of_specific_user(user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT Username FROM users WHERE Userid = %s", (user_id,))
+    cursor.execute("SELECT Username FROM Users WHERE Userid = %s", (user_id,))
     user_name = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -193,7 +193,7 @@ def get_user_name_of_specific_user(user_id):
 def get_all_users_except_students():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM users WHERE RoleID != 5")  # Assuming student role ID is 5
+    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM Users WHERE RoleID != 5")  # Assuming student role ID is 5
     users = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -207,7 +207,7 @@ def get_all_users_except_students():
 def get_only_student_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM users WHERE RoleID = 5")  # Assuming student role ID is 5
+    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM Users WHERE RoleID = 5")  # Assuming student role ID is 5
     users = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -264,7 +264,7 @@ def approve_temp_user(user_id):
     print(TempUser[2])
     # save it in a Users table and delete it from TempUsers table
     if TempUser:
-        insert_query = "INSERT INTO users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
+        insert_query = "INSERT INTO Users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
         user_data = (TempUser[2], TempUser[3], TempUser[6] , TempUser[4], TempUser[5] , TempUser[7] , TempUser[1])
         cursor.execute(insert_query, user_data)
     
