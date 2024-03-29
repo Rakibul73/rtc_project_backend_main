@@ -195,7 +195,7 @@ def get_user_name_of_specific_user(user_id):
 def get_all_users_except_students():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation FROM Users WHERE RoleID != 5")  # Assuming student role ID is 5
+    cursor.execute("SELECT Userid, Username, FirstName , LastName , SignatureLocation , SealLocation , ProfilePicLocation FROM Users WHERE RoleID != 5")  # Assuming student role ID is 5
     users = cursor.fetchall()
     cursor.close()
     conn.close()

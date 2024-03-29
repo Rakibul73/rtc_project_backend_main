@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2024 at 03:17 PM
+-- Generation Time: Mar 29, 2024 at 09:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -207,6 +207,18 @@ CREATE TABLE `review` (
   `Points` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `review`
+--
+
+INSERT INTO `review` (`ReviewID`, `ProjectID`, `ReviewerUserID`, `Comments`, `Rating`, `Points`) VALUES
+(1, 62, 6, NULL, NULL, NULL),
+(2, 62, 8, NULL, NULL, NULL),
+(3, 62, 10, NULL, NULL, NULL),
+(4, 52, 6, NULL, NULL, NULL),
+(5, 52, 1, NULL, NULL, NULL),
+(6, 52, 10, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -252,10 +264,8 @@ CREATE TABLE `tempusers` (
 
 INSERT INTO `tempusers` (`UserID`, `RoleID`, `Username`, `PASSWORD`, `FirstName`, `LastName`, `Email`, `Phone`) VALUES
 (6, 4, 'manashsir', 'pbkdf2:sha256:600000$OmNEWPpV8PGIvf2u$0247cba8882f95b81cc8384b383c950dff86bca377c4ec6fd1f0942a3a5dfb7f', 'Manash', 'Sarker', 'raqibul.islam.17@gmail.com', '01712149555'),
-(8, 4, 'sarnamam', 'pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b', 'Sarna', 'Majumder', 'raqibul.islam.17@gmail.com', '01767265119'),
 (9, 4, 'chinmaysir', 'pbkdf2:sha256:600000$s6D9rvvSDqmuuO5Z$62526ca926a11b516865206682cffa576200a2bd9b9d86252a202ae19cc3d00b', 'Chinmay', 'Bepery', 'raqibul.islam.17@gmail.com', '01710531024'),
 (10, 4, 'jamalsir', 'pbkdf2:sha256:600000$YuBhgqtVb1mAHGEi$1d6b6564a4087e56da87297b215008704bb1e7b43b7dea077f5c83a19ee5d602', 'Mohammad Jamal', 'Hossain', 'raqibul.islam.17@gmail.com', '01865102400'),
-(11, 4, 'masudsir', 'pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f', 'Dr. Md Abdul', 'Masud', 'raqibul.islam.17@gmail.com', '01915461874'),
 (12, 4, 'atiksir', 'pbkdf2:sha256:600000$yHlCBhitz4C7wE4j$afa93360466f4e6dc65a0e659b293af5b239ae74cbe92a8bdbc3c22ce4d34177', 'Md Atikur', 'Rahman', 'raqibul.islam.17@gmail.com', '01915114929'),
 (13, 4, 'mahbubsir', 'pbkdf2:sha256:600000$z9tpFHVoKIbs917v$43701bfc20578fa8a045ac0cdd6d00cb489bec90dfa0b510c081a0eb7350a088', 'Md Mahbubur', 'Rahman', 'raqibul.islam.17@gmail.com', '01556449873'),
 (14, 4, 'sayedsir', 'pbkdf2:sha256:600000$0EhHhFL4NSP8BEaN$2c43dad63ced45e0accd56d6703e363babc7b097c9c41d291338c033ead6a797', 'Moinul Islam', 'Sayed', 'raqibul.islam.17@gmail.com', '+14372263887'),
@@ -325,13 +335,15 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglish`, `PositionBangla`, `PositionHeldSince`, `Email`, `FirstName`, `LastName`, `FullNameBangla`, `PresentAddress`, `PermanentAddress`, `Gender`, `Nid`, `NidLocation`, `InstituteName`, `InstituteLocation`, `InstituteEmail`, `Phone`, `Dateofbirth`, `SalaryScale`, `HighestAcademicQualification`, `HighestAcademicQualificationUniversity`, `HighestAcademicQualificationCountry`, `HighestAcademicQualificationYear`, `AreaOfExpertise`, `ReferencesOfLatestPublications`, `ExperienceInResearch`, `Teaching`, `ProfilePicLocation`, `SignatureLocation`, `SealLocation`, `TotalNumberOfCompleteProjects`, `TotalNumberOfCompletePublications`, `OngoingProjects`, `StudentID`, `StudentRegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
-(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'MD Rakibul', 'Islam', 'd', 'address', 'd', 'd', 'd', '22.png', 'd', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, '30000000.jpg', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
+(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'Md. Rakibul', 'Islam', 'd', 'address', 'd', 'd', 'd', '22.png', 'd', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, '30000000.jpg', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
 (2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', '', '', 'taj@gmail.com', 'Tahmidur', 'Rahman Taj', '', '', '', 'male', '', 'defaultnid.png', '', '', '', '01400000000', '2000-03-29 00:00:00.000', 0, '', '', '', 0, '', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'defaultseal.png', 0, 0, 0, 1802038, '08483', 'semester 1', '3.5'),
 (3, 4, 'sobujsirsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', 'f', 'f', '5', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', 'hf', 'f', 'f', 'f', 'ff', '', 'f', 'f', 'f', '01500000000', '2024-03-20 00:00:00.000', 0, 'f', 'ff', 'f', 0, 'f', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'shanto  .jpg', 0, 0, 0, 0, '3', 'f', 'f'),
 (4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01725225225', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (5, 4, 'sobujsir', 'pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389', 'Professor', 'অধ্যাপক', '2019', 'rakibul16@cse.pstu.ac.bd', 'Dr. Md.', 'Samsuzzaman', 'মোঃ শামসুজ্জামান', 'Room No: 401 CSE Building (3rd Floor) Department of CCE,  Faculty of CSE , Dhumki , Patuakhali', 'Village: Rotidanga, Road: Rotidanga Road , Post Office : Boalia Bazar, Division : Khulna', 'Male', '1491370944', 'defaultnid.png', 'Patuakhali Science and Technology University', 'Room No: 401 CSE Building (3rd Floor) Department of Computer and Communication Engineering Faculty of Computer Science and Engineering', 'registrar@pstu.ac.bd', '01712653210', '1982-11-15 00:00:00.000', 50000, 'Doctor of Philosophy', 'Universiti Kebangsaan Malaysia', 'Malaysia', 2015, 'Microwave Communication, Satellite Communication, Microwave Imaging, Antenna Technology for Microwave Applications', NULL, 6, 13, 'defaultprofilepic.png', '14.png', '9.png', 10, 29, 0, 0, '0', '0', '0'),
 (6, 4, 'muradsir', 'pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81', '', '', '', 'tuimorsala01@gmail.com', 'Golam Md. Muradul', 'Bashir', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01783242885', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 4, 'arpitamam', 'pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec', '', '', '', 'lovely.shanto.35@gmail.com', 'Arpita', 'Howlader', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01584563227', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(8, 4, 'arpitamam', 'pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec', '', '', '', 'lovely.shanto.35@gmail.com', 'Arpita', 'Howlader', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01584563227', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(10, 4, 'sarnamam', 'pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b', '', '', '', 'raqibul.islam.17@gmail.com', 'Sarna', 'Majumder', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01767265119', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, 4, 'masudsir', 'pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f', '', '', '', 'raqibul.islam.17@gmail.com', 'Dr. Md Abdul', 'Masud', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '01915461874', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -414,7 +426,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `ReviewID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ReviewID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -432,7 +444,7 @@ ALTER TABLE `tempusers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
