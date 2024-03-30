@@ -1,5 +1,5 @@
 from flask import request, jsonify , Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from auth_utils import role_required
 from db import get_db  # Assuming get_db is a local module providing database connection
 
@@ -37,6 +37,63 @@ def get_revieweruserid_for_specific_project(project_id):
     cursor.close()
     conn.close()
     return jsonify({'revieweruserid': revieweruserid , 'statuscode' : 200}), 200
+
+
+# Route to get total number of review dashboard
+@review_blueprint.route('/review_dashboard', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def review_dashboard():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    
+    cursor.execute("SELECT COUNT(*) AS total_projects_to_review FROM Review WHERE ReviewerUserID = %s", (current_user_id,))
+    total_projects_to_review = cursor.fetchone()
+    print(total_projects_to_review['total_projects_to_review'])
+    
+    cursor.execute("SELECT COUNT(*) AS pending_reviews FROM Review WHERE ReviewerUserID = %s AND Comments IS NULL" , (current_user_id,))
+    pending_reviews = cursor.fetchone()
+    print(pending_reviews['pending_reviews'])
+    
+    cursor.execute("SELECT COUNT(*) AS completed_reviews FROM Review WHERE ReviewerUserID = %s AND Comments IS NOT NULL" , (current_user_id,))
+    completed_reviews = cursor.fetchone()
+    print(completed_reviews['completed_reviews'])
+    
+    # Get the project IDs associated with the current user from projectlistwithuserid table
+    cursor.execute("SELECT ProjectID FROM projectlistwithuserid WHERE UserID = %s", (current_user_id,))
+    user_projects = cursor.fetchall()
+    if len(user_projects) == 0:
+        review_queue = {'review_queue': 0}
+        review_done = {'review_done': 0}
+    else:
+        # Count how many of the user's projects are added in the review table
+        projects_in_review = [project['ProjectID'] for project in user_projects]
+        print(projects_in_review)
+        cursor.execute("SELECT COUNT(DISTINCT ProjectID) AS review_queue FROM Review WHERE ProjectID IN ({})".format(
+            ', '.join(['%s']*len(projects_in_review))), projects_in_review)
+        review_queue = cursor.fetchone()
+        
+        cursor.execute("SELECT COUNT(DISTINCT ProjectID) AS review_done FROM Review WHERE ProjectID IN ({}) AND Comments IS NOT NULL".format(
+            ', '.join(['%s']*len(projects_in_review))), projects_in_review)
+        review_done = cursor.fetchone()
+    
+    print(review_queue['review_queue'])
+    print(review_done['review_done'])
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({
+        'total_projects_to_review': total_projects_to_review['total_projects_to_review'],
+        'completed_reviews': completed_reviews['completed_reviews'],
+        'review_queue': review_queue['review_queue'],
+        'pending_reviews': pending_reviews['pending_reviews'],
+        'review_done': review_done['review_done'],
+        'statuscode' : 200
+    }) , 200
 
 
 
