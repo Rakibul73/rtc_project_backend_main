@@ -162,6 +162,14 @@ CREATE TABLE ActivityPlan (
 );
 
 -- Create Review table
+CREATE TABLE ProjectListWithReviewerID (
+  ProjectID INT,
+  ReviewerUserID INT,
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+  FOREIGN KEY (ReviewerUserID) REFERENCES Users(UserID)
+);
+
+-- Create Review table
 CREATE TABLE Review (
   ReviewID INT PRIMARY KEY AUTO_INCREMENT,
   ProjectID INT,

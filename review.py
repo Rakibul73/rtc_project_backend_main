@@ -16,7 +16,7 @@ def set_reviewer_for_specific_project():
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
-    insert_query = "INSERT INTO Review (ProjectID, ReviewerUserID) VALUES (%s, %s)"
+    insert_query = "INSERT INTO ProjectListWithReviewerID (ProjectID, ReviewerUserID) VALUES (%s, %s)"
     review_data = (data['ProjectID'], data['ReviewerUserID'])
     cursor.execute(insert_query, review_data)
     conn.commit()
@@ -32,7 +32,7 @@ def set_reviewer_for_specific_project():
 def get_revieweruserid_for_specific_project(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT ReviewerUserID FROM Review WHERE ProjectID = %s", (project_id,))
+    cursor.execute("SELECT ReviewerUserID FROM ProjectListWithReviewerID WHERE ProjectID = %s", (project_id,))
     revieweruserid = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -50,17 +50,15 @@ def review_dashboard():
     # Get the current user's ID from JWT
     current_user_id = get_jwt_identity()
     
-    cursor.execute("SELECT COUNT(*) AS total_projects_to_review FROM Review WHERE ReviewerUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS total_projects_to_review FROM ProjectListWithReviewerID WHERE ReviewerUserID = %s", (current_user_id,))
     total_projects_to_review = cursor.fetchone()
     print(total_projects_to_review['total_projects_to_review'])
-    
-    cursor.execute("SELECT COUNT(*) AS pending_reviews FROM Review WHERE ReviewerUserID = %s AND Comments IS NULL" , (current_user_id,))
-    pending_reviews = cursor.fetchone()
-    print(pending_reviews['pending_reviews'])
     
     cursor.execute("SELECT COUNT(*) AS completed_reviews FROM Review WHERE ReviewerUserID = %s AND Comments IS NOT NULL" , (current_user_id,))
     completed_reviews = cursor.fetchone()
     print(completed_reviews['completed_reviews'])
+    
+    pending_reviews = {'pending_reviews': total_projects_to_review['total_projects_to_review'] - completed_reviews['completed_reviews']}
     
     # Get the project IDs associated with the current user from projectlistwithuserid table
     cursor.execute("SELECT ProjectID FROM projectlistwithuserid WHERE UserID = %s", (current_user_id,))
@@ -69,10 +67,11 @@ def review_dashboard():
         review_queue = {'review_queue': 0}
         review_done = {'review_done': 0}
     else:
+        print("Count how many of the user's projects are added in the review table")
         # Count how many of the user's projects are added in the review table
         projects_in_review = [project['ProjectID'] for project in user_projects]
         print(projects_in_review)
-        cursor.execute("SELECT COUNT(DISTINCT ProjectID) AS review_queue FROM Review WHERE ProjectID IN ({})".format(
+        cursor.execute("SELECT COUNT(DISTINCT ProjectID) AS review_queue FROM ProjectListWithReviewerID WHERE ProjectID IN ({})".format(
             ', '.join(['%s']*len(projects_in_review))), projects_in_review)
         review_queue = cursor.fetchone()
         
@@ -95,6 +94,48 @@ def review_dashboard():
         'statuscode' : 200
     }) , 200
 
+
+
+# Route to get all projects have to review
+@review_blueprint.route('/get_all_projects_have_to_review', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_all_projects_have_to_review():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    cursor.execute("SELECT * FROM ProjectListWithReviewerID WHERE ReviewerUserID = %s", (current_user_id,))
+    ProjectHaveToReviewList = cursor.fetchall()
+    # retrieve all projects that have to be reviewed with ProjectHaveToReviewList 
+    projects_in_review = [project['ProjectID'] for project in ProjectHaveToReviewList]
+    cursor.execute("SELECT * FROM Projects WHERE ProjectID IN ({})".format(
+        ', '.join(['%s']*len(projects_in_review))), projects_in_review)
+    
+    ProjectHaveToReviewList = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'ProjectHaveToReviewList': ProjectHaveToReviewList , "statuscode" : 200}) , 200
+
+
+
+# Route to get wether a project reviewed or not
+@review_blueprint.route('/check_a_project_reviewed_or_not/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def check_a_project_reviewed_or_not(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT * FROM Review WHERE ProjectID = %s", (project_id,))
+    ProjectReviewCheck = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    if ProjectReviewCheck:
+        return jsonify({'ProjectReviewCheck': "Yes" , "statuscode" : 200}) , 200
+    else:
+        return jsonify({'ProjectReviewCheck': "No" , "statuscode" : 200}) , 200
+    
 
 
 # # Route to get all reviews for a specific project
