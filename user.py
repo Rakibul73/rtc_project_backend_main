@@ -2,7 +2,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 from flask import  render_template, request, jsonify , Blueprint
-from flask_jwt_extended import jwt_required 
+from flask_jwt_extended import get_jwt_identity, jwt_required 
 from auth_utils import role_required
 from db import get_db # local module
 
@@ -334,7 +334,6 @@ def user_management_overview():
         'total_student': total_student['total_student'],
         'statuscode' : 200
     }) , 200
-
 
 
 # ==========================================  User Related Routes END =============================
