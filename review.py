@@ -151,21 +151,21 @@ def check_a_project_reviewed_or_not(project_id):
 #     conn.close()
 #     return jsonify({'reviews': reviews})
 
-# # Route to create a new review for a project
-# @review_blueprint.route('/create_reviews_specific_project', methods=['POST'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1, 2 , 3 , 4 , 5])
-# def create_reviews_specific_project():
-#     data = request.get_json()
-#     conn = get_db()
-#     cursor = conn.cursor()
-#     insert_query = "INSERT INTO Review (ProjectID, ReviewerUserID, Comments, Rating, Points) VALUES (%s, %s, %s, %s, %s)"
-#     review_data = (data['ProjectID'], data['ReviewerUserID'], data['Comments'], data['Rating'], data['Points'])
-#     cursor.execute(insert_query, review_data)
-#     conn.commit()
-#     cursor.close()
-#     conn.close()
-#     return jsonify({'message': 'Review created successfully'}), 201
+# Route to create a new review for a project
+@review_blueprint.route('/create_reviews_specific_project', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([2 , 3 , 4 , 5])
+def create_reviews_specific_project():
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    insert_query = "INSERT INTO Review (ProjectID, ReviewerUserID, Comments, Points) VALUES (%s, %s, %s, %s)"
+    review_data = (data['ProjectID'], data['ReviewerUserID'], data['Comments'], data['Points'])
+    cursor.execute(insert_query, review_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Review created successfully' , 'statuscode' : 201}), 201
 
 # # Route to update a specific project review
 # @review_blueprint.route('/update_specific_project_review/<int:review_id>', methods=['PUT'])
@@ -197,18 +197,19 @@ def check_a_project_reviewed_or_not(project_id):
 #     return jsonify({'message': 'Review with id ' + str(review_id) + ' deleted successfully'})
 
 
-# # Route to get all reviews for a specific reviewer user
-# @review_blueprint.route('/get_all_reviews_for_specific_reviewer/<int:reviewer_user_id>', methods=['GET'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1, 2 , 3 , 4 , 5])
-# def get_all_reviews_for_specific_reviewer(reviewer_user_id):
-#     conn = get_db()
-#     cursor = conn.cursor(dictionary=True)
-#     cursor.execute("SELECT * FROM Review WHERE ReviewerUserID = %s", (reviewer_user_id,))
-#     reviews = cursor.fetchall()
-#     cursor.close()
-#     conn.close()
-#     return jsonify({'reviews': reviews})
+# Route to get all reviews for a specific reviewer user
+@review_blueprint.route('/get_all_reviews_for_specific_reviewer', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_all_reviews_for_specific_reviewer():
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Review WHERE ProjectID = %s AND ReviewerUserID = %s", (data['ProjectID'], data['ReviewerUserID']))
+    reviews = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'reviews': reviews , 'statuscode' : 200}), 200
 
 
 # # Route to delete all reviews for a specific project
