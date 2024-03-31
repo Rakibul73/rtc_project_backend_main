@@ -336,4 +336,22 @@ def user_management_overview():
     }) , 200
 
 
+
+# Route to get a specific user
+@user_blueprint.route('/get_specific_user_minimum/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_specific_user_minimum(user_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT Username , FirstName , LastName , ProfilePicLocation FROM Users WHERE Userid = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    print(jsonify(user))
+    if user:
+        return jsonify({'user': user , 'statuscode' : 200}), 200
+    else:
+        return jsonify({'message': 'User not found'}), 404
+
 # ==========================================  User Related Routes END =============================
