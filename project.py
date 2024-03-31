@@ -122,6 +122,9 @@ def delete_project(project_id):
     # Remove from Review table based on ProjectID
     delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
     cursor.execute(delete_review_query, (project_id,))
+    # Remove from ProjectListWithReviewerID table based on ProjectID
+    delete_review_query = "DELETE FROM ProjectListWithReviewerID WHERE ProjectID = %s"
+    cursor.execute(delete_review_query, (project_id,))
     # Remove from ProjectListWithUserID table based on ProjectID
     delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
     cursor.execute(delete_project_list_query, (project_id,))
