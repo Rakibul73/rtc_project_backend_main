@@ -96,7 +96,7 @@ def review_dashboard():
 
 
 
-# Route to get all projects have to review
+# Route to get all projects have to review for current user
 @review_blueprint.route('/get_all_projects_have_to_review', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
@@ -120,14 +120,14 @@ def get_all_projects_have_to_review():
 
 
 # Route to get wether a project reviewed or not
-@review_blueprint.route('/check_a_project_reviewed_or_not/<int:project_id>', methods=['GET'])
+@review_blueprint.route('/check_a_project_reviewed_or_not/<int:project_id>/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
-def check_a_project_reviewed_or_not(project_id):
+def check_a_project_reviewed_or_not(project_id , user_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT * FROM Review WHERE ProjectID = %s", (project_id,))
+    cursor.execute("SELECT * FROM Review WHERE ProjectID = %s AND ReviewerUserID = %s", (project_id , user_id))
     ProjectReviewCheck = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -138,18 +138,18 @@ def check_a_project_reviewed_or_not(project_id):
     
 
 
-# # Route to get all reviews for a specific project
-# @review_blueprint.route('/get_reviews_for_specific_project/<int:project_id>', methods=['GET'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1, 2 , 3 , 4 , 5])
-# def get_reviews_for_specific_project(project_id):
-#     conn = get_db()
-#     cursor = conn.cursor(dictionary=True)
-#     cursor.execute("SELECT * FROM Review WHERE ProjectID = %s", (project_id,))
-#     reviews = cursor.fetchall()
-#     cursor.close()
-#     conn.close()
-#     return jsonify({'reviews': reviews})
+# Route to get all reviews for a specific project
+@review_blueprint.route('/get_reviews_for_specific_project/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_reviews_for_specific_project(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Review WHERE ProjectID = %s", (project_id,))
+    reviews = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'reviews': reviews , 'statuscode' : 200}), 200
 
 # Route to create a new review for a project
 @review_blueprint.route('/create_reviews_specific_project', methods=['POST'])
@@ -224,5 +224,60 @@ def get_all_reviews_for_specific_reviewer():
 #     cursor.close()
 #     conn.close()
 #     return jsonify({'message': f'All Reviews for ProjectID {project_id} deleted successfully'})
+
+
+
+
+# Route to get total number of review dashboard
+@review_blueprint.route('/review_panel_overview', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def review_panel_overview():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    
+    cursor.execute("SELECT COUNT(*) AS reviewer_gave_review FROM ( SELECT ProjectID FROM Review GROUP BY ProjectID HAVING COUNT(*) = 3 ) AS ProjectsWithThreeReviews")
+    reviewer_gave_review = cursor.fetchone()
+    print(reviewer_gave_review['reviewer_gave_review'])
+    
+    
+    cursor.execute("SELECT COUNT(DISTINCT ProjectID) AS assigned_reviewer FROM ProjectListWithReviewerID")
+    assigned_reviewer = cursor.fetchall()
+    
+    cursor.execute("SELECT COUNT(*) AS totalNumOfProjects FROM projects")
+    totalNumOfProjects = cursor.fetchone()
+    print(totalNumOfProjects['totalNumOfProjects'])
+    remaining_projects = totalNumOfProjects['totalNumOfProjects'] - assigned_reviewer[0]['assigned_reviewer']
+    need_to_assign_reviewer = {'need_to_assign_reviewer': remaining_projects}
+
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({
+        'reviewer_gave_review': reviewer_gave_review['reviewer_gave_review'],
+        'need_to_assign_reviewer': need_to_assign_reviewer['need_to_assign_reviewer'],
+        'assigned_reviewer': assigned_reviewer[0]['assigned_reviewer'],
+        'statuscode' : 200
+    }) , 200
+
+
+
+# Route to get all projects reviewer given review
+@review_blueprint.route('/get_all_projects_reviewer_given_review', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def get_all_projects_reviewer_given_review():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT * FROM projects WHERE ProjectID IN( SELECT ProjectID FROM Review GROUP BY ProjectID HAVING COUNT(*) = 3 )")
+    project_list = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'projects': project_list  , "statuscode" : 200}) , 200
 
 # ==========================================  Review Related Routes END  =============================
