@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2024 at 06:46 PM
+-- Generation Time: Mar 31, 2024 at 03:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -230,8 +230,16 @@ CREATE TABLE `review` (
   `ReviewerUserID` int(11) DEFAULT NULL,
   `Comments` text DEFAULT NULL,
   `Rating` int(11) DEFAULT NULL,
-  `Points` int(11) DEFAULT NULL
+  `Points` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `review`
+--
+
+INSERT INTO `review` (`ReviewID`, `ProjectID`, `ReviewerUserID`, `Comments`, `Rating`, `Points`) VALUES
+(1, 52, 6, 'not good', NULL, 4.5),
+(2, 62, 6, 'Not good', NULL, 6);
 
 -- --------------------------------------------------------
 
@@ -447,7 +455,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `ReviewID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ReviewID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `role`
