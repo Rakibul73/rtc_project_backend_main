@@ -8,20 +8,37 @@ project_blueprint = Blueprint('project', __name__)
 # ==========================================  Project Related Routes START =============================
 
 
-# # Route to get total number of projects
-# @project_blueprint.route('/get_total_number_of_projects', methods=['GET'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1, 2 , 3 , 4 , 5])
-# def get_total_number_of_projects():
-#     conn = get_db()
-#     cursor = conn.cursor(dictionary=True)
-#     cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
-#     total_projects = cursor.fetchone()
-#     cursor.close()
-#     conn.close()
-#     print(total_projects['total_projects'])
-#     return jsonify({'total_projects': total_projects['total_projects'] , "statuscode" : 200}) , 200
+# Route to get project status of a specified project
+@project_blueprint.route('/get_project_status_specific_project/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_project_status_specific_project(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT ProjectStatus FROM Projects WHERE ProjectID = %s", (project_id,))
+    ProjectStatus = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    print(ProjectStatus['ProjectStatus'])
+    return jsonify({'ProjectStatus': ProjectStatus['ProjectStatus'] , "statuscode" : 200}) , 200
 
+
+# Route to update project status & total points of specific project
+@project_blueprint.route('/update_projectstatus_point/<int:project_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def update_projectstatus_point(project_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    print(data)
+    update_query = "UPDATE Projects SET ProjectStatus = %s , TotalPoints = %s WHERE ProjectID = %s"
+    project_data = (data['ProjectStatus'] , data['TotalPoints'] , project_id)
+    cursor.execute(update_query, project_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Project Status & Total Points updated successfully' , 'statuscode' : 200}), 200
 
 
 # Route to get all projects
