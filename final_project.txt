@@ -134,7 +134,7 @@ CREATE TABLE Projects (
   ResultsAndDiscussion TEXT,
   KeyAchievements TEXT,
   ProjectStatus VARCHAR(50),
-  TotalPoints INT,
+  TotalPoints FLOAT(11),
   ProjectSoftCopyLocation VARCHAR(255),
   FOREIGN KEY (CreatorUserID) REFERENCES Users(UserID),
   FOREIGN KEY (CoPiUserID) REFERENCES Users(UserID)
@@ -176,7 +176,8 @@ CREATE TABLE Review (
   ReviewerUserID INT,
   Comments TEXT,
   Rating INT,
-  Points INT,
+  Points FLOAT(11),
+  PiCanViewOrNot INT,
   FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
   FOREIGN KEY (ReviewerUserID) REFERENCES Users(UserID)
 );
