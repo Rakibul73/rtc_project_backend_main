@@ -6,7 +6,14 @@ This is a simple Flask-based API server that provides endpoints to interact with
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Endpoints](#endpoints)
+- [Authentication Endpoints](#authentication-endpoints)
+- [File Download Endpoints](#file-download-endpoints)
+- [File Upload Endpoints](#file-upload-endpoints)
+- [User Endpoints](#user-endpoints)
+- [Reviewer Endpoints](#reviewer-endpoints)
+- [ProjectUser Endpoints](#projectuser-endpoints)
+- [Project Endpoints](#project-endpoints)
+- [Notification Endpoints](#notification-endpoints)
 
 ---
 
