@@ -12,10 +12,12 @@ from datetime import timedelta
 from upload import upload_blueprint
 from download import download_blueprint
 from notification import notification_blueprint
+from flask_compress import Compress
 
 
 app = Flask(__name__)
 CORS(app)  # Add this line
+Compress(app)
 
 
 # Configure JWT
