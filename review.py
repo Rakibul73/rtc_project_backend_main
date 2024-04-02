@@ -285,7 +285,7 @@ def review_panel_overview():
     cursor.execute("SELECT COUNT(DISTINCT ProjectID) AS assigned_reviewer FROM ProjectListWithReviewerID")
     assigned_reviewer = cursor.fetchall()
     
-    cursor.execute("SELECT COUNT(*) AS totalNumOfProjects FROM projects")
+    cursor.execute("SELECT COUNT(*) AS totalNumOfProjects FROM Projects")
     totalNumOfProjects = cursor.fetchone()
     print(totalNumOfProjects['totalNumOfProjects'])
     remaining_projects = totalNumOfProjects['totalNumOfProjects'] - assigned_reviewer[0]['assigned_reviewer']
