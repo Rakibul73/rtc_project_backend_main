@@ -527,6 +527,333 @@ You can interact with the API server using HTTP requests. You can use tools like
   }
   ```
 
+### Reviewer Endpoints
+
+#### `POST /set_reviewer_for_specific_project`
+
+- Authorization: Requires JWT authentication; accessible to role 1.
+- Description: Creates a new review for a project by setting a reviewer based on the provided ProjectID and ReviewerUserID.
+- Request Body: JSON
+  ```json
+  {
+    "ProjectID": 123,
+    "ReviewerUserID": 456
+  }
+  ```
+- Response:
+  ```json
+  {
+    "message": "Reviewer Set successfully",
+    "statuscode": 201
+  }
+  ```
+
+#### `GET /get_revieweruserid_for_specific_project/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to role 1.
+- Description: Fetches all ReviewerUserIDs associated with a specific project based on the provided project ID.
+- Response:
+  ```json
+  {
+    "revieweruserid": [{ "ReviewerUserID": 123 }, { "ReviewerUserID": 456 }],
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /review_dashboard`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves the total number of projects to review, completed reviews, pending reviews, review queue, and other relevant information for the review dashboard.
+- Response:
+  ```json
+  {
+    "total_projects_to_review": 10,
+    "completed_reviews": 5,
+    "review_queue": 3,
+    "pending_reviews": 5,
+    "review_done": 2,
+    "my_total_project": 7,
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /update_picanviewornot/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Updates the PiCanViewOrNot status for a specific project, where 0 means cannot view and 1 means can view.
+- Response:
+  ```json
+  {
+    "message": "Review PiCanViewOrNot updated successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_all_projects_pi_can_view_review`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves all projects that a PI (Principal Investigator) can view for review.
+- Response:
+  ```json
+  {
+    "ProjectsPiCanViewReview": [
+      {
+        "ProjectID": 1,
+        "ProjectTitle": "Research Project 1",
+        "Description": "This is the description of the project 1.",
+        ...
+      },
+      {
+        "ProjectID": 2,
+        "ProjectTitle": "Research Project 2",
+        "Description": "This is the description of the project 2.",
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_all_projects_have_to_review`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves all projects that the current user has to review.
+- Response:
+  ```json
+  {
+    "ProjectHaveToReviewList": [
+      {
+        "ProjectID": 1,
+        "ProjectTitle": "Research Project 1",
+        "Description": "This is the description of the project 1.",
+        ...
+      },
+      {
+        "ProjectID": 3,
+        "ProjectTitle": "Research Project 3",
+        "Description": "This is the description of the project 3.",
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /check_a_project_reviewed_or_not/<project_id>/<user_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Checks whether a specific project has been reviewed by a specific user.
+- Response:
+  - If the project is reviewed:
+    ```json
+    {
+      "ProjectReviewCheck": "Yes",
+      "statuscode": 200
+    }
+    ```
+  - If the project is not reviewed:
+    ```json
+    {
+      "ProjectReviewCheck": "No",
+      "statuscode": 200
+    }
+    ```
+
+#### `GET /get_reviews_for_specific_project/<project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves all reviews for a specific project based on the project ID.
+- Response:
+  ```json
+  {
+    "reviews": [
+      {
+        "ReviewID": 1,
+        "ProjectID": 1,
+        "ReviewerUserID": 123,
+        "Comments": "This is a review comment for the project.",
+        "Points": 4.5,
+        "PiCanViewOrNot": 0,
+        ...
+      },
+      {
+        "ReviewID": 2,
+        "ProjectID": 1,
+        "ReviewerUserID": 456,
+        "Comments": "Another review comment for the project.",
+        "Points": 3.5,
+        "PiCanViewOrNot": 1,
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+#### `POST /create_reviews_specific_project`
+
+- Authorization: Requires JWT authentication; accessible to roles 2, 3, 4, and 5.
+- Description: Creates a new review for a specific project.
+- Request Body:
+  ```json
+  {
+    "ProjectID": 1,
+    "ReviewerUserID": 123,
+    "Comments": "This is a review comment for the project.",
+    "Points": 4.5
+  }
+  ```
+- Response:
+  ```json
+  {
+    "message": "Review created successfully",
+    "statuscode": 201
+  }
+  ```
+
+#### `POST /get_all_reviews_for_specific_reviewer`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves all reviews for a specific reviewer user and project.
+- Request Body:
+  ```json
+  {
+    "ProjectID": 1,
+    "ReviewerUserID": 123
+  }
+  ```
+- Response:
+  ```json
+  {
+    "reviews": [
+      {
+        "ReviewID": 1,
+        "ProjectID": 1,
+        "ReviewerUserID": 123,
+        "Comments": "This is a review comment for the project.",
+        "Points": 4.5,
+        "PiCanViewOrNot": 0,
+        ...
+      },
+      {
+        "ReviewID": 2,
+        "ProjectID": 1,
+        "ReviewerUserID": 123,
+        "Comments": "Another review comment for the project.",
+        "Points": 3.5,
+        "PiCanViewOrNot": 1,
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /review_panel_overview`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Provides an overview of the review panel statistics, including the number of reviewers who have given reviews, the number of projects that still need reviewers assigned, and the total number of projects and assigned reviewers.
+- Response:
+  ```json
+  {
+    "reviewer_gave_review": 15,
+    "need_to_assign_reviewer": 5,
+    "assigned_reviewer": 20,
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_all_projects_have_to_set_reviewer`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves a list of all projects that still need a reviewer assigned.
+- Response:
+  ```json
+  {
+    "ProjectHaveToSetReviewerList": [
+      {
+        "ProjectID": 1,
+        "ProjectTitle": "Sample Project 1",
+        ...
+      },
+      {
+        "ProjectID": 2,
+        "ProjectTitle": "Sample Project 2",
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_all_projects_reviewer_given_review`
+
+- Authorization: Requires JWT authentication; accessible only to role 1 (admin).
+- Description: Retrieves a list of all projects where reviewers have given their reviews.
+- Response:
+  ```json
+  {
+    "projects": [
+      {
+        "ProjectID": 1,
+        "ProjectTitle": "Sample Project 1",
+        ...
+      },
+      {
+        "ProjectID": 2,
+        "ProjectTitle": "Sample Project 2",
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+### ProjectUser Endpoints
+
+#### `GET /get_total_number_of_all_dashboard`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves various counts related to users and projects, including total users, projects, admins, researchers, reviewers, teachers, students, and projects with reports.
+- Response:
+  ```json
+  {
+    "total_users": 100,
+    "total_projects": 50,
+    "total_admin": 5,
+    "total_researcher": 20,
+    "total_reviewer": 10,
+    "total_teacher": 8,
+    "total_student": 57,
+    "total_project_report": 30,
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_self_project_dashboard`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves project-related statistics for the current user, including completed, total, pending, approved, rejected, running projects, and final reports submitted.
+- Response:
+  ```json
+  {
+    "running_projects": 5,
+    "rejected_projects": 2,
+    "approved_projects": 15,
+    "pending_projects": 10,
+    "final_report_submitted": 20,
+    "completed_projects": 30,
+    "total_projects": 50,
+    "statuscode": 200
+  }
+  ```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
