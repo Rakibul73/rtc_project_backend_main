@@ -46,7 +46,7 @@ You can interact with the API server using HTTP requests. You can use tools like
 
 ## Endpoints
 
-`Some of the endpoints need valid access token`
+> Some of the endpoints need valid access token
 
 ### Authentication Endpoints
 
@@ -850,6 +850,280 @@ You can interact with the API server using HTTP requests. You can use tools like
     "final_report_submitted": 20,
     "completed_projects": 30,
     "total_projects": 50,
+    "statuscode": 200
+  }
+  ```
+
+### Project Endpoints
+
+#### `GET /get_project_status_specific_project/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Retrieves the status of a specified project.
+- Response:
+  ```json
+  {
+    "ProjectStatus": "Running",
+    "statuscode": 200
+  }
+  ```
+
+#### `PUT /update_projectstatus_point/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Updates the project status and total points of a specific project.
+- Request Body Example:
+  ```json
+  {
+    "ProjectStatus": "Approved",
+    "TotalPoints": 100
+  }
+  ```
+- Response:
+  ```json
+  {
+    "message": "Project Status & Total Points updated successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /projects`
+
+- Authorization: Requires JWT authentication; accessible to role 1 (admin).
+- Description: Retrieves all projects.
+- Response:
+
+  ```json
+  {
+  "projects": [
+    {
+      "ProjectID": 1,
+      "ProjectTitle": "Sample Project 1",
+      "CreatorUserID": 123,
+      ...
+    },
+    {
+      "ProjectID": 2,
+      "ProjectTitle": "Sample Project 2",
+      "CreatorUserID": 456,
+      ...
+    },
+    ...
+  ],
+  "statuscode": 200
+  }
+  ```
+
+#### `POST /create_projects`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5.
+- Description: Creates a new project.
+- Request Body Example:
+
+  ```json
+  {
+    "CodeByRTC": "ABC123",
+    "DateRecieved": "2024-04-03",
+    "ProjectTitle": "Research Project Title",
+    "NatureOfResearchProposal": "Nature of Research Proposal",
+    ...
+  }
+  ```
+
+- Response:
+  ```json
+  {
+    "message": "Project created successfully",
+    "statuscode": 201
+  }
+  ```
+
+#### `GET /projects/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, and 4.
+- Description: Retrieves details of a specific project.
+- Response:
+  ```json
+  {
+    "project": {
+      "ProjectID": 1,
+      "ProjectTitle": "Sample Project",
+      "CreatorUserID": 123,
+      "ProjectStatus": "Pending",
+      ...
+    },
+    "statuscode": 200
+  }
+  ```
+
+#### `DELETE /projects/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to role 1 (admin).
+- Description: Deletes a project and its related data.
+- Response:
+  ```json
+  {
+    "message": "Project with id 123 deleted successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `PUT /update_project/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, and 4.
+- Description: Updates the basic information of a project.
+- Request Body Example:
+
+  ```json
+  {
+    "CodeByRTC": "12345",
+    "ProjectTitle": "Updated Project Title",
+    "NatureOfResearchProposal": "Updated Proposal",
+    ...
+  }
+  ```
+
+- Response:
+  ```json
+  {
+    "message": "Project updated successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_admin_project_dashboard`
+
+- Authorization: Requires JWT authentication; accessible only to users with role 1 (admin).
+- Description: Fetches a dashboard containing statistics related to projects in the system, such as the count of completed, pending, approved, rejected, running projects, and the number of final reports submitted.
+- Response:
+  ```json
+  {
+    "running_projects": 3,
+    "rejected_projects": 1,
+    "approved_projects": 5,
+    "pending_projects": 2,
+    "final_report_submitted": 8,
+    "completed_projects": 15,
+    "total_projects": 34,
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /myprojects/user/<int:user_id>`
+
+- Authorization: Requires JWT authentication.
+- Description: Retrieves all projects associated with the self user.
+- Response:
+  ```json
+  {
+    "projects": [
+      {
+        "ProjectID": 1,
+        "ProjectTitle": "Project 1",
+        ...
+      },
+      {
+        "ProjectID": 2,
+        "ProjectTitle": "Project 2",
+        ...
+      },
+      ...
+    ],
+    "statuscode": 200
+  }
+  ```
+
+### Notification Endpoints
+
+#### `POST /request_project_deletion_to_admin/<int:project_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 2, 3, 4, and 5 (teachers).
+- Description: Allows teachers to request project deletion to the admin.
+- Request Body Example:
+  ```json
+  {
+    "CodeByRTC": "12345",
+    "ProjectTitle": "Updated Project Title",
+    "NatureOfResearchProposal": "Updated Proposal",
+    ...
+  }
+  ```
+- Response:
+  ```json
+  {
+    "message": "Project deletion request sent successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `DELETE /delete_project_request/<int:notification_id>`
+
+- Authorization: Requires JWT authentication; accessible to role 1 (admin).
+- Description: Allows the admin to delete a project requested for deletion based on the notification ID.
+- Response:
+  ```json
+  {
+    "message": "Project with id {project_id} deleted successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_self_notification`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5 (admin and supervisors).
+- Description: Retrieves notifications for the current user (admin or supervisor) in descending order based on timestamp.
+- Response Example:
+  ```json
+  {
+    "MyNotifications": [...],
+    "statuscode": 200
+  }
+  ```
+
+#### `PUT /mark_as_unread/<int:notification_id>` and `PUT /mark_as_read/<int:notification_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5 (teachers).
+- Description: Marks a notification as unread or read based on the notification ID.
+- Response Example (for both endpoints):
+  ```json
+  {
+    "message": "Notification marked as unread/read successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_all_notification`
+
+- Authorization: Requires JWT authentication; accessible to role 1 (admin).
+- Description: Retrieves all notifications in descending order based on timestamp.
+- Response Example:
+  ```json
+  {
+    "AllNotifications": [...],
+    "statuscode": 200
+  }
+  ```
+
+#### `PUT /mark_all_as_read`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, 4, and 5 (teachers).
+- Description: Marks all notifications for the current user as read.
+- Response Example:
+  ```json
+  {
+    "message": "Notification marked as read successfully",
+    "statuscode": 200
+  }
+  ```
+
+#### `GET /get_specific_notification/<int:notification_id>`
+
+- Authorization: Requires JWT authentication; accessible to roles 1, 2, 3, and 4.
+- Description: Retrieves a specific notification based on the notification ID.
+- Response Example:
+  ```json
+  {
+    "Notification": {...},
     "statuscode": 200
   }
   ```
