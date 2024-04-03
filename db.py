@@ -5,14 +5,14 @@ import mysql.connector
 #     'host': 'rakib73.mysql.pythonanywhere-services.com',
 #     'user': 'rakib73',
 #     'password': 'rakib73rakib73',
-#     'database': 'rakib73$final_project'
+#     'database': 'rakib73$pstu_rtc'
 # }
 
 db_config = {
     'host': 'localhost',
     'user': 'root',
     'password': '',
-    'database': 'final_project'
+    'database': 'pstu_rtc'
 }
 
 # Function to establish a database connection
