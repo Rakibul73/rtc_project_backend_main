@@ -1,7 +1,10 @@
+from datetime import datetime
 from flask import request, jsonify , Blueprint
 from auth_utils import role_required
 from db import get_db # local module
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from dateutil import parser
+
 
 project_blueprint = Blueprint('project', __name__)
 
@@ -138,6 +141,9 @@ def delete_project(project_id):
     # Remove from ActivityPlan table based on ProjectID
     delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
     cursor.execute(delete_activity_query, (project_id,))
+    # Remove from BudgetPlan table based on ProjectID
+    delete_budget_query = "DELETE FROM BudgetPlan WHERE ProjectID = %s"
+    cursor.execute(delete_budget_query, (project_id,))
     # Remove from Review table based on ProjectID
     delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
     cursor.execute(delete_review_query, (project_id,))
@@ -298,7 +304,7 @@ def get_projects_for_user(user_id):
     return jsonify({'projects': project_list, 'statuscode': 200}), 200
 
 
-
+# Route to create project gantt for a specific project
 @project_blueprint.route('/create_project_gantt/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1 , 2, 3, 4, 5]) 
@@ -322,7 +328,7 @@ def create_project_gantt(project_id):
     
     return jsonify({'message': 'Project Gantt created successfully' ,'statuscode' : 201}), 201 
 
-
+# Route to create project budget for a specific project
 @project_blueprint.route('/create_project_budget/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1 , 2, 3, 4, 5]) 
@@ -345,6 +351,102 @@ def create_project_budget(project_id):
     conn.close()
     
     return jsonify({'message': 'Project Budget created successfully' ,'statuscode' : 201}), 201 
+
+
+
+# Route to fetch all gantt for a specific project
+@project_blueprint.route('/get_self_project_gantt/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def get_self_project_gantt(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    # check if the current user is authorized to access projects
+    cursor.execute("SELECT ProjectTitle FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
+    check = cursor.fetchone()
+    if check is None:
+        return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
+
+    cursor.execute("SELECT * FROM ActivityPlan WHERE ProjectID = %s", (project_id,))
+    gantt_list = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'gantt_list': gantt_list ,'statuscode' : 200}), 200 
+
+
+# Route to update project status & total points of specific project
+@project_blueprint.route('/update_project_gantt/<int:project_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def update_project_gantt(project_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    for activity_data in data:
+        # Convert date strings to the format MySQL accepts 
+        # Fri, 19 Apr 2024 00:00:00 GMT to 2024-04-19 00:00:00
+        start_date = parser.parse(activity_data['StartDate']).strftime('%Y-%m-%d')
+        end_date = parser.parse(activity_data['EndDate']).strftime('%Y-%m-%d')
+        
+        update_query = "UPDATE ActivityPlan SET Activity = %s , StartDate = %s , EndDate = %s , ActivityStatus = %s WHERE ProjectID = %s AND ActivityID = %s"
+        project_data = (activity_data['Activity'], start_date, end_date, activity_data['ActivityStatus'], activity_data['ProjectID'], activity_data['ActivityID'])
+        cursor.execute(update_query, project_data)
+        print(activity_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Project Gantt updated successfully' , 'statuscode' : 200}), 200
+
+
+
+# Route to fetch all budget for a specific project
+@project_blueprint.route('/get_self_project_budget/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def get_self_project_budget(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    # check if the current user is authorized to access projects
+    cursor.execute("SELECT ProjectTitle FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
+    check = cursor.fetchone()
+    if check is None:
+        return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
+
+    cursor.execute("SELECT * FROM BudgetPlan WHERE ProjectID = %s", (project_id,))
+    budget_list = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'budget_list': budget_list ,'statuscode' : 200}), 200 
+
+
+
+# Route to update budget of specific project
+@project_blueprint.route('/update_project_budget/<int:project_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def update_project_budget(project_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    for budget_data in data:
+        update_query = "UPDATE BudgetPlan SET SerialNo = %s , Item = %s , Quantity = %s , UnitPrice = %s , TotalCost = %s WHERE ProjectID = %s AND BudgetID = %s"
+        project_data = (budget_data['SerialNo'], budget_data['Item'], budget_data['Quantity'], budget_data['UnitPrice'], budget_data['TotalCost'] , budget_data['ProjectID'], budget_data['BudgetID'])
+        cursor.execute(update_query, project_data)
+        print(budget_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Project Budget updated successfully' , 'statuscode' : 200}), 200
 
 
 
