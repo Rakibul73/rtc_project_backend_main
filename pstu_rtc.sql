@@ -30,10 +30,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `activityplan` (
   `ProjectID` int(11) NOT NULL,
   `ActivityID` int(11) NOT NULL,
-  `ActivityName` varchar(255) DEFAULT NULL,
+  `Activity` varchar(255) DEFAULT NULL,
   `StartDate` date DEFAULT NULL,
   `EndDate` date DEFAULT NULL,
-  `Activity` text DEFAULT NULL
+  `ActivityStatus` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

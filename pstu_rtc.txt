@@ -151,17 +151,28 @@ CREATE TABLE ProjectListWithUserID (
 
 -- Create ActivityPlan table
 CREATE TABLE ActivityPlan (
+  ActivityID INT PRIMARY KEY AUTO_INCREMENT,
   ProjectID INT,
-  ActivityID INT,
-  ActivityName VARCHAR(255),
+  Activity VARCHAR(255),
   StartDate DATE,
   EndDate DATE,
-  Activity TEXT,
-  PRIMARY KEY (ProjectID, ActivityID),
+  ActivityStatus TEXT,
   FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
 );
 
--- Create Review table
+-- Create BudgetPlan table
+CREATE TABLE BudgetPlan (
+  BudgetID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  SerialNo INT,
+  Item VARCHAR(255),
+  Quantity INT,
+  UnitPrice FLOAT(20),
+  TotalCost FLOAT(20),
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
+-- Create ProjectListWithReviewerID table
 CREATE TABLE ProjectListWithReviewerID (
   ProjectID INT,
   ReviewerUserID INT,

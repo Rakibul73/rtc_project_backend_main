@@ -86,9 +86,11 @@ def create_project():
     cursor.execute(project_list_query, project_list_data)
     conn.commit()
     
+    print("The auto-incremented project ID is:", project_id)
+    
     cursor.close()
     conn.close()
-    return jsonify({'message': 'Project created successfully' , 'statuscode' : 201}), 201
+    return jsonify({'message': 'Project created successfully' , 'project_id' : project_id , 'statuscode' : 201}), 201
 
 
 # Route to get a specific project
@@ -294,6 +296,56 @@ def get_projects_for_user(user_id):
     conn.close()
     
     return jsonify({'projects': project_list, 'statuscode': 200}), 200
+
+
+
+@project_blueprint.route('/create_project_gantt/<int:project_id>', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def create_project_gantt(project_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+
+    print(data['formDatas'])
+    print("project id = " , project_id)
+    
+    # Iterate through the form datas and insert into the database
+    for individual_data in data['formDatas']:
+        insert_query = "INSERT INTO ActivityPlan (ProjectID, Activity, StartDate, EndDate, ActivityStatus) VALUES (%s, %s, %s, %s, %s)"
+        user_data = (project_id, individual_data['workActivity'], individual_data['duration'].split(' - ')[0], individual_data['duration'].split(' - ')[1], individual_data['activityStatus'])
+        print(user_data)
+        cursor.execute(insert_query, user_data)
+        conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'message': 'Project Gantt created successfully' ,'statuscode' : 201}), 201 
+
+
+@project_blueprint.route('/create_project_budget/<int:project_id>', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def create_project_budget(project_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+
+    print(data['formDatas'])
+    print("project id = " , project_id)
+    
+    # Iterate through the form datas and insert into the database
+    for individual_data in data['formDatas']:
+        insert_query = "INSERT INTO BudgetPlan (ProjectID, SerialNo, Item, Quantity, UnitPrice , TotalCost) VALUES (%s, %s, %s, %s, %s , %s)"
+        user_data = (project_id, individual_data['serialNo'], individual_data['item'], individual_data['quantity'], individual_data['unitPrice'] , individual_data['totalCostTk'])
+        print(user_data)
+        cursor.execute(insert_query, user_data)
+        conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'message': 'Project Budget created successfully' ,'statuscode' : 201}), 201 
+
 
 
 # ==========================================  Project Related Routes END  =============================
