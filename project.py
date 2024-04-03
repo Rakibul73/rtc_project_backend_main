@@ -367,11 +367,16 @@ def get_self_project_gantt(project_id):
     # check if the current user is authorized to access projects
     cursor.execute("SELECT ProjectTitle FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
     check = cursor.fetchone()
-    if check is None:
+    # check current user's role is Admin/1 or not
+    cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (current_user_id,))
+    check_role = cursor.fetchone()
+    print(check_role['RoleID'])
+    if check_role['RoleID'] == 1 or check is not None:
+        cursor.execute("SELECT * FROM ActivityPlan WHERE ProjectID = %s", (project_id,))
+        gantt_list = cursor.fetchall()
+    else:
         return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
 
-    cursor.execute("SELECT * FROM ActivityPlan WHERE ProjectID = %s", (project_id,))
-    gantt_list = cursor.fetchall()
     conn.commit()
     cursor.close()
     conn.close()
@@ -417,11 +422,15 @@ def get_self_project_budget(project_id):
     # check if the current user is authorized to access projects
     cursor.execute("SELECT ProjectTitle FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
     check = cursor.fetchone()
-    if check is None:
+    # check current user's role is Admin/1 or not
+    cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (current_user_id,))
+    check_role = cursor.fetchone()
+    if check_role['RoleID'] == 1 or check is not None:
+        cursor.execute("SELECT * FROM BudgetPlan WHERE ProjectID = %s", (project_id,))
+        budget_list = cursor.fetchall()
+    else:
         return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
 
-    cursor.execute("SELECT * FROM BudgetPlan WHERE ProjectID = %s", (project_id,))
-    budget_list = cursor.fetchall()
     conn.commit()
     cursor.close()
     conn.close()

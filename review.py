@@ -333,4 +333,59 @@ def get_all_projects_reviewer_given_review():
     
     return jsonify({'projects': project_list  , "statuscode" : 200}) , 200
 
+
+
+# Route to fetch all gantt for a specific project that need to be reviewed by assigned reviewer
+@review_blueprint.route('/get_review_project_gantt/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def get_review_project_gantt(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    # check if the current user is authorized to access project to review
+    cursor.execute("SELECT ProjectID FROM ProjectListWithReviewerID WHERE ProjectID = %s AND ReviewerUserID = %s", (project_id, current_user_id))
+    check = cursor.fetchone()
+    if check is None:
+        return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
+
+    cursor.execute("SELECT * FROM ActivityPlan WHERE ProjectID = %s", (project_id,))
+    gantt_list = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'gantt_list': gantt_list ,'statuscode' : 200}), 200 
+
+
+
+# Route to fetch all budget for a specific project that need to be reviewed by assigned reviewer
+@review_blueprint.route('/get_review_project_budget/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def get_review_project_budget(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    # check if the current user is authorized to access projects to review
+    cursor.execute("SELECT ProjectID FROM ProjectListWithReviewerID WHERE ProjectID = %s AND ReviewerUserID = %s", (project_id, current_user_id))
+    check = cursor.fetchone()
+    if check is None:
+        return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
+
+    cursor.execute("SELECT * FROM BudgetPlan WHERE ProjectID = %s", (project_id,))
+    budget_list = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'budget_list': budget_list ,'statuscode' : 200}), 200 
+
+
+
+
 # ==========================================  Review Related Routes END  =============================
