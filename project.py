@@ -259,7 +259,7 @@ def get_admin_project_dashboard():
     running_projects = cursor.fetchone()
     print(running_projects['running_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL")
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL AND ProjectSoftCopyLocation != ''")
     final_report_submitted = cursor.fetchone()
     print(final_report_submitted['final_report_submitted'])
 
