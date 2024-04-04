@@ -12,6 +12,7 @@ from datetime import timedelta
 from upload import upload_blueprint
 from download import download_blueprint
 from notification import notification_blueprint
+from fund import fund_blueprint
 from flask_compress import Compress
 
 
@@ -52,6 +53,9 @@ app.register_blueprint(download_blueprint)
 
 # Register the Notification blueprint
 app.register_blueprint(notification_blueprint)
+
+# Register the Fund blueprint
+app.register_blueprint(fund_blueprint)
 
 @app.route('/', methods=['GET'])
 def index():
