@@ -23,6 +23,7 @@ CREATE TABLE TempUsers (
   LastName VARCHAR(255),
   Email VARCHAR(255) NOT NULL,
   Phone VARCHAR(15),
+  FacultyName VARCHAR(255),
   FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
 );
 
@@ -46,6 +47,8 @@ CREATE TABLE Users (
   Phone VARCHAR(15),
   Nid VARCHAR(255),
   NidLocation VARCHAR(255),
+  FacultyName VARCHAR(255),
+  DepartmentName VARCHAR(255),
   InstituteName VARCHAR(255),
   InstituteLocation VARCHAR(255),
   InstituteEmail VARCHAR(255),

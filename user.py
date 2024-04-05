@@ -69,8 +69,8 @@ def update_pending_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
     print(data)
-    update_query = "UPDATE TempUsers SET Username = %s , Email = %s , FirstName = %s , LastName = %s , Phone = %s , RoleID = %s  WHERE UserID = %s"
-    temp_user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['Phone'] , data['RoleID'] , user_id)
+    update_query = "UPDATE TempUsers SET Username = %s , Email = %s , FirstName = %s , LastName = %s , Phone = %s , RoleID = %s , FacultyName = %s  WHERE UserID = %s"
+    temp_user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['Phone'] , data['RoleID'] , data['FacultyName'] , user_id)
     cursor.execute(update_query, temp_user_data)
     conn.commit()
     cursor.close()
@@ -134,8 +134,8 @@ def update_user(user_id):
     conn = get_db()
     cursor = conn.cursor()
     print(data)
-    update_query = "UPDATE Users SET Username = %s , Email = %s , FirstName = %s , LastName = %s , FullNameBangla = %s , PositionEnglish = %s , PositionBangla = %s , PositionHeldSince = %s , Gender = %s , Dateofbirth = %s , Phone = %s , Nid = %s , NidLocation = %s , InstituteName = %s , InstituteLocation = %s , InstituteEmail = %s , PresentAddress = %s , PermanentAddress = %s , ProfilePicLocation = %s , SignatureLocation = %s , SealLocation = %s , SalaryScale = %s , HighestAcademicQualification = %s , HighestAcademicQualificationUniversity = %s , HighestAcademicQualificationCountry = %s , HighestAcademicQualificationYear = %s , AreaOfExpertise = %s , ExperienceInResearch = %s , Teaching = %s , TotalNumberOfCompleteProjects = %s , TotalNumberOfCompletePublications = %s , OngoingProjects = %s , StudentID = %s , StudentRegNo = %s , FirstEnrollmentSemester = %s , UndergraduateCGPALevel = %s  WHERE Userid = %s"
-    user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['FullNameBangla'] , data['PositionEnglish'] , data['PositionBangla'] , data['PositionHeldSince'] , data['Gender'] , data['Dateofbirth'] , data['Phone'] , data['Nid'] , data['NidLocation'] , data['InstituteName'] , data['InstituteLocation'] , data['InstituteEmail'] , data['PresentAddress'] , data['PermanentAddress'] , data['ProfilePicLocation'] , data['SignatureLocation'] , data['SealLocation'] , data['SalaryScale'] , data['HighestAcademicQualification'] , data['HighestAcademicQualificationUniversity'] , data['HighestAcademicQualificationCountry'] , data['HighestAcademicQualificationYear'] , data['AreaOfExpertise'] , data['ExperienceInResearch'] , data['Teaching'] , data['TotalNumberOfCompleteProjects'] , data['TotalNumberOfCompletePublications'] , data['OngoingProjects'] , data['StudentID'] , data['StudentRegNo'] , data['FirstEnrollmentSemester'] , data['UndergraduateCGPALevel'] , user_id)
+    update_query = "UPDATE Users SET Username = %s , Email = %s , FirstName = %s , LastName = %s , FullNameBangla = %s , PositionEnglish = %s , PositionBangla = %s , PositionHeldSince = %s , Gender = %s , Dateofbirth = %s , Phone = %s , Nid = %s , NidLocation = %s , FacultyName = %s , DepartmentName = %s , InstituteName = %s , InstituteLocation = %s , InstituteEmail = %s , PresentAddress = %s , PermanentAddress = %s , ProfilePicLocation = %s , SignatureLocation = %s , SealLocation = %s , SalaryScale = %s , HighestAcademicQualification = %s , HighestAcademicQualificationUniversity = %s , HighestAcademicQualificationCountry = %s , HighestAcademicQualificationYear = %s , AreaOfExpertise = %s , ExperienceInResearch = %s , Teaching = %s , TotalNumberOfCompleteProjects = %s , TotalNumberOfCompletePublications = %s , OngoingProjects = %s , StudentID = %s , StudentRegNo = %s , FirstEnrollmentSemester = %s , UndergraduateCGPALevel = %s  WHERE Userid = %s"
+    user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['FullNameBangla'] , data['PositionEnglish'] , data['PositionBangla'] , data['PositionHeldSince'] , data['Gender'] , data['Dateofbirth'] , data['Phone'] , data['Nid'] , data['NidLocation'] , data['FacultyName'] , data['DepartmentName'] , data['InstituteName'] , data['InstituteLocation'] , data['InstituteEmail'] , data['PresentAddress'] , data['PermanentAddress'] , data['ProfilePicLocation'] , data['SignatureLocation'] , data['SealLocation'] , data['SalaryScale'] , data['HighestAcademicQualification'] , data['HighestAcademicQualificationUniversity'] , data['HighestAcademicQualificationCountry'] , data['HighestAcademicQualificationYear'] , data['AreaOfExpertise'] , data['ExperienceInResearch'] , data['Teaching'] , data['TotalNumberOfCompleteProjects'] , data['TotalNumberOfCompletePublications'] , data['OngoingProjects'] , data['StudentID'] , data['StudentRegNo'] , data['FirstEnrollmentSemester'] , data['UndergraduateCGPALevel'] , user_id)
     cursor.execute(update_query, user_data)
     conn.commit()
     cursor.close()
@@ -266,8 +266,8 @@ def approve_temp_user(user_id):
     print(TempUser[2])
     # save it in a Users table and delete it from TempUsers table
     if TempUser:
-        insert_query = "INSERT INTO Users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
-        user_data = (TempUser[2], TempUser[3], TempUser[6] , TempUser[4], TempUser[5] , TempUser[7] , TempUser[1])
+        insert_query = "INSERT INTO Users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID , FacultyName) VALUES (%s, %s , %s , %s , %s , %s , %s , %s)"
+        user_data = (TempUser[2], TempUser[3], TempUser[6] , TempUser[4], TempUser[5] , TempUser[7] , TempUser[1] , TempUser[8])
         cursor.execute(insert_query, user_data)
     
     
