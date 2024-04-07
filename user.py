@@ -125,7 +125,7 @@ def get_specific_user(user_id):
     else:
         return jsonify({'message': 'User not found'}), 404
 
-# Route to update a user
+# Route to update a self user
 @user_blueprint.route('/update_user/<int:user_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1, 2 , 3 , 4 , 5])
