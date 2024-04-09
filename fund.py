@@ -103,10 +103,10 @@ def get_specific_project_for_fund_self(project_id):
     current_user_role = cursor.fetchone()
     print(current_user_role)
     if current_user_role['RoleID'] == 1:
-        cursor.execute("SELECT CodeByRTC , ProjectTitle , TotalBudgetOfResearchProposalTK , CreatorUserSealLocation , CreatorUserSignatureDate , CreatorUserSignatureLocation , ChairmanOfDepartmentSignatureDate , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSealLocation  FROM Projects WHERE ProjectID = %s", (project_id,))
+        cursor.execute("SELECT CodeByRTC , ProjectTitle , TotalBudgetOfResearchProposalTK , CreatorUserSealLocation , CreatorUserSignatureDate , CreatorUserSignatureLocation , ChairmanOfDepartmentSignatureDate , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSealLocation , CreatorUserID  FROM Projects WHERE ProjectID = %s", (project_id,))
         project_data = cursor.fetchone()
     else:
-        cursor.execute("SELECT CodeByRTC , ProjectTitle , TotalBudgetOfResearchProposalTK , CreatorUserSealLocation , CreatorUserSignatureDate , CreatorUserSignatureLocation , ChairmanOfDepartmentSignatureDate , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSealLocation  FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
+        cursor.execute("SELECT CodeByRTC , ProjectTitle , TotalBudgetOfResearchProposalTK , CreatorUserSealLocation , CreatorUserSignatureDate , CreatorUserSignatureLocation , ChairmanOfDepartmentSignatureDate , ChairmanOfDepartmentSignatureLocation , ChairmanOfDepartmentSealLocation , CreatorUserID  FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
         project_data = cursor.fetchone()
     cursor.close()
     conn.close()
