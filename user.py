@@ -78,13 +78,13 @@ def update_pending_user(user_id):
     return jsonify({'message': 'TempUser updated successfully' , 'statuscode' : 200}), 200
 
 # Route to get all users
-@user_blueprint.route('/get_all_users', methods=['GET'])
+@user_blueprint.route('/get_all_users_minimum_user_management_overview', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1])  # Only admin can access this route
 def get_all_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Users")
+    cursor.execute("SELECT UserID , PositionEnglish , LastName , FirstName  ,Username , RoleID FROM Users")
     users = cursor.fetchall()
     cursor.close()
     conn.close()
