@@ -101,7 +101,7 @@ def get_self_project_dashboard():
     running_projects = cursor.fetchone()
     print(running_projects['running_projects'])
     
-    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL AND CreatorUserID = %s", (current_user_id,))
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL AND ProjectSoftCopyLocation != "" AND CreatorUserID = %s", (current_user_id,))
     final_report_submitted = cursor.fetchone()
     print(final_report_submitted['final_report_submitted'])
 
