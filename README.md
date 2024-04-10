@@ -1,6 +1,6 @@
 # Custom API Server for [PSTU RTC Project Management (Frontend)](https://github.com/Rakibul73/rtc_project_fronend)
 
-This is a simple Flask-based API server that provides endpoints to interact with the project `PSTU RTC Project Management System`. It allows you to add data using both POST and GET methods and retrieve the stored data. This can be useful for various applications, including implementing a `Research & Training Center` management system.
+This is a simple Flask-based API server that provides endpoints to interact with the project `PSTU RTC Project Management System`. It allows you to add data using both POST and GET methods and retrieve the stored data from `MySQL`. This can be useful for various applications, including implementing a `Research & Training Center` management system.
 
 ## Table of Contents
 
