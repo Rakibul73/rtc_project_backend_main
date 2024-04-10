@@ -15,7 +15,7 @@
 # use rakib73$final_project; source /home/rakib73/mysite/rtc_project_backend/pstu_rtc.sql;
 
 
-# mysqldump -u rakib73 -h rakib73.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces 'rakib73$final_project'  > db-backup.sql
+# mysqldump -u rakib73 -h rakib73.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces 'rakib73$final_project'  > pstu_rtc.sql
 
 
 import re
