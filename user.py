@@ -354,4 +354,22 @@ def get_specific_user_minimum(user_id):
     else:
         return jsonify({'message': 'User not found'}), 404
 
+
+# Route to update a specific pending user
+@user_blueprint.route('/update_user_admin_mode/<int:user_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def update_user_admin_mode(user_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    print(data)
+    update_query = "UPDATE Users SET Username = %s , Email = %s , FirstName = %s , LastName = %s , FullNameBangla = %s , PositionEnglish = %s , PositionBangla = %s , PositionHeldSince = %s , Gender = %s , Dateofbirth = %s , Phone = %s , Nid = %s , NidLocation = %s , FacultyName = %s , DepartmentName = %s , InstituteName = %s , InstituteLocation = %s , InstituteEmail = %s , PresentAddress = %s , PermanentAddress = %s , ProfilePicLocation = %s , SignatureLocation = %s , SealLocation = %s , SalaryScale = %s , BasicPay = %s , HighestAcademicQualification = %s , HighestAcademicQualificationUniversity = %s , HighestAcademicQualificationCountry = %s , HighestAcademicQualificationYear = %s , AreaOfExpertise = %s , ExperienceInResearch = %s , Teaching = %s , TotalNumberOfCompleteProjects = %s , TotalNumberOfCompletePublications = %s , OngoingProjects = %s , StudentID = %s , StudentRegNo = %s , FirstEnrollmentSemester = %s , UndergraduateCGPALevel = %s , ReferencesOfLatestPublications = %s , RoleID = %s  WHERE Userid = %s"
+    user_data = (data['Username'] , data['Email'] , data['FirstName'] , data['LastName'] , data['FullNameBangla'] , data['PositionEnglish'] , data['PositionBangla'] , data['PositionHeldSince'] , data['Gender'] , data['Dateofbirth'] , data['Phone'] , data['Nid'] , data['NidLocation'] , data['FacultyName'] , data['DepartmentName'] , data['InstituteName'] , data['InstituteLocation'] , data['InstituteEmail'] , data['PresentAddress'] , data['PermanentAddress'] , data['ProfilePicLocation'] , data['SignatureLocation'] , data['SealLocation'] , data['SalaryScale'] , data['BasicPay'] , data['HighestAcademicQualification'] , data['HighestAcademicQualificationUniversity'] , data['HighestAcademicQualificationCountry'] , data['HighestAcademicQualificationYear'] , data['AreaOfExpertise'] , data['ExperienceInResearch'] , data['Teaching'] , data['TotalNumberOfCompleteProjects'] , data['TotalNumberOfCompletePublications'] , data['OngoingProjects'] , data['StudentID'] , data['StudentRegNo'] , data['FirstEnrollmentSemester'] , data['UndergraduateCGPALevel'] , data['ReferencesOfLatestPublications'] , data['RoleID'] , user_id)
+    cursor.execute(update_query, user_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'TempUser updated successfully' , 'statuscode' : 200}), 200
+
 # ==========================================  User Related Routes END =============================
