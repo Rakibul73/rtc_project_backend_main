@@ -84,7 +84,7 @@ def update_pending_user(user_id):
 def get_all_users():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT UserID , PositionEnglish , LastName , FirstName  ,Username , RoleID FROM Users")
+    cursor.execute("SELECT UserID , PositionEnglish , LastName , FirstName  ,Username , FacultyName, RoleID FROM Users")
     users = cursor.fetchall()
     cursor.close()
     conn.close()
