@@ -1,4 +1,3 @@
-import asyncio
 from flask import request, jsonify , Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from auth_utils import role_required
@@ -13,49 +12,56 @@ projectuser_blueprint = Blueprint('projectuser', __name__)
 @projectuser_blueprint.route('/get_total_number_of_all_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
-async def get_total_number_of_all_dashboard():
+def get_total_number_of_all_dashboard():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    async def execute_query(query):
-        cursor.execute(query)
-        result = cursor.fetchone()
-        return result
+    cursor.execute("SELECT COUNT(*) AS total_users FROM Users")
+    total_users = cursor.fetchone()
+    print(total_users['total_users'])
     
-    async_queries = [
-        execute_query("SELECT COUNT(*) AS total_users FROM Users"),
-        execute_query("SELECT COUNT(*) AS total_projects FROM Projects"),
-        execute_query("SELECT COUNT(*) AS total_admin FROM Users WHERE RoleID = 1"),
-        execute_query("SELECT COUNT(*) AS total_project_report FROM Projects WHERE ProjectSoftCopyLocation IS NOT NULL"),
-        execute_query("SELECT COUNT(*) AS total_teacher FROM Users WHERE RoleID = 4"),
-        execute_query("SELECT COUNT(*) AS total_researcher FROM Users WHERE RoleID = 2"),
-        execute_query("SELECT COUNT(*) AS total_reviewer FROM Users WHERE RoleID = 3"),
-        execute_query("SELECT COUNT(*) AS total_student FROM Users WHERE RoleID = 5")
-    ]
-
-    results = await asyncio.gather(*async_queries)
-
-    total_users = results[0]['total_users']
-    total_projects = results[1]['total_projects']
-    total_admin = results[2]['total_admin']
-    total_project_report = results[3]['total_project_report']
-    total_teacher = results[4]['total_teacher']
-    total_researcher = results[5]['total_researcher']
-    total_reviewer = results[6]['total_reviewer']
-    total_student = results[7]['total_student']
-
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM Projects")
+    total_projects = cursor.fetchone()
+    print(total_projects['total_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_admin FROM Users WHERE RoleID = 1")
+    total_admin = cursor.fetchone()
+    print(total_admin['total_admin'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_project_report FROM Projects WHERE ProjectSoftCopyLocation IS NOT NULL")
+    total_project_report = cursor.fetchone()
+    print(total_project_report['total_project_report'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_teacher FROM Users WHERE RoleID = 4")
+    total_teacher = cursor.fetchone()
+    print(total_teacher['total_teacher'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_researcher FROM Users WHERE RoleID = 2")
+    total_researcher = cursor.fetchone()
+    print(total_researcher['total_researcher'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_reviewer FROM Users WHERE RoleID = 3")
+    total_reviewer = cursor.fetchone()
+    print(total_reviewer['total_reviewer'])
+    
+    cursor.execute("SELECT COUNT(*) AS total_student FROM Users WHERE RoleID = 5")
+    total_student = cursor.fetchone()
+    print(total_student['total_student'])
+    
+    
+    
     cursor.close()
     conn.close()
     
     return jsonify({
-        'total_users': total_users,
-        'total_projects': total_projects,
-        'total_admin': total_admin,
-        'total_researcher': total_researcher,
-        'total_reviewer': total_reviewer,
-        'total_teacher': total_teacher,
-        'total_student': total_student,
-        'total_project_report': total_project_report,
+        'total_users': total_users['total_users'],
+        'total_projects': total_projects['total_projects'],
+        'total_admin': total_admin['total_admin'],
+        'total_researcher': total_researcher['total_researcher'],
+        'total_reviewer': total_reviewer['total_reviewer'],
+        'total_teacher': total_teacher['total_teacher'],
+        'total_student': total_student['total_student'],
+        'total_project_report': total_project_report['total_project_report'],
         'statuscode' : 200
     }) , 200
 
@@ -64,49 +70,53 @@ async def get_total_number_of_all_dashboard():
 @projectuser_blueprint.route('/get_self_project_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @role_required([1 , 2 , 3 , 4 , 5])
-async def get_self_project_dashboard():
+def get_self_project_dashboard():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
     # Get the current user's ID from JWT
     current_user_id = get_jwt_identity()
     
-    async def execute_query(query, *params):
-        cursor.execute(query, params)
-        result = cursor.fetchone()
-        return result
-
-    async_queries = [
-        execute_query("SELECT COUNT(*) AS completed_projects FROM Projects WHERE ProjectStatus = 'Completed' AND CreatorUserID = %s", (current_user_id,)),
-        execute_query("SELECT COUNT(*) AS total_projects FROM ProjectListWithUserID WHERE UserID = %s", (current_user_id,)),
-        execute_query("SELECT COUNT(*) AS pending_projects FROM Projects WHERE ProjectStatus = 'Pending' AND CreatorUserID = %s", (current_user_id,)),
-        execute_query("SELECT COUNT(*) AS approved_projects FROM Projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s", (current_user_id,)),
-        execute_query("SELECT COUNT(*) AS rejected_projects FROM Projects WHERE ProjectStatus = 'Rejected' AND CreatorUserID = %s", (current_user_id,)),
-        execute_query("SELECT COUNT(*) AS running_projects FROM Projects WHERE ProjectStatus = 'Running' AND CreatorUserID = %s", (current_user_id,)),
-        execute_query("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE ProjectSoftCopyLocation IS NOT NULL AND ProjectSoftCopyLocation != '' AND CreatorUserID = %s", (current_user_id,))
-    ]
+    cursor.execute("SELECT COUNT(*) AS completed_projects FROM Projects WHERE ProjectStatus = 'Completed' AND CreatorUserID = %s", (current_user_id,))
+    completed_projects = cursor.fetchone()
+    print(completed_projects['completed_projects'])
     
-    results = await asyncio.gather(*async_queries)
+    cursor.execute("SELECT COUNT(*) AS total_projects FROM ProjectListWithUserID WHERE UserID = %s", (current_user_id,))
+    total_projects = cursor.fetchone()
+    print(total_projects['total_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS pending_projects FROM Projects WHERE ProjectStatus = 'Pending' AND CreatorUserID = %s", (current_user_id,))
+    pending_projects = cursor.fetchone()
+    print(pending_projects['pending_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS approved_projects FROM Projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s", (current_user_id,))
+    approved_projects = cursor.fetchone()
+    print(approved_projects['approved_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS rejected_projects FROM Projects WHERE ProjectStatus = 'Rejected' AND CreatorUserID = %s", (current_user_id,))
+    rejected_projects = cursor.fetchone()
+    print(rejected_projects['rejected_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS running_projects FROM Projects WHERE ProjectStatus = 'Running' AND CreatorUserID = %s", (current_user_id,))
+    running_projects = cursor.fetchone()
+    print(running_projects['running_projects'])
+    
+    cursor.execute("SELECT COUNT(*) AS final_report_submitted FROM Projects WHERE  ProjectSoftCopyLocation IS NOT NULL AND ProjectSoftCopyLocation != '' AND CreatorUserID = %s", (current_user_id,))
+    final_report_submitted = cursor.fetchone()
+    print(final_report_submitted['final_report_submitted'])
 
-    completed_projects = results[0]['completed_projects']
-    total_projects = results[1]['total_projects']
-    pending_projects = results[2]['pending_projects']
-    approved_projects = results[3]['approved_projects']
-    rejected_projects = results[4]['rejected_projects']
-    running_projects = results[5]['running_projects']
-    final_report_submitted = results[6]['final_report_submitted']
     
     cursor.close()
     conn.close()
     
     return jsonify({
-        'running_projects': running_projects,
-        'rejected_projects': rejected_projects,
-        'approved_projects': approved_projects,
-        'pending_projects': pending_projects,
-        'final_report_submitted': final_report_submitted,
-        'completed_projects': completed_projects,
-        'total_projects': total_projects,
+        'running_projects': running_projects['running_projects'],
+        'rejected_projects': rejected_projects['rejected_projects'],
+        'approved_projects': approved_projects['approved_projects'],
+        'pending_projects': pending_projects['pending_projects'],
+        'final_report_submitted': final_report_submitted['final_report_submitted'],
+        'completed_projects': completed_projects['completed_projects'],
+        'total_projects': total_projects['total_projects'],
         'statuscode' : 200
     }) , 200
 

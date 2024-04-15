@@ -14,8 +14,6 @@ from download import download_blueprint
 from notification import notification_blueprint
 from fund import fund_blueprint
 from flask_compress import Compress
-import asyncio
-from flask_socketio import SocketIO
 
 
 app = Flask(__name__)
@@ -28,7 +26,6 @@ app.config['JWT_SECRET_KEY'] = 'rakibpstusecretkey'
 # Set a longer token expiration time
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=3)  # Example: 24 hours
 jwt = JWTManager(app)
-socketio = SocketIO(app, async_mode='threading')  # Add SocketIO for asynchronous tasks
 
 # Register the authentication blueprint
 app.register_blueprint(auth_blueprint)
@@ -67,5 +64,4 @@ def index():
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=5000 , debug=True) # for docker only
-    # app.run(debug=True)
-    socketio.run(app, debug=True)
+    app.run(debug=True)
