@@ -25,10 +25,10 @@ DROP TABLE IF EXISTS `ActivityPlan`;
 CREATE TABLE `ActivityPlan` (
   `ActivityID` int NOT NULL AUTO_INCREMENT,
   `ProjectID` int DEFAULT NULL,
-  `Activity` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Activity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `StartDate` date DEFAULT NULL,
   `EndDate` date DEFAULT NULL,
-  `ActivityStatus` text COLLATE utf8mb4_general_ci,
+  `ActivityStatus` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`ActivityID`),
   KEY `ProjectID` (`ProjectID`),
   CONSTRAINT `activityplan_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`)
@@ -56,7 +56,7 @@ CREATE TABLE `BudgetPlan` (
   `BudgetID` int NOT NULL AUTO_INCREMENT,
   `ProjectID` int DEFAULT NULL,
   `SerialNo` int DEFAULT NULL,
-  `Item` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Item` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Quantity` int DEFAULT NULL,
   `UnitPrice` float DEFAULT NULL,
   `TotalCost` float DEFAULT NULL,
@@ -77,6 +77,26 @@ INSERT INTO `BudgetPlan` VALUES (3,92,1,'Item1',11,500,5500),(4,92,2,'Item2',22,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Notice`
+--
+
+DROP TABLE IF EXISTS `Notice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Notice` (
+  `NoticeID` int NOT NULL AUTO_INCREMENT,
+  `DatePublished` text,
+  `Subject` text,
+  `NoticeFileLocation` text,
+  PRIMARY KEY (`NoticeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Notice`
+--
+
+--
 -- Table structure for table `Notification`
 --
 
@@ -87,7 +107,7 @@ CREATE TABLE `Notification` (
   `NotificationID` int NOT NULL AUTO_INCREMENT,
   `SenderUserID` int DEFAULT NULL,
   `ReceiverUserID` int DEFAULT NULL,
-  `Message` text COLLATE utf8mb4_general_ci,
+  `Message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `IsRead` int DEFAULT NULL,
   `Timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`NotificationID`),
@@ -116,8 +136,8 @@ DROP TABLE IF EXISTS `PassReset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `PassReset` (
-  `Email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `ResetToken` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `Email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `ResetToken` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Used` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -145,8 +165,8 @@ CREATE TABLE `ProjectFund` (
   `TotalBudget` float DEFAULT NULL,
   `HonorariumOfPI` float DEFAULT NULL,
   `HonorariumOfCoPI` float DEFAULT NULL,
-  `PiSignatureDate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ChairmanOfDepartmentSignatureDate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `PiSignatureDate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ChairmanOfDepartmentSignatureDate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `TotalHonorarium` float DEFAULT NULL,
   `RequestedAmount` float DEFAULT NULL,
   `RequestForFundDone` int DEFAULT NULL,
@@ -205,7 +225,7 @@ DROP TABLE IF EXISTS `ProjectListWithUserID`;
 CREATE TABLE `ProjectListWithUserID` (
   `UserID` int DEFAULT NULL,
   `ProjectID` int DEFAULT NULL,
-  `ProjectTitle` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ProjectTitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   KEY `UserID` (`UserID`),
   KEY `ProjectID` (`ProjectID`),
   CONSTRAINT `projectlistwithuserid_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`),
@@ -232,56 +252,56 @@ DROP TABLE IF EXISTS `Projects`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Projects` (
   `ProjectID` int NOT NULL AUTO_INCREMENT,
-  `CodeByRTC` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `DateRecieved` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `CodeByRTC` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `DateRecieved` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `CreatorUserID` int DEFAULT NULL,
   `CoPiUserID` int DEFAULT NULL,
   `StudentUserID` int DEFAULT NULL,
-  `ProjectTitle` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `NatureOfResearchProposal` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `NameOfCollaboratingDepartments` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `AddressOfCollaboratingDepartments` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `NameOfCollaboratingInstitutes` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `AddressOfCollaboratingInstitutes` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `LocationOfFieldActivities` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `DurationOfResearchProjectAnnual` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `DurationOfResearchProjectLongTerm` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ProjectTitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `NatureOfResearchProposal` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `NameOfCollaboratingDepartments` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `AddressOfCollaboratingDepartments` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `NameOfCollaboratingInstitutes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `AddressOfCollaboratingInstitutes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `LocationOfFieldActivities` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `DurationOfResearchProjectAnnual` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `DurationOfResearchProjectLongTerm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `TotalBudgetOfResearchProposalTK` int DEFAULT NULL,
-  `ExternalAgencyFundingSource` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ExternalAgencyFundingSourcesName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ExternalAgencyFundingSourcesSubmissionDate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `CommitmentOtherResearchProject` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `CommitmentOtherResearchProjectName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ProjectDescription` text COLLATE utf8mb4_general_ci,
-  `ProjectObjective` text COLLATE utf8mb4_general_ci,
-  `PstuNationalGoal` text COLLATE utf8mb4_general_ci,
-  `PriorResearchOverview` text COLLATE utf8mb4_general_ci,
-  `Methodology` text COLLATE utf8mb4_general_ci,
-  `MethodologyFileLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ExpectedOutput` text COLLATE utf8mb4_general_ci,
-  `SuccessIndicators` text COLLATE utf8mb4_general_ci,
-  `Beneficiaries` text COLLATE utf8mb4_general_ci,
-  `ManPowerExisting` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ManPowerRequired` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `SmallEquipmentExisting` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `SmallEquipmentRequired` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ResearchMaterialsExisting` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ResearchMaterialsRequired` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `OtherExisting` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `OtherRequired` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ResearchCarriedOutPlace` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `CreatorUserSealLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `CreatorUserSignatureLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `CreatorUserSignatureDate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ChairmanOfDepartmentComment` text COLLATE utf8mb4_general_ci,
-  `ChairmanOfDepartmentSealLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ChairmanOfDepartmentSignatureLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ChairmanOfDepartmentSignatureDate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ResultsAndDiscussion` text COLLATE utf8mb4_general_ci,
-  `KeyAchievements` text COLLATE utf8mb4_general_ci,
-  `ProjectStatus` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ExternalAgencyFundingSource` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ExternalAgencyFundingSourcesName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ExternalAgencyFundingSourcesSubmissionDate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `CommitmentOtherResearchProject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `CommitmentOtherResearchProjectName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ProjectDescription` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `ProjectObjective` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `PstuNationalGoal` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `PriorResearchOverview` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `Methodology` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `MethodologyFileLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ExpectedOutput` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `SuccessIndicators` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `Beneficiaries` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `ManPowerExisting` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ManPowerRequired` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `SmallEquipmentExisting` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `SmallEquipmentRequired` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ResearchMaterialsExisting` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ResearchMaterialsRequired` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `OtherExisting` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `OtherRequired` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ResearchCarriedOutPlace` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `CreatorUserSealLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `CreatorUserSignatureLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `CreatorUserSignatureDate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ChairmanOfDepartmentComment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `ChairmanOfDepartmentSealLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ChairmanOfDepartmentSignatureLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ChairmanOfDepartmentSignatureDate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ResultsAndDiscussion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `KeyAchievements` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `ProjectStatus` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `TotalPoints` float DEFAULT NULL,
-  `ProjectSoftCopyLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ProjectSoftCopyLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`ProjectID`),
   KEY `CreatorUserID` (`CreatorUserID`),
   KEY `CoPiUserID` (`CoPiUserID`),
@@ -311,7 +331,7 @@ CREATE TABLE `Review` (
   `ReviewID` int NOT NULL AUTO_INCREMENT,
   `ProjectID` int DEFAULT NULL,
   `ReviewerUserID` int DEFAULT NULL,
-  `Comments` text COLLATE utf8mb4_general_ci,
+  `Comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `Rating` int DEFAULT NULL,
   `Points` float DEFAULT NULL,
   `PiCanViewOrNot` int NOT NULL,
@@ -342,7 +362,7 @@ DROP TABLE IF EXISTS `Role`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Role` (
   `RoleID` int NOT NULL AUTO_INCREMENT,
-  `RoleName` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `RoleName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`RoleID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -367,13 +387,13 @@ DROP TABLE IF EXISTS `TempUsers`;
 CREATE TABLE `TempUsers` (
   `UserID` int NOT NULL AUTO_INCREMENT,
   `RoleID` int DEFAULT NULL,
-  `Username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `PASSWORD` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `FirstName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `LastName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `Phone` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `FacultyName` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `Username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `PASSWORD` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `FirstName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `LastName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `FacultyName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`UserID`),
   KEY `RoleID` (`RoleID`),
   CONSTRAINT `tempusers_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `Role` (`RoleID`)
@@ -400,47 +420,47 @@ DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users` (
   `UserID` int NOT NULL AUTO_INCREMENT,
   `RoleID` int DEFAULT NULL,
-  `Username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `Password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `PositionEnglish` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `PositionBangla` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `PositionHeldSince` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `Email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `FirstName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `LastName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `FullNameBangla` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `PresentAddress` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `PermanentAddress` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Gender` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Nid` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `NidLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `FacultyName` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `DepartmentName` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `InstituteName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `InstituteLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `InstituteEmail` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Phone` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Dateofbirth` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `SalaryScale` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `PositionEnglish` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `PositionBangla` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `PositionHeldSince` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `FirstName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `LastName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `FullNameBangla` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `PresentAddress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `PermanentAddress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Gender` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Nid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `NidLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `FacultyName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `DepartmentName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `InstituteName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `InstituteLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `InstituteEmail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Dateofbirth` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `SalaryScale` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `BasicPay` float NOT NULL,
-  `HighestAcademicQualification` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `HighestAcademicQualificationUniversity` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `HighestAcademicQualificationCountry` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `HighestAcademicQualification` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `HighestAcademicQualificationUniversity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `HighestAcademicQualificationCountry` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `HighestAcademicQualificationYear` int DEFAULT NULL,
-  `AreaOfExpertise` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ReferencesOfLatestPublications` varchar(2000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `AreaOfExpertise` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ReferencesOfLatestPublications` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `ExperienceInResearch` int DEFAULT NULL,
   `Teaching` int DEFAULT NULL,
-  `ProfilePicLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `SignatureLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `SealLocation` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ProfilePicLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `SignatureLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `SealLocation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `TotalNumberOfCompleteProjects` int DEFAULT NULL,
   `TotalNumberOfCompletePublications` int DEFAULT NULL,
   `OngoingProjects` int DEFAULT NULL,
   `StudentID` int DEFAULT NULL,
-  `StudentRegNo` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `FirstEnrollmentSemester` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `UndergraduateCGPALevel` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `StudentRegNo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `FirstEnrollmentSemester` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `UndergraduateCGPALevel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`UserID`),
   KEY `RoleID` (`RoleID`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `Role` (`RoleID`)
@@ -453,7 +473,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES (1,1,'rakib','pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4','d','d','d','rakib29185@gmail.com','Md. Rakibul','Islam','d','address','d','Male','d','22.png','Faculty of Computer Science and Engineering','',NULL,'d','d','01700000000','2000-09-17 00:00:00.000','0',0,'cse','pstu','bd',2024,'area','arearesearchgate , google scholars',0,0,'30000000.jpg','17.png','shanto.jpg',0,0,0,0,'d','d','d'),(2,5,'taj','pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43','','','','taj@gmail.com','Tahmidur','Rahman Taj','','','','Male','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01400000000','2000-03-29 00:00:00.000','0',0,'','','',0,'','researchgate , google scholars',0,0,'defaultprofilepic.png','defaultsignature.png','defaultseal.png',0,0,0,1802038,'08483','semester 1','3.5'),(3,4,'sobujsirsir','pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123','f','f','5','sobujsir@gmail.com','sobujsir','sobujsir','hf','f','f','Male','ff','','Faculty of Computer Science and Engineering','',NULL,'f','f','01500000000','2024-03-20 00:00:00.000','0',0,'f','ff','f',0,'f','researchgate , google scholars',0,0,'defaultprofilepic.png','defaultsignature.png','shanto  .jpg',0,0,0,0,'3','f','f'),(4,4,'test','pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6','','','','test@gmail.com','test','test',NULL,NULL,NULL,'Male',NULL,NULL,'Faculty of Computer Science and Engineering','',NULL,NULL,NULL,'01725225225',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,'researchgate , google scholars',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,4,'sobujsir','pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389','Professor','অধ্যাপক','2019','rakibul16@cse.pstu.ac.bd','Dr. Md.','Samsuzzaman','মোঃ শামসুজ্জামান','Room No: 401 CSE Building (3rd Floor) Department of CCE,  Faculty of CSE , Dhumki , Patuakhali','Village: Rotidanga, Road: Rotidanga Road , Post Office : Boalia Bazar, Division : Khulna','Male','1491370944','defaultnid.png','Faculty of Computer Science and Engineering','Department of Computer and Communication Engineering','Patuakhali Science & Technology University (PSTU)','Dumki, Patuakhali, Bangladesh','registrar@pstu.ac.bd','01712653210','1982-11-15 00:00:00.000','50000-71200',60400,'Doctor of Philosophy','Universiti Kebangsaan Malaysia','Malaysia',2015,'Microwave Communication, Satellite Communication, Microwave Imaging, Antenna Technology for Microwave Applications','1. Samsuzzaman, Md, Norbahiah Misran, Md Tarikul Islam, and Mohammad Tariqul Islam. \"Wideband 8× 8 patch antenna array for 5G wireless communications.\" Optoelectronics and Advanced Materials-Rapid Communications 14, no. March-April 2020 (2020): 163-171. ISSN: 1842-6573, (Impact Factor-0.445) Q4 (Indexed in ISI & SCOPUS).\n2. Hossain, Amran, Mohammad Tariqul Islam, Ali F. Almutairi, Mandeep Singh Jit Singh, Kamarulzaman Mat, and Md Samsuzzaman. \"An Octagonal Ring-shaped Parasitic Resonator Based Compact Ultrawideband Antenna for Microwave Imaging Applications.\" Sensors 20, no. 5 (2020): 1354.eISSN: 1424-8220, (Impact Factor-3.275) Q1 (Indexed in ISI & SCOPUS).\n3. Islam, Mohammad Shahidul, Md Samsuzzaman, Gan Kok Beng, Norbahiah Misran, Nowshad Amin, and Mohammad Tariqul Islam. \"A Gap Coupled Hexagonal Split Ring Resonator Based Metamaterial for S-Band and X-Band Microwave Applications.\" IEEE Access 8 (2020): 68239- 68253. ISSN: 2169-3536, (Impact Factor-3.745) Q1 (Indexed in ISI & SCOPUS).\n4. M. T. Islam, M. Samsuzzaman, M. Rahman, M. J. Singh, and M. T. Islam,. \"Asymmetric feed circularly polarized broadband printed antenna for wireless communication.\" Journal of Optoelectronics and Advanced Materials 22, no. 3-4 (2020): 129-135. ISSN: 1454-4164, (Impact Factor-0.631) Q4 (Indexed in ISI & SCOPUS).\n5. M. Tarikul Islam, Md Samsuzzaman, Salehin Kibria, Norbahiah Misran, and Mohammad Tariqul Islam. \"Metasurface Loaded High Gain Antenna based Microwave Imaging using Iteratively Corrected Delay Multiply and Sum Algorithm.\" Scientific reports 9, no. 1 (2019): 1-14. ISSN 2045-2322, (Indexed in ISI & SCOPUS) (Impact Factor-4.011) Q1',6,13,'defaultprofilepic.png','1.png','7.png',10,29,0,0,'0','0','0'),(6,4,'muradsir','pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81','','','','tuimorsala01@gmail.com','Golam Md. Muradul','Bashir','','','','Male','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01783242885','1981-04-09 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','3.png','9.png',0,0,0,0,'','',''),(8,4,'arpitamam','pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec','','','','lovely.shanto.35@gmail.com','Arpita','Howlader','','','','Female','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01584563227','1993-04-12 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','4.png','10.png',0,0,0,0,'','',''),(10,4,'sarnamam','pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b','','','','raqibul.islam.17@gmail.com','Sarna','Majumder','','','','Female','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01767265119','1991-04-18 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','5.png','11.png',0,0,0,0,'','',''),(11,4,'masudsir','pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f','','','','raqibul.islam.17@gmail.com','Dr. Md Abdul','Masud','','','','Male','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01915461874','1981-04-09 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','2.png','8.png',0,0,0,0,'','','');
+INSERT INTO `Users` VALUES (1,1,'rakib','pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4','Admin','d','d','rakib29185@gmail.com','Md. Rakibul','Islam','d','address','d','Male','d','22.png','','','','d','d','01700000000','2000-09-17 00:00:00.000','0',0,'cse','pstu','bd',2024,'area','arearesearchgate , google scholars',0,0,'30000000.jpg','17.png','shanto.jpg',0,0,0,0,'d','d','d'),(2,5,'taj','pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43','','','','taj@gmail.com','Tahmidur','Rahman Taj','','','','Male','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01400000000','2000-03-29 00:00:00.000','0',0,'','','',0,'','researchgate , google scholars',0,0,'defaultprofilepic.png','defaultsignature.png','defaultseal.png',0,0,0,1802038,'08483','semester 1','3.5'),(3,4,'sobujsirsir','pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123','f','f','5','sobujsir@gmail.com','sobujsir','sobujsir','hf','f','f','Male','ff','','Faculty of Computer Science and Engineering','',NULL,'f','f','01500000000','2024-03-20 00:00:00.000','0',0,'f','ff','f',0,'f','researchgate , google scholars',0,0,'defaultprofilepic.png','defaultsignature.png','shanto  .jpg',0,0,0,0,'3','f','f'),(4,4,'test','pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6','','','','test@gmail.com','test','test',NULL,NULL,NULL,'Male',NULL,NULL,'Faculty of Computer Science and Engineering','',NULL,NULL,NULL,'01725225225',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,'researchgate , google scholars',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,4,'sobujsir','pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389','Professor','অধ্যাপক','2019','rakibul16@cse.pstu.ac.bd','Dr. Md.','Samsuzzaman','মোঃ শামসুজ্জামান','Room No: 401 CSE Building (3rd Floor) Department of CCE,  Faculty of CSE , Dhumki , Patuakhali','Village: Rotidanga, Road: Rotidanga Road , Post Office : Boalia Bazar, Division : Khulna','Male','1491370944','defaultnid.png','Faculty of Computer Science and Engineering','Department of Computer and Communication Engineering','Patuakhali Science & Technology University (PSTU)','Dumki, Patuakhali, Bangladesh','registrar@pstu.ac.bd','01712653210','1982-11-15 00:00:00.000','50000-71200',60400,'Doctor of Philosophy','Universiti Kebangsaan Malaysia','Malaysia',2015,'Microwave Communication, Satellite Communication, Microwave Imaging, Antenna Technology for Microwave Applications','1. Samsuzzaman, Md, Norbahiah Misran, Md Tarikul Islam, and Mohammad Tariqul Islam. \"Wideband 8× 8 patch antenna array for 5G wireless communications.\" Optoelectronics and Advanced Materials-Rapid Communications 14, no. March-April 2020 (2020): 163-171. ISSN: 1842-6573, (Impact Factor-0.445) Q4 (Indexed in ISI & SCOPUS).\n2. Hossain, Amran, Mohammad Tariqul Islam, Ali F. Almutairi, Mandeep Singh Jit Singh, Kamarulzaman Mat, and Md Samsuzzaman. \"An Octagonal Ring-shaped Parasitic Resonator Based Compact Ultrawideband Antenna for Microwave Imaging Applications.\" Sensors 20, no. 5 (2020): 1354.eISSN: 1424-8220, (Impact Factor-3.275) Q1 (Indexed in ISI & SCOPUS).\n3. Islam, Mohammad Shahidul, Md Samsuzzaman, Gan Kok Beng, Norbahiah Misran, Nowshad Amin, and Mohammad Tariqul Islam. \"A Gap Coupled Hexagonal Split Ring Resonator Based Metamaterial for S-Band and X-Band Microwave Applications.\" IEEE Access 8 (2020): 68239- 68253. ISSN: 2169-3536, (Impact Factor-3.745) Q1 (Indexed in ISI & SCOPUS).\n4. M. T. Islam, M. Samsuzzaman, M. Rahman, M. J. Singh, and M. T. Islam,. \"Asymmetric feed circularly polarized broadband printed antenna for wireless communication.\" Journal of Optoelectronics and Advanced Materials 22, no. 3-4 (2020): 129-135. ISSN: 1454-4164, (Impact Factor-0.631) Q4 (Indexed in ISI & SCOPUS).\n5. M. Tarikul Islam, Md Samsuzzaman, Salehin Kibria, Norbahiah Misran, and Mohammad Tariqul Islam. \"Metasurface Loaded High Gain Antenna based Microwave Imaging using Iteratively Corrected Delay Multiply and Sum Algorithm.\" Scientific reports 9, no. 1 (2019): 1-14. ISSN 2045-2322, (Indexed in ISI & SCOPUS) (Impact Factor-4.011) Q1',6,13,'defaultprofilepic.png','1.png','7.png',10,29,0,0,'0','0','0'),(6,4,'muradsir','pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81','','','','tuimorsala01@gmail.com','Golam Md. Muradul','Bashir','','','','Male','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01783242885','1981-04-09 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','3.png','9.png',0,0,0,0,'','',''),(8,4,'arpitamam','pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec','','','','lovely.shanto.35@gmail.com','Arpita','Howlader','','','','Female','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01584563227','1993-04-12 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','4.png','10.png',0,0,0,0,'','',''),(10,4,'sarnamam','pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b','','','','raqibul.islam.17@gmail.com','Sarna','Majumder','','','','Female','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01767265119','1991-04-18 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','5.png','11.png',0,0,0,0,'','',''),(11,4,'masudsir','pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f','','','','raqibul.islam.17@gmail.com','Dr. Md Abdul','Masud','','','','Male','','defaultnid.png','Faculty of Computer Science and Engineering','',NULL,'','','01915461874','1981-04-09 00:00:00.000','',0,'','','',0,'',NULL,0,0,'defaultprofilepic.png','2.png','8.png',0,0,0,0,'','','');
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -466,4 +486,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-10 12:03:28
+-- Dump completed on 2024-04-16 21:47:10
