@@ -105,3 +105,19 @@ def upload_project_softcopy():
     file.save('upload/project_softcopy/' + file.filename)
     
     return jsonify({'message': 'project_softcopy file uploaded successfully' , "statuscode" : 200}), 200
+
+@upload_blueprint.route('/notice/upload', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def upload_notice():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part' , "statuscode" : 400}), 400
+    
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({'error': 'No selected file' , "statuscode" : 400}), 400
+    
+    file.save('upload/notices/' + file.filename)
+    
+    return jsonify({'message': 'notice file uploaded successfully' , "statuscode" : 200}), 200
