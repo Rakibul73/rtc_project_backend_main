@@ -225,6 +225,14 @@ CREATE TABLE Notification (
   FOREIGN KEY (ReceiverUserID) REFERENCES Users(UserID)
 );
 
+-- Create Notice table
+CREATE TABLE Notice (
+  NoticeID INT PRIMARY KEY AUTO_INCREMENT,
+  DatePublished TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  Subject TEXT,
+  NoticeFileLocation TEXT
+);
+
 
 
 
