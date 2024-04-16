@@ -228,7 +228,7 @@ CREATE TABLE Notification (
 -- Create Notice table
 CREATE TABLE Notice (
   NoticeID INT PRIMARY KEY AUTO_INCREMENT,
-  DatePublished TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  DatePublished TEXT,
   Subject TEXT,
   NoticeFileLocation TEXT
 );

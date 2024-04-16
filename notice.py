@@ -33,8 +33,8 @@ def create_notice():
     conn = get_db()
     cursor = conn.cursor()
     
-    insert_query = "INSERT INTO Notice (Subject, NoticeFileLocation) VALUES (%s, %s )"
-    user_data = ( data['Subject'], data['NoticeFileLocation'])
+    insert_query = "INSERT INTO Notice (Subject, NoticeFileLocation , DatePublished) VALUES (%s, %s , %s)"
+    user_data = ( data['Subject'], data['NoticeFileLocation'] , data['DatePublished'])
     cursor.execute(insert_query, user_data)
     conn.commit()
     notice_id = cursor.lastrowid
@@ -44,6 +44,18 @@ def create_notice():
 
 
 
+# Route to get all reviews for a specific project
+@notice_blueprint.route('/get_notice/<int:notice_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_notice(notice_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Notice WHERE NoticeID = %s", (notice_id,))
+    notice = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'notice': notice , 'statuscode' : 200}), 200
 
 
 
