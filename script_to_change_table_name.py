@@ -34,6 +34,7 @@ table_name_mappings = {
     "projects": "Projects",
     "users": "Users",
     "role": "Role",
+    "notice": "Notice",
     # Add more mappings here if needed
 }
 
