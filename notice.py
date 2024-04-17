@@ -58,8 +58,39 @@ def get_notice(notice_id):
     return jsonify({'notice': notice , 'statuscode' : 200}), 200
 
 
+# Route to update basic info of a project of self 
+@notice_blueprint.route('/update_notice/<int:notice_id>', methods=['PUT'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def update_notice(notice_id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    notice_query = "UPDATE Notice SET NoticeFileLocation = %s , Subject = %s , DatePublished = %s WHERE NoticeID = %s"
+    notice_data = (data['NoticeFileLocation'] , data['Subject'] , data['DatePublished'] , notice_id)
+    cursor.execute(notice_query, notice_data)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Project updated successfully', 'statuscode' : 200}), 200
 
 
+
+# Route to delete a notice
+@notice_blueprint.route('/notice/<int:notice_id>', methods=['DELETE'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def delete_project(notice_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    delete_activity_query = "DELETE FROM Notice WHERE NoticeID = %s"
+    cursor.execute(delete_activity_query, (notice_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Notice with id ' + str(notice_id) + ' deleted successfully' , 'statuscode' : 200}), 200
 
 
 
