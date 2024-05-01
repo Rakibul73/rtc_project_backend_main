@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from auth_utils import role_required
 from db import get_db
@@ -24,9 +24,14 @@ def request_project_deletion_to_admin(project_id):
         conn.close()
         return jsonify({'error': 'Project not found' , 'statuscode' : 404}), 404
     
+    # Parse the reason for deletion from the request body
+    data = request.get_json()
+    reason = data.get('reasonForDelete', '')
+    print(reason)
+    
     # Create a notification for admin
     try:
-        notification_msg = f"ProjectDeletionRequest: Teacher ID: {current_user_id} requests deletion of Project ID: {project_id}"
+        notification_msg = f"ProjectDeletionRequest: Teacher ID: {current_user_id} requests deletion of Project ID: {project_id} for reason: {reason}"
         cursor.execute("INSERT INTO Notification (SenderUserID, ReceiverUserID, Message , IsRead) VALUES (%s, %s, %s , %s)", (current_user_id, 1, notification_msg , False))
         conn.commit()
     except Exception as e:
@@ -41,7 +46,7 @@ def request_project_deletion_to_admin(project_id):
 def extract_ids_from_notification(notification_message):
     # Extract sender ID and project ID from the notification message
     parts = notification_message.split()
-    sender_id = parts[3]  # Assuming the format is "ProjectDeletionRequest: Teacher ID: {sender_id} requests deletion of Project ID: {project_id}"
+    sender_id = parts[3]  # Assuming the format is "ProjectDeletionRequest: Teacher ID: {sender_id} requests deletion of Project ID: {project_id} for reason: {reason}"
     project_id = parts[9]
     return int(sender_id), int(project_id)
 
@@ -57,20 +62,19 @@ def delete_project_request(notification_id):
     admin_id = get_jwt_identity()
     
     # Check if the notification exists and if the admin has access to it
-    cursor.execute("SELECT * FROM Notification WHERE NotificationID = %s AND ReceiverUserID = %s", (notification_id, admin_id))
-    notification = cursor.fetchone()
-    if notification is None:
+    cursor.execute("SELECT Message FROM Notification WHERE NotificationID = %s AND ReceiverUserID = %s", (notification_id, admin_id))
+    notificationMessage = cursor.fetchone()
+    if notificationMessage is None:
         cursor.close()
         conn.close()
         return jsonify({'error': 'Notification not found or unauthorized access' , 'statuscode' : 404}), 404
     
-    
     # Extract project and sender IDs from the notification message
-    sender_id, project_id = extract_ids_from_notification(notification[3])
+    sender_id, project_id = extract_ids_from_notification(notificationMessage)
     print(sender_id, project_id)
     
     # Check if the project exists and if the sender is the creator of the project
-    cursor.execute("SELECT * FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, sender_id))
+    cursor.execute("SELECT ProjectID FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, sender_id))
     project = cursor.fetchone()
     if project is None:
         cursor.close()
@@ -81,6 +85,9 @@ def delete_project_request(notification_id):
     try:
         # Remove from ActivityPlan table based on ProjectID
         delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
+        cursor.execute(delete_activity_query, (project_id,))
+        # Remove from BudgetPlan table based on ProjectID
+        delete_activity_query = "DELETE FROM BudgetPlan WHERE ProjectID = %s"
         cursor.execute(delete_activity_query, (project_id,))
         # Remove from Review table based on ProjectID
         delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
