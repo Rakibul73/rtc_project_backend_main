@@ -192,6 +192,21 @@ CREATE TABLE ProjectFund (
   FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
 );
 
+
+-- Create ProjectAdvanceFund table
+CREATE TABLE ProjectAdvanceFund (
+  ProjectAdvanceFundID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  TotalBudget FLOAT(20),
+  PiSignatureDate VARCHAR(255),
+  ChairmanOfDepartmentSignatureDate VARCHAR(255),
+  RequestedAmount FLOAT(20), -- only for Advance initially it is NULL
+  RequestForAdvanceFundDone INT, -- 0 = not Request , 1 = 1st request, 2 = 2nd request/Advance , 3 = 3rd request etc
+  AdvanceFundRecievedDone INT, -- 0 = not Received , 1 = 1st Received, 2 = 2nd Received/Advance , 3 = 3rd Received etc
+  AdvanceFundSendDone INT, -- 0 = not Send , 1 = 1st Send, 2 = 2nd Send/Advance , 3 = 3rd Send etc
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
 -- Create ProjectListWithReviewerID table
 CREATE TABLE ProjectListWithReviewerID (
   ProjectID INT,

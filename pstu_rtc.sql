@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2024 at 09:50 PM
+-- Generation Time: May 02, 2024 at 11:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -178,6 +178,31 @@ INSERT INTO `PassReset` (`Email`, `ResetToken`, `Used`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ProjectAdvanceFund`
+--
+
+CREATE TABLE `ProjectAdvanceFund` (
+  `ProjectAdvanceFundID` int(11) NOT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `TotalBudget` float DEFAULT NULL,
+  `PiSignatureDate` varchar(255) DEFAULT NULL,
+  `ChairmanOfDepartmentSignatureDate` varchar(255) DEFAULT NULL,
+  `RequestedAmount` float DEFAULT NULL,
+  `RequestForAdvanceFundDone` int(11) DEFAULT NULL,
+  `AdvanceFundRecievedDone` int(11) DEFAULT NULL,
+  `AdvanceFundSendDone` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ProjectAdvanceFund`
+--
+
+INSERT INTO `ProjectAdvanceFund` (`ProjectAdvanceFundID`, `ProjectID`, `TotalBudget`, `PiSignatureDate`, `ChairmanOfDepartmentSignatureDate`, `RequestedAmount`, `RequestForAdvanceFundDone`, `AdvanceFundRecievedDone`, `AdvanceFundSendDone`) VALUES
+(1, 62, 80000, '2024-05-24 00:00:00.000', '2024-05-19 00:00:00.000', 50000, 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ProjectFund`
 --
 
@@ -190,19 +215,19 @@ CREATE TABLE `ProjectFund` (
   `PiSignatureDate` varchar(255) DEFAULT NULL,
   `ChairmanOfDepartmentSignatureDate` varchar(255) DEFAULT NULL,
   `TotalHonorarium` float DEFAULT NULL,
-  `RequestedAmount` float DEFAULT NULL,
   `RequestForFundDone` int(11) DEFAULT NULL,
   `FundRecievedDone` int(11) DEFAULT NULL,
-  `FundSendDone` int(11) DEFAULT NULL
+  `FundSendDone` int(11) DEFAULT NULL,
+  `RequestedAmount` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ProjectFund`
 --
 
-INSERT INTO `ProjectFund` (`ProjectFundID`, `ProjectID`, `TotalBudget`, `HonorariumOfPI`, `HonorariumOfCoPI`, `PiSignatureDate`, `ChairmanOfDepartmentSignatureDate`, `TotalHonorarium`, `RequestedAmount`, `RequestForFundDone`, `FundRecievedDone`, `FundSendDone`) VALUES
-(1, 62, 80000, 5000, 5000, '2024-04-05 00:00:00.000', '2024-04-16 00:00:00.000', 10000, NULL, 1, 1, 1),
-(3, 64, 80000, 8000, 2000, '2024-04-04 00:00:00.000', '2024-04-04 00:00:00.000', 10000, NULL, 1, 1, 1);
+INSERT INTO `ProjectFund` (`ProjectFundID`, `ProjectID`, `TotalBudget`, `HonorariumOfPI`, `HonorariumOfCoPI`, `PiSignatureDate`, `ChairmanOfDepartmentSignatureDate`, `TotalHonorarium`, `RequestForFundDone`, `FundRecievedDone`, `FundSendDone`, `RequestedAmount`) VALUES
+(1, 62, 80000, 5000, 5000, '2024-04-05 00:00:00.000', '2024-04-16 00:00:00.000', 10000, NULL, NULL, NULL, NULL),
+(3, 64, 80000, 8000, 2000, '2024-04-04 00:00:00.000', '2024-04-04 00:00:00.000', 10000, 1, 1, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -499,7 +524,7 @@ INSERT INTO `Users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglis
 (2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', '', '', 'taj@gmail.com', 'Tahmidur', 'Rahman Taj', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01400000000', '2000-03-29 00:00:00.000', '0', 0, '', '', '', 0, '', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'defaultseal.png', 0, 0, 0, 1802038, '08483', 'semester 1', '3.5'),
 (3, 4, 'sobujsirsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', 'f', 'f', '5', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', 'hf', 'f', 'f', 'Male', 'ff', '', 'Faculty of Computer Science and Engineering', '', NULL, 'f', 'f', '01500000000', '2024-03-20 00:00:00.000', '0', 0, 'f', 'ff', 'f', 0, 'f', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'shanto  .jpg', 0, 0, 0, 0, '3', 'f', 'f'),
 (4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, 'Male', NULL, NULL, 'Faculty of Computer Science and Engineering', '', NULL, NULL, NULL, '01725225225', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 4, 'sobujsir', 'pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389', 'Professor', 'অধ্যাপক', '2019', 'rakibul16@cse.pstu.ac.bd', 'Dr. Md.', 'Samsuzzaman', 'মোঃ শামসুজ্জামান', 'Room No: 401 CSE Building (3rd Floor) Department of CCE,  Faculty of CSE , Dhumki , Patuakhali', 'Village: Rotidanga, Road: Rotidanga Road , Post Office : Boalia Bazar, Division : Khulna', 'Male', '1491370944', 'defaultnid.png', 'Faculty of Computer Science and Engineering', 'Department of Computer and Communication Engineering', 'Patuakhali Science and Technology University', 'Dumki, Patuakhali, Bangladesh', 'registrar@pstu.ac.bd', '01712653210', '1982-11-15 00:00:00.000', '50000-71200', 60400, 'Doctor of Philosophy', 'Universiti Kebangsaan Malaysia', 'Malaysia', 2015, 'Microwave Communication, Satellite Communication, Microwave Imaging, Antenna Technology for Microwave Applications', '1. Samsuzzaman, Md, Norbahiah Misran, Md Tarikul Islam, and Mohammad Tariqul Islam. \"Wideband 8× 8 patch antenna array for 5G wireless communications.\" Optoelectronics and Advanced Materials-Rapid Communications 14, no. March-April 2020 (2020): 163-171. ISSN: 1842-6573, (Impact Factor-0.445) Q4 (Indexed in ISI & SCOPUS).\n2. Hossain, Amran, Mohammad Tariqul Islam, Ali F. Almutairi, Mandeep Singh Jit Singh, Kamarulzaman Mat, and Md Samsuzzaman. \"An Octagonal Ring-shaped Parasitic Resonator Based Compact Ultrawideband Antenna for Microwave Imaging Applications.\" Sensors 20, no. 5 (2020): 1354.eISSN: 1424-8220, (Impact Factor-3.275) Q1 (Indexed in ISI & SCOPUS).\n3. Islam, Mohammad Shahidul, Md Samsuzzaman, Gan Kok Beng, Norbahiah Misran, Nowshad Amin, and Mohammad Tariqul Islam. \"A Gap Coupled Hexagonal Split Ring Resonator Based Metamaterial for S-Band and X-Band Microwave Applications.\" IEEE Access 8 (2020): 68239- 68253. ISSN: 2169-3536, (Impact Factor-3.745) Q1 (Indexed in ISI & SCOPUS).\n4. M. T. Islam, M. Samsuzzaman, M. Rahman, M. J. Singh, and M. T. Islam,. \"Asymmetric feed circularly polarized broadband printed antenna for wireless communication.\" Journal of Optoelectronics and Advanced Materials 22, no. 3-4 (2020): 129-135. ISSN: 1454-4164, (Impact Factor-0.631) Q4 (Indexed in ISI & SCOPUS).\n5. M. Tarikul Islam, Md Samsuzzaman, Salehin Kibria, Norbahiah Misran, and Mohammad Tariqul Islam. \"Metasurface Loaded High Gain Antenna based Microwave Imaging using Iteratively Corrected Delay Multiply and Sum Algorithm.\" Scientific reports 9, no. 1 (2019): 1-14. ISSN 2045-2322, (Indexed in ISI & SCOPUS) (Impact Factor-4.011) Q1', 6, 13, 'defaultprofilepic.png', '1.png', '7.png', 10, 29, 0, 0, '0', '0', '0'),
+(5, 4, 'sobujsir', 'pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389', 'Professor', 'অধ্যাপক', '2019', 'rakibul16@cse.pstu.ac.bd', 'Dr. Md.', 'Samsuzzaman', 'মোঃ শামসুজ্জামান', 'Room No: 401 CSE Building (3rd Floor) Department of CCE,  Faculty of CSE , Dhumki , Patuakhali', 'Village: Rotidanga, Road: Rotidanga Road , Post Office : Boalia Bazar, Division : Khulna', 'Male', '1491370944', 'defaultnid.png', 'Faculty of Computer Science and Engineering', 'Department of Computer and Communication Engineering', 'Patuakhali Science & Technology University (PSTU)', 'Dumki, Patuakhali, Bangladesh', 'registrar@pstu.ac.bd', '01712653210', '1982-11-15 00:00:00.000', '50000-71200', 60400, 'Doctor of Philosophy', 'Universiti Kebangsaan Malaysia', 'Malaysia', 2015, 'Microwave Communication, Satellite Communication, Microwave Imaging, Antenna Technology for Microwave Applications', '1. Samsuzzaman, Md, Norbahiah Misran, Md Tarikul Islam, and Mohammad Tariqul Islam. \"Wideband 8× 8 patch antenna array for 5G wireless communications.\" Optoelectronics and Advanced Materials-Rapid Communications 14, no. March-April 2020 (2020): 163-171. ISSN: 1842-6573, (Impact Factor-0.445) Q4 (Indexed in ISI & SCOPUS).\n2. Hossain, Amran, Mohammad Tariqul Islam, Ali F. Almutairi, Mandeep Singh Jit Singh, Kamarulzaman Mat, and Md Samsuzzaman. \"An Octagonal Ring-shaped Parasitic Resonator Based Compact Ultrawideband Antenna for Microwave Imaging Applications.\" Sensors 20, no. 5 (2020): 1354.eISSN: 1424-8220, (Impact Factor-3.275) Q1 (Indexed in ISI & SCOPUS).\n3. Islam, Mohammad Shahidul, Md Samsuzzaman, Gan Kok Beng, Norbahiah Misran, Nowshad Amin, and Mohammad Tariqul Islam. \"A Gap Coupled Hexagonal Split Ring Resonator Based Metamaterial for S-Band and X-Band Microwave Applications.\" IEEE Access 8 (2020): 68239- 68253. ISSN: 2169-3536, (Impact Factor-3.745) Q1 (Indexed in ISI & SCOPUS).\n4. M. T. Islam, M. Samsuzzaman, M. Rahman, M. J. Singh, and M. T. Islam,. \"Asymmetric feed circularly polarized broadband printed antenna for wireless communication.\" Journal of Optoelectronics and Advanced Materials 22, no. 3-4 (2020): 129-135. ISSN: 1454-4164, (Impact Factor-0.631) Q4 (Indexed in ISI & SCOPUS).\n5. M. Tarikul Islam, Md Samsuzzaman, Salehin Kibria, Norbahiah Misran, and Mohammad Tariqul Islam. \"Metasurface Loaded High Gain Antenna based Microwave Imaging using Iteratively Corrected Delay Multiply and Sum Algorithm.\" Scientific reports 9, no. 1 (2019): 1-14. ISSN 2045-2322, (Indexed in ISI & SCOPUS) (Impact Factor-4.011) Q1', 6, 13, 'defaultprofilepic.png', '1.png', '7.png', 10, 29, 0, 0, '0', '0', '0'),
 (6, 4, 'muradsir', 'pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81', '', '', '', 'tuimorsala01@gmail.com', 'Golam Md. Muradul', 'Bashir', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01783242885', '1981-04-09 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '3.png', '9.png', 0, 0, 0, 0, '', '', ''),
 (8, 4, 'arpitamam', 'pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec', '', '', '', 'lovely.shanto.35@gmail.com', 'Arpita', 'Howlader', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01584563227', '1993-04-12 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '4.png', '10.png', 0, 0, 0, 0, '', '', ''),
 (10, 4, 'sarnamam', 'pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b', '', '', '', 'raqibul.islam.17@gmail.com', 'Sarna', 'Majumder', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01767265119', '1991-04-18 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '5.png', '11.png', 0, 0, 0, 0, '', '', ''),
@@ -536,6 +561,13 @@ ALTER TABLE `Notification`
   ADD PRIMARY KEY (`NotificationID`),
   ADD KEY `SenderUserID` (`SenderUserID`),
   ADD KEY `ReceiverUserID` (`ReceiverUserID`);
+
+--
+-- Indexes for table `ProjectAdvanceFund`
+--
+ALTER TABLE `ProjectAdvanceFund`
+  ADD PRIMARY KEY (`ProjectAdvanceFundID`),
+  ADD KEY `ProjectID` (`ProjectID`);
 
 --
 -- Indexes for table `ProjectFund`
@@ -623,6 +655,12 @@ ALTER TABLE `Notification`
   MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
+-- AUTO_INCREMENT for table `ProjectAdvanceFund`
+--
+ALTER TABLE `ProjectAdvanceFund`
+  MODIFY `ProjectAdvanceFundID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `ProjectFund`
 --
 ALTER TABLE `ProjectFund`
@@ -680,6 +718,12 @@ ALTER TABLE `BudgetPlan`
 ALTER TABLE `Notification`
   ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`SenderUserID`) REFERENCES `Users` (`UserID`),
   ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`ReceiverUserID`) REFERENCES `Users` (`UserID`);
+
+--
+-- Constraints for table `ProjectAdvanceFund`
+--
+ALTER TABLE `ProjectAdvanceFund`
+  ADD CONSTRAINT `projectadvancefund_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
 
 --
 -- Constraints for table `ProjectFund`

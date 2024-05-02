@@ -20,29 +20,42 @@ def get_my_fund_dashboard():
     total_project_list_can_apply_fund = cursor.fetchall()
     print(total_project_list_can_apply_fund)
     total_project_can_apply_fund = len(total_project_list_can_apply_fund)
-    if len(total_project_list_can_apply_fund) == 0:
-        total_project_applied_fund = {'total_project_applied_fund': 0}
-        total_project_fund_recieved = {'total_project_fund_recieved': 0}
-    else:
-        project_list_can_apply_fund = [project['ProjectID'] for project in total_project_list_can_apply_fund]
-        print(project_list_can_apply_fund)
-        cursor.execute("SELECT COUNT(ProjectID) AS total_project_applied_fund FROM ProjectFund WHERE ProjectID IN ({}) AND RequestForFundDone > 0".format(
-                ', '.join(['%s']*len(project_list_can_apply_fund))), project_list_can_apply_fund)
-        total_project_applied_fund = cursor.fetchone()
-        print(total_project_applied_fund['total_project_applied_fund'])
+    # if len(total_project_list_can_apply_fund) == 0:
+    #     total_project_applied_fund = {'total_project_applied_fund': 0}
+    #     total_project_fund_recieved = {'total_project_fund_recieved': 0}
+    # else:
+    #     project_list_can_apply_fund = [project['ProjectID'] for project in total_project_list_can_apply_fund]
+    #     print(project_list_can_apply_fund)
+    #     cursor.execute("SELECT COUNT(ProjectID) AS total_project_applied_fund FROM ProjectFund WHERE ProjectID IN ({}) AND RequestForFundDone > 0".format(
+    #             ', '.join(['%s']*len(project_list_can_apply_fund))), project_list_can_apply_fund)
+    #     total_project_applied_fund = cursor.fetchone()
+    #     print(total_project_applied_fund['total_project_applied_fund'])
         
-        cursor.execute("SELECT COUNT(ProjectID) AS total_project_fund_recieved FROM ProjectFund WHERE ProjectID IN ({}) AND FundSendDone > 0".format(
-                ', '.join(['%s']*len(project_list_can_apply_fund))), project_list_can_apply_fund)
-        total_project_fund_recieved = cursor.fetchone()
-        print(total_project_fund_recieved['total_project_fund_recieved'])
+    #     cursor.execute("SELECT COUNT(ProjectID) AS total_project_fund_recieved FROM ProjectFund WHERE ProjectID IN ({}) AND FundSendDone > 0".format(
+    #             ', '.join(['%s']*len(project_list_can_apply_fund))), project_list_can_apply_fund)
+    #     total_project_fund_recieved = cursor.fetchone()
+    #     print(total_project_fund_recieved['total_project_fund_recieved'])
     
+    project_list = [project['ProjectID'] for project in total_project_list_can_apply_fund]
+    cursor.execute("SELECT ProjectID FROM ProjectAdvanceFund WHERE ProjectID IN ({}) AND AdvanceFundSendDone > 0".format(
+            ', '.join(['%s']*len(project_list))), project_list)
+    advancefunded_project = cursor.fetchall()
+    recieved_advance_fund = len(advancefunded_project)
+    
+    cursor.execute("SELECT ProjectID FROM ProjectFund WHERE ProjectID IN ({}) AND FundSendDone > 0".format(
+            ', '.join(['%s']*len(project_list))), project_list)
+    funded_project = cursor.fetchall()
+    recieved_honorarium_fund = len(funded_project)
+
     cursor.close()
     conn.close()
     
     return jsonify({
         'total_project_can_apply_fund': total_project_can_apply_fund,
-        'total_project_applied_fund': total_project_applied_fund['total_project_applied_fund'],
-        'total_project_fund_recieved': total_project_fund_recieved['total_project_fund_recieved'],
+        # 'total_project_applied_fund': total_project_applied_fund['total_project_applied_fund'],
+        # 'total_project_fund_recieved': total_project_fund_recieved['total_project_fund_recieved'],
+        'recieved_advance_fund' : recieved_advance_fund,
+        'recieved_honorarium_fund' : recieved_honorarium_fund,
         'statuscode' : 200
     }) , 200
 
