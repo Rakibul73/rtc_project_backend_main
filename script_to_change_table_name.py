@@ -3,6 +3,7 @@
 # drop table Notification;
 # drop table PassReset;
 # drop table ProjectFund;
+# drop table ProjectAdvanceFund;
 # drop table ProjectListWithReviewerID;
 # drop table ProjectListWithUserID;
 # drop table Review;
@@ -10,6 +11,8 @@
 # drop table Projects;
 # drop table Users;
 # drop table Role;
+# drop table Notice;
+
 
 
 # use rakib73$final_project; source /home/rakib73/mysite/rtc_project_backend/pstu_rtc.sql;
