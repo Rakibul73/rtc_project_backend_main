@@ -323,6 +323,11 @@ def create_project_gantt(project_id):
         print(user_data)
         cursor.execute(insert_query, user_data)
         conn.commit()
+        insert_query = "INSERT INTO ActivityPlanOriginal (ProjectID, Activity, StartDate, EndDate, ActivityStatus) VALUES (%s, %s, %s, %s, %s)"
+        user_data = (project_id, individual_data['workActivity'], individual_data['duration'].split(' - ')[0], individual_data['duration'].split(' - ')[1], individual_data['activityStatus'])
+        print(user_data)
+        cursor.execute(insert_query, user_data)
+        conn.commit()
     cursor.close()
     conn.close()
     
@@ -343,6 +348,11 @@ def create_project_budget(project_id):
     # Iterate through the form datas and insert into the database
     for individual_data in data['formDatas']:
         insert_query = "INSERT INTO BudgetPlan (ProjectID, SerialNo, Item, Quantity, UnitPrice , TotalCost) VALUES (%s, %s, %s, %s, %s , %s)"
+        user_data = (project_id, individual_data['serialNo'], individual_data['item'], individual_data['quantity'], individual_data['unitPrice'] , individual_data['totalCostTk'])
+        print(user_data)
+        cursor.execute(insert_query, user_data)
+        conn.commit()
+        insert_query = "INSERT INTO BudgetPlanOriginal (ProjectID, SerialNo, Item, Quantity, UnitPrice , TotalCost) VALUES (%s, %s, %s, %s, %s , %s)"
         user_data = (project_id, individual_data['serialNo'], individual_data['item'], individual_data['quantity'], individual_data['unitPrice'] , individual_data['totalCostTk'])
         print(user_data)
         cursor.execute(insert_query, user_data)
@@ -382,6 +392,38 @@ def get_self_project_gantt(project_id):
     conn.close()
     
     return jsonify({'gantt_list': gantt_list ,'statuscode' : 200}), 200 
+
+
+
+# Route to fetch all gantt for a specific project
+@project_blueprint.route('/get_self_project_gantt_original/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def get_self_project_gantt_original(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    # check if the current user is authorized to access projects
+    cursor.execute("SELECT ProjectTitle FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
+    check = cursor.fetchone()
+    # check current user's role is Admin/1 or not
+    cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (current_user_id,))
+    check_role = cursor.fetchone()
+    print(check_role['RoleID'])
+    if check_role['RoleID'] == 1 or check is not None:
+        cursor.execute("SELECT * FROM ActivityPlanOriginal WHERE ProjectID = %s", (project_id,))
+        gantt_list = cursor.fetchall()
+    else:
+        return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'gantt_list_original': gantt_list ,'statuscode' : 200}), 200 
+
 
 
 # Route to update project status & total points of specific project
@@ -436,6 +478,35 @@ def get_self_project_budget(project_id):
     conn.close()
     
     return jsonify({'budget_list': budget_list ,'statuscode' : 200}), 200 
+
+
+# Route to fetch all budget for a specific project
+@project_blueprint.route('/get_self_project_budget_original/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
+def get_self_project_budget_original(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    # check if the current user is authorized to access projects
+    cursor.execute("SELECT ProjectTitle FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s", (project_id, current_user_id))
+    check = cursor.fetchone()
+    # check current user's role is Admin/1 or not
+    cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (current_user_id,))
+    check_role = cursor.fetchone()
+    if check_role['RoleID'] == 1 or check is not None:
+        cursor.execute("SELECT * FROM BudgetPlanOriginal WHERE ProjectID = %s", (project_id,))
+        budget_list = cursor.fetchall()
+    else:
+        return jsonify({'message': 'Unauthorized access to user projects Gantt' , 'statuscode': 403}), 403
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'budget_list_original': budget_list ,'statuscode' : 200}), 200 
 
 
 

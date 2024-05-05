@@ -14,6 +14,7 @@ from download import download_blueprint
 from notification import notification_blueprint
 from fund import fund_blueprint
 from fund_advance import fund_advance_blueprint
+from monitoring import monitoring_blueprint
 from notice import notice_blueprint
 from flask_compress import Compress
 
@@ -61,6 +62,9 @@ app.register_blueprint(fund_blueprint)
 
 # Register the Fund blueprint
 app.register_blueprint(fund_advance_blueprint)
+
+# Register the monitoring blueprint
+app.register_blueprint(monitoring_blueprint)
 
 # Register the Notice blueprint
 app.register_blueprint(notice_blueprint)
