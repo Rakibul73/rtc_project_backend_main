@@ -1,4 +1,13 @@
 # drop table ActivityPlan;
+# drop table ProjectMonitoringReportBudget;
+# drop table ProjectMonitoringReportActivity;
+# drop table BudgetPlanHistory;
+# drop table ActivityPlanHistory;
+# drop table ActivityPlanOriginal;
+# drop table BudgetPlanOriginal;
+# drop table ProjectListWithMonitoringCommitteeID;
+# drop table ProjectMonitoringFeedback;
+# drop table ProjectMonitoringReport;
 # drop table BudgetPlan;
 # drop table Notification;
 # drop table PassReset;
@@ -39,6 +48,16 @@ table_name_mappings = {
     "role": "Role",
     "notice": "Notice",
     "projectadvancefund": "ProjectAdvanceFund",
+    "projectmonitoringreportbudget" : "ProjectMonitoringReportBudget",
+    "projectmonitoringreportactivity" : "ProjectMonitoringReportActivity",
+    "budgetplanhistory" : "BudgetPlanHistory",
+    "activityplanhistory" : "ActivityPlanHistory",
+    "activityplanoriginal" : "ActivityPlanOriginal",
+    "budgetplanoriginal" : "BudgetPlanOriginal",
+    "projectlistwithmonitoringcommitteeid" : "ProjectListWithMonitoringCommitteeID",
+    "projectmonitoringfeedback" : "ProjectMonitoringFeedback",
+    "projectmonitoringreport" : "ProjectMonitoringReport",
+
     # Add more mappings here if needed
 }
 

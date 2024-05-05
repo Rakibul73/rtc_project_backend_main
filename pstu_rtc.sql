@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2024 at 11:07 PM
+-- Generation Time: May 05, 2024 at 08:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,68 @@ CREATE TABLE `ActivityPlan` (
 INSERT INTO `ActivityPlan` (`ActivityID`, `ProjectID`, `Activity`, `StartDate`, `EndDate`, `ActivityStatus`) VALUES
 (18, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
 (19, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
-(20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
+(20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Ongoing'),
+(21, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
+(22, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
+(23, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
+(25, 93, 'Do this ', '2024-04-12', '2024-04-20', 'Ongoing'),
+(26, 93, 'Do that', '2024-04-28', '2024-04-30', 'Ongoing'),
+(27, 94, 'Do this ', '2024-04-12', '2024-04-20', 'Ongoing'),
+(28, 94, 'Do that', '2024-04-28', '2024-04-30', 'Ongoing'),
+(29, 95, 'Do this ', '2024-04-12', '2024-04-20', 'Ongoing'),
+(30, 95, 'Do that', '2024-04-28', '2024-04-30', 'Ongoing'),
+(31, 96, 'ddd', '2024-05-10', '2024-05-11', 'Ongoing');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ActivityPlanHistory`
+--
+
+CREATE TABLE `ActivityPlanHistory` (
+  `ActivityID` int(11) NOT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `Activity` varchar(255) DEFAULT NULL,
+  `StartDate` date DEFAULT NULL,
+  `EndDate` date DEFAULT NULL,
+  `ActivityStatus` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ActivityPlanHistory`
+--
+
+INSERT INTO `ActivityPlanHistory` (`ActivityID`, `ProjectID`, `Activity`, `StartDate`, `EndDate`, `ActivityStatus`) VALUES
+(1, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
+(2, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
+(3, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Ongoing'),
+(4, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
+(5, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
+(6, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ActivityPlanOriginal`
+--
+
+CREATE TABLE `ActivityPlanOriginal` (
+  `ActivityID` int(11) NOT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `Activity` varchar(255) DEFAULT NULL,
+  `StartDate` date DEFAULT NULL,
+  `EndDate` date DEFAULT NULL,
+  `ActivityStatus` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ActivityPlanOriginal`
+--
+
+INSERT INTO `ActivityPlanOriginal` (`ActivityID`, `ProjectID`, `Activity`, `StartDate`, `EndDate`, `ActivityStatus`) VALUES
+(18, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Ongoing'),
+(19, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Ongoing'),
+(20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Ongoing'),
 (21, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
 (22, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
 (23, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
@@ -76,6 +137,83 @@ CREATE TABLE `BudgetPlan` (
 --
 
 INSERT INTO `BudgetPlan` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Quantity`, `UnitPrice`, `TotalCost`) VALUES
+(5, 64, 1, 'a) Substrate Material', 3, 3000, 9000),
+(6, 64, 2, 'b) Fabrication Cost', 3, 2000, 6000),
+(7, 64, 3, 'c) Measurement Cost', 3, 2500, 7500),
+(8, 64, 4, 'd) Printer', 1, 10000, 10000),
+(9, 64, 5, 'e) USB Switch/Router', 2, 1000, 2000),
+(10, 64, 6, 'f) Soldering Iron ', 1, 1000, 1000),
+(11, 64, 7, 'g) SMA connector', 10, 100, 1000),
+(12, 64, 8, 'h)Tool Box', 1, 1500, 1500),
+(13, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
+(14, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
+(15, 64, 0, '', 0, 0, 0),
+(16, 64, 0, '', 0, 0, 0),
+(17, 64, 0, '', 0, 0, 0),
+(18, 93, 1, 'this ', 1, 111, 111),
+(19, 93, 2, 'taht', 2, 222, 444),
+(20, 94, 1, 'this ', 1, 111, 111),
+(21, 94, 2, 'taht', 2, 222, 444),
+(22, 95, 1, 'this ', 1, 111, 111),
+(23, 95, 2, 'taht', 2, 222, 444),
+(24, 96, 1, 'dd', 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `BudgetPlanHistory`
+--
+
+CREATE TABLE `BudgetPlanHistory` (
+  `BudgetID` int(11) NOT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `SerialNo` int(11) DEFAULT NULL,
+  `Item` varchar(255) DEFAULT NULL,
+  `Quantity` int(11) DEFAULT NULL,
+  `UnitPrice` float DEFAULT NULL,
+  `TotalCost` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `BudgetPlanHistory`
+--
+
+INSERT INTO `BudgetPlanHistory` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Quantity`, `UnitPrice`, `TotalCost`) VALUES
+(1, 64, 1, 'a) Substrate Material', 3, 3000, 9000),
+(2, 64, 2, 'b) Fabrication Cost', 3, 2000, 6000),
+(3, 64, 3, 'c) Measurement Cost', 3, 2500, 7500),
+(4, 64, 4, 'd) Printer', 1, 10000, 10000),
+(5, 64, 5, 'e) USB Switch/Router', 2, 1000, 2000),
+(6, 64, 6, 'f) Soldering Iron ', 1, 1000, 1000),
+(7, 64, 7, 'g) SMA connector', 10, 100, 1000),
+(8, 64, 8, 'h)Tool Box', 1, 1500, 1500),
+(9, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
+(10, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
+(11, 64, 0, '', 0, 0, 0),
+(12, 64, 0, '', 0, 0, 0),
+(13, 64, 0, '', 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `BudgetPlanOriginal`
+--
+
+CREATE TABLE `BudgetPlanOriginal` (
+  `BudgetID` int(11) NOT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `SerialNo` int(11) DEFAULT NULL,
+  `Item` varchar(255) DEFAULT NULL,
+  `Quantity` int(11) DEFAULT NULL,
+  `UnitPrice` float DEFAULT NULL,
+  `TotalCost` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `BudgetPlanOriginal`
+--
+
+INSERT INTO `BudgetPlanOriginal` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Quantity`, `UnitPrice`, `TotalCost`) VALUES
 (5, 64, 1, 'a) Substrate Material', 3, 3000, 9000),
 (6, 64, 2, 'b) Fabrication Cost', 3, 2000, 6000),
 (7, 64, 3, 'c) Measurement Cost', 3, 2500, 7500),
@@ -232,6 +370,17 @@ INSERT INTO `ProjectFund` (`ProjectFundID`, `ProjectID`, `TotalBudget`, `Honorar
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ProjectListWithMonitoringCommitteeID`
+--
+
+CREATE TABLE `ProjectListWithMonitoringCommitteeID` (
+  `ProjectID` int(11) DEFAULT NULL,
+  `MonitoringCommitteeUserID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ProjectListWithReviewerID`
 --
 
@@ -286,6 +435,98 @@ INSERT INTO `ProjectListWithUserID` (`UserID`, `ProjectID`, `ProjectTitle`) VALU
 (6, 94, 'Microwave Applications'),
 (6, 95, 'S-Band and X-Band Microwave Applications'),
 (6, 96, 'dddddddddddddddd');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectMonitoringFeedback`
+--
+
+CREATE TABLE `ProjectMonitoringFeedback` (
+  `ProjectMonitoringFeedbackID` int(11) NOT NULL,
+  `ProjectMonitoringReportID` int(11) DEFAULT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `MonitoringCommitteeUserID` int(11) DEFAULT NULL,
+  `Observation` text DEFAULT NULL,
+  `Suggestions` text DEFAULT NULL,
+  `Recommendations` text DEFAULT NULL,
+  `Endorsement` text DEFAULT NULL,
+  `MonitoringFeedbackFileLocation` varchar(255) DEFAULT NULL,
+  `PiCanViewOrNot` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectMonitoringReport`
+--
+
+CREATE TABLE `ProjectMonitoringReport` (
+  `ProjectMonitoringReportID` int(11) NOT NULL,
+  `ProjectID` int(11) DEFAULT NULL,
+  `ReportDate` text DEFAULT NULL,
+  `ReportFileLocation` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ProjectMonitoringReport`
+--
+
+INSERT INTO `ProjectMonitoringReport` (`ProjectMonitoringReportID`, `ProjectID`, `ReportDate`, `ReportFileLocation`) VALUES
+(1, 64, 'Mon, 06 May 2024 12:55 AM', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectMonitoringReportActivity`
+--
+
+CREATE TABLE `ProjectMonitoringReportActivity` (
+  `ProjectMonitoringReportID` int(11) DEFAULT NULL,
+  `ActivityID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ProjectMonitoringReportActivity`
+--
+
+INSERT INTO `ProjectMonitoringReportActivity` (`ProjectMonitoringReportID`, `ActivityID`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectMonitoringReportBudget`
+--
+
+CREATE TABLE `ProjectMonitoringReportBudget` (
+  `ProjectMonitoringReportID` int(11) DEFAULT NULL,
+  `BudgetID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ProjectMonitoringReportBudget`
+--
+
+INSERT INTO `ProjectMonitoringReportBudget` (`ProjectMonitoringReportID`, `BudgetID`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13);
 
 -- --------------------------------------------------------
 
@@ -542,9 +783,37 @@ ALTER TABLE `ActivityPlan`
   ADD KEY `ProjectID` (`ProjectID`);
 
 --
+-- Indexes for table `ActivityPlanHistory`
+--
+ALTER TABLE `ActivityPlanHistory`
+  ADD PRIMARY KEY (`ActivityID`),
+  ADD KEY `ProjectID` (`ProjectID`);
+
+--
+-- Indexes for table `ActivityPlanOriginal`
+--
+ALTER TABLE `ActivityPlanOriginal`
+  ADD PRIMARY KEY (`ActivityID`),
+  ADD KEY `ProjectID` (`ProjectID`);
+
+--
 -- Indexes for table `BudgetPlan`
 --
 ALTER TABLE `BudgetPlan`
+  ADD PRIMARY KEY (`BudgetID`),
+  ADD KEY `ProjectID` (`ProjectID`);
+
+--
+-- Indexes for table `BudgetPlanHistory`
+--
+ALTER TABLE `BudgetPlanHistory`
+  ADD PRIMARY KEY (`BudgetID`),
+  ADD KEY `ProjectID` (`ProjectID`);
+
+--
+-- Indexes for table `BudgetPlanOriginal`
+--
+ALTER TABLE `BudgetPlanOriginal`
   ADD PRIMARY KEY (`BudgetID`),
   ADD KEY `ProjectID` (`ProjectID`);
 
@@ -577,6 +846,13 @@ ALTER TABLE `ProjectFund`
   ADD KEY `ProjectID` (`ProjectID`);
 
 --
+-- Indexes for table `ProjectListWithMonitoringCommitteeID`
+--
+ALTER TABLE `ProjectListWithMonitoringCommitteeID`
+  ADD KEY `ProjectID` (`ProjectID`),
+  ADD KEY `MonitoringCommitteeUserID` (`MonitoringCommitteeUserID`);
+
+--
 -- Indexes for table `ProjectListWithReviewerID`
 --
 ALTER TABLE `ProjectListWithReviewerID`
@@ -589,6 +865,36 @@ ALTER TABLE `ProjectListWithReviewerID`
 ALTER TABLE `ProjectListWithUserID`
   ADD KEY `UserID` (`UserID`),
   ADD KEY `ProjectID` (`ProjectID`);
+
+--
+-- Indexes for table `ProjectMonitoringFeedback`
+--
+ALTER TABLE `ProjectMonitoringFeedback`
+  ADD PRIMARY KEY (`ProjectMonitoringFeedbackID`),
+  ADD KEY `ProjectID` (`ProjectID`),
+  ADD KEY `ProjectMonitoringReportID` (`ProjectMonitoringReportID`),
+  ADD KEY `MonitoringCommitteeUserID` (`MonitoringCommitteeUserID`);
+
+--
+-- Indexes for table `ProjectMonitoringReport`
+--
+ALTER TABLE `ProjectMonitoringReport`
+  ADD PRIMARY KEY (`ProjectMonitoringReportID`),
+  ADD KEY `ProjectID` (`ProjectID`);
+
+--
+-- Indexes for table `ProjectMonitoringReportActivity`
+--
+ALTER TABLE `ProjectMonitoringReportActivity`
+  ADD KEY `ProjectMonitoringReportID` (`ProjectMonitoringReportID`),
+  ADD KEY `ActivityID` (`ActivityID`);
+
+--
+-- Indexes for table `ProjectMonitoringReportBudget`
+--
+ALTER TABLE `ProjectMonitoringReportBudget`
+  ADD KEY `ProjectMonitoringReportID` (`ProjectMonitoringReportID`),
+  ADD KEY `BudgetID` (`BudgetID`);
 
 --
 -- Indexes for table `Projects`
@@ -637,9 +943,33 @@ ALTER TABLE `ActivityPlan`
   MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
+-- AUTO_INCREMENT for table `ActivityPlanHistory`
+--
+ALTER TABLE `ActivityPlanHistory`
+  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `ActivityPlanOriginal`
+--
+ALTER TABLE `ActivityPlanOriginal`
+  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
 -- AUTO_INCREMENT for table `BudgetPlan`
 --
 ALTER TABLE `BudgetPlan`
+  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `BudgetPlanHistory`
+--
+ALTER TABLE `BudgetPlanHistory`
+  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `BudgetPlanOriginal`
+--
+ALTER TABLE `BudgetPlanOriginal`
   MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
@@ -665,6 +995,18 @@ ALTER TABLE `ProjectAdvanceFund`
 --
 ALTER TABLE `ProjectFund`
   MODIFY `ProjectFundID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `ProjectMonitoringFeedback`
+--
+ALTER TABLE `ProjectMonitoringFeedback`
+  MODIFY `ProjectMonitoringFeedbackID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ProjectMonitoringReport`
+--
+ALTER TABLE `ProjectMonitoringReport`
+  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `Projects`
@@ -707,10 +1049,34 @@ ALTER TABLE `ActivityPlan`
   ADD CONSTRAINT `activityplan_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
 
 --
+-- Constraints for table `ActivityPlanHistory`
+--
+ALTER TABLE `ActivityPlanHistory`
+  ADD CONSTRAINT `activityplanhistory_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
+
+--
+-- Constraints for table `ActivityPlanOriginal`
+--
+ALTER TABLE `ActivityPlanOriginal`
+  ADD CONSTRAINT `activityplanoriginal_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
+
+--
 -- Constraints for table `BudgetPlan`
 --
 ALTER TABLE `BudgetPlan`
   ADD CONSTRAINT `budgetplan_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
+
+--
+-- Constraints for table `BudgetPlanHistory`
+--
+ALTER TABLE `BudgetPlanHistory`
+  ADD CONSTRAINT `budgetplanhistory_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
+
+--
+-- Constraints for table `BudgetPlanOriginal`
+--
+ALTER TABLE `BudgetPlanOriginal`
+  ADD CONSTRAINT `budgetplanoriginal_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
 
 --
 -- Constraints for table `Notification`
@@ -732,6 +1098,13 @@ ALTER TABLE `ProjectFund`
   ADD CONSTRAINT `projectfund_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
 
 --
+-- Constraints for table `ProjectListWithMonitoringCommitteeID`
+--
+ALTER TABLE `ProjectListWithMonitoringCommitteeID`
+  ADD CONSTRAINT `projectlistwithmonitoringcommitteeid_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`),
+  ADD CONSTRAINT `projectlistwithmonitoringcommitteeid_ibfk_2` FOREIGN KEY (`MonitoringCommitteeUserID`) REFERENCES `Users` (`UserID`);
+
+--
 -- Constraints for table `ProjectListWithReviewerID`
 --
 ALTER TABLE `ProjectListWithReviewerID`
@@ -744,6 +1117,34 @@ ALTER TABLE `ProjectListWithReviewerID`
 ALTER TABLE `ProjectListWithUserID`
   ADD CONSTRAINT `projectlistwithuserid_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`),
   ADD CONSTRAINT `projectlistwithuserid_ibfk_2` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
+
+--
+-- Constraints for table `ProjectMonitoringFeedback`
+--
+ALTER TABLE `ProjectMonitoringFeedback`
+  ADD CONSTRAINT `projectmonitoringfeedback_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`),
+  ADD CONSTRAINT `projectmonitoringfeedback_ibfk_2` FOREIGN KEY (`ProjectMonitoringReportID`) REFERENCES `ProjectMonitoringReport` (`ProjectMonitoringReportID`),
+  ADD CONSTRAINT `projectmonitoringfeedback_ibfk_3` FOREIGN KEY (`MonitoringCommitteeUserID`) REFERENCES `Users` (`UserID`);
+
+--
+-- Constraints for table `ProjectMonitoringReport`
+--
+ALTER TABLE `ProjectMonitoringReport`
+  ADD CONSTRAINT `projectmonitoringreport_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
+
+--
+-- Constraints for table `ProjectMonitoringReportActivity`
+--
+ALTER TABLE `ProjectMonitoringReportActivity`
+  ADD CONSTRAINT `projectmonitoringreportactivity_ibfk_1` FOREIGN KEY (`ProjectMonitoringReportID`) REFERENCES `ProjectMonitoringReport` (`ProjectMonitoringReportID`),
+  ADD CONSTRAINT `projectmonitoringreportactivity_ibfk_2` FOREIGN KEY (`ActivityID`) REFERENCES `ActivityPlanHistory` (`ActivityID`);
+
+--
+-- Constraints for table `ProjectMonitoringReportBudget`
+--
+ALTER TABLE `ProjectMonitoringReportBudget`
+  ADD CONSTRAINT `projectmonitoringreportbudget_ibfk_1` FOREIGN KEY (`ProjectMonitoringReportID`) REFERENCES `ProjectMonitoringReport` (`ProjectMonitoringReportID`),
+  ADD CONSTRAINT `projectmonitoringreportbudget_ibfk_2` FOREIGN KEY (`BudgetID`) REFERENCES `BudgetPlanHistory` (`BudgetID`);
 
 --
 -- Constraints for table `Projects`

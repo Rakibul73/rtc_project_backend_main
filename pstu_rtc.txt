@@ -163,8 +163,54 @@ CREATE TABLE ActivityPlan (
   FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
 );
 
+-- Create ActivityPlanHistory table
+CREATE TABLE ActivityPlanHistory (
+  ActivityID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  Activity VARCHAR(255),
+  StartDate DATE,
+  EndDate DATE,
+  ActivityStatus TEXT,
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
+-- Create ActivityPlanOriginal table
+CREATE TABLE ActivityPlanOriginal (
+  ActivityID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  Activity VARCHAR(255),
+  StartDate DATE,
+  EndDate DATE,
+  ActivityStatus TEXT,
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
 -- Create BudgetPlan table
 CREATE TABLE BudgetPlan (
+  BudgetID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  SerialNo INT,
+  Item VARCHAR(255),
+  Quantity INT,
+  UnitPrice FLOAT(20),
+  TotalCost FLOAT(20),
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
+-- Create BudgetPlanHistory table
+CREATE TABLE BudgetPlanHistory (
+  BudgetID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  SerialNo INT,
+  Item VARCHAR(255),
+  Quantity INT,
+  UnitPrice FLOAT(20),
+  TotalCost FLOAT(20),
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
+-- Create BudgetPlanOriginal table
+CREATE TABLE BudgetPlanOriginal (
   BudgetID INT PRIMARY KEY AUTO_INCREMENT,
   ProjectID INT,
   SerialNo INT,
@@ -206,6 +252,57 @@ CREATE TABLE ProjectAdvanceFund (
   AdvanceFundSendDone INT, -- 0 = not Send , 1 = 1st Send, 2 = 2nd Send/Advance , 3 = 3rd Send etc
   FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
 );
+
+-- Create ProjectMonitoringFeedback table
+CREATE TABLE ProjectMonitoringFeedback (
+  ProjectMonitoringFeedbackID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectMonitoringReportID INT,
+  ProjectID INT,
+  MonitoringCommitteeUserID INT,
+  Observation TEXT,
+  Suggestions TEXT,
+  Recommendations TEXT,
+  Endorsement TEXT,
+  MonitoringFeedbackFileLocation VARCHAR(255),
+  PiCanViewOrNot INT, -- 0 means can not view 1 means can view
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+  FOREIGN KEY (ProjectMonitoringReportID) REFERENCES ProjectMonitoringReport(ProjectMonitoringReportID),
+  FOREIGN KEY (MonitoringCommitteeUserID) REFERENCES Users(UserID)
+);
+
+-- Create ProjectListWithMonitoringCommitteeID table
+CREATE TABLE ProjectListWithMonitoringCommitteeID (
+  ProjectID INT,
+  MonitoringCommitteeUserID INT,
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+  FOREIGN KEY (MonitoringCommitteeUserID) REFERENCES Users(UserID)
+);
+
+-- Create ProjectMonitoringReport table
+CREATE TABLE ProjectMonitoringReport (
+  ProjectMonitoringReportID INT PRIMARY KEY AUTO_INCREMENT,
+  ProjectID INT,
+  ReportDate TEXT,
+  ReportFileLocation VARCHAR(255),
+  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
+-- Create ProjectMonitoringReportActivity table
+CREATE TABLE ProjectMonitoringReportActivity (
+  ProjectMonitoringReportID INT,
+  ActivityID INT,
+  FOREIGN KEY (ProjectMonitoringReportID) REFERENCES ProjectMonitoringReport(ProjectMonitoringReportID),
+  FOREIGN KEY (ActivityID) REFERENCES ActivityPlanHistory(ActivityID)
+);
+
+-- Create ProjectMonitoringReportBudget table
+CREATE TABLE ProjectMonitoringReportBudget (
+  ProjectMonitoringReportID INT,
+  BudgetID INT,
+  FOREIGN KEY (ProjectMonitoringReportID) REFERENCES ProjectMonitoringReport(ProjectMonitoringReportID),
+  FOREIGN KEY (BudgetID) REFERENCES BudgetPlanHistory(BudgetID)
+);
+
 
 -- Create ProjectListWithReviewerID table
 CREATE TABLE ProjectListWithReviewerID (
