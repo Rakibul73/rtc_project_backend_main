@@ -113,6 +113,25 @@ def get_specific_project(project_id):
         return jsonify({'message': 'project not found' , 'statuscode' : 404}), 404
 
 
+
+# Route to get projecttitle from a specific project
+@project_blueprint.route('/projecttitle/<int:project_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4])
+def get_specific_project_title(project_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT ProjectTitle, CodeByRTC FROM Projects WHERE ProjectID = %s", (project_id,))
+    project_data = cursor.fetchone()
+    print(project_data)
+    cursor.close()
+    conn.close()
+    if project_data:
+        return jsonify({'project': project_data , 'statuscode' : 200}), 200
+    else:
+        return jsonify({'message': 'project not found' , 'statuscode' : 404}), 404
+
+
 # # Route to update all fields of a project only if user is admin
 # @project_blueprint.route('/update_project_admin/<int:project_id>', methods=['PUT'])
 # @jwt_required()  # Protect the route with JWT

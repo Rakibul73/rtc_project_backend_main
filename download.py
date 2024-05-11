@@ -51,3 +51,10 @@ def download_project_softcopy(filename):
 @role_required([1, 2 , 3 , 4 , 5])
 def download_notice(filename):
     return send_from_directory('upload/notices', filename)
+
+
+@download_blueprint.route('/monitoringreportfile/download/<filename>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def download_monitoring_report_file(filename):
+    return send_from_directory('upload/monitoringreportfile', filename)

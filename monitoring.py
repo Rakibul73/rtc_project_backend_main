@@ -152,4 +152,96 @@ def update_project_budget_for_report(projectMonitoringReportID):
 
 
 
+# Route to get all projects
+@monitoring_blueprint.route('/get_single_project_monitoring_history/<int:projectID>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])  
+def get_single_project_monitoring_history(projectID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    current_user_id = get_jwt_identity()
+    
+    cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectID = %s ORDER BY ProjectMonitoringReportID DESC" , (projectID,))
+    single_project_monitoring_report_list = cursor.fetchall()
+    print(single_project_monitoring_report_list)
+
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'projects': single_project_monitoring_report_list  , "statuscode" : 200}) , 200
+
+
+
+
+
+# Route to get a specific project for fund self
+@monitoring_blueprint.route('/get_specific_project_monitoring_report/<int:monitoringReportID>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4])
+def get_specific_project_monitoring_report(monitoringReportID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
+    project_monitoring_report_data = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+    if project_monitoring_report_data:
+        return jsonify({'monitoring_report_data': project_monitoring_report_data , 'statuscode' : 200}), 200
+    else:
+        return jsonify({'message': 'project not found' , 'statuscode' : 404}), 404
+
+
+
+
+# Route to fetch all budget for a specific project
+@monitoring_blueprint.route('/get_self_project_gantt_history/<int:monitoringReportID>', methods=['GET'])
+# @jwt_required()  # Protect the route with JWT
+# @role_required([1 , 2, 3, 4, 5]) 
+def get_self_project_gantt_history(monitoringReportID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT ProjectID FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
+    ProjectIDObject = cursor.fetchone()
+    ProjectID = ProjectIDObject['ProjectID']
+    
+    cursor.execute("SELECT * FROM ActivityPlanHistory ap WHERE ap.ActivityID IN ( SELECT pma.ActivityID FROM ProjectMonitoringReportActivity pma WHERE pma.ProjectMonitoringReportID = %s)", (monitoringReportID,))
+    ProjectIDObjectList = cursor.fetchall()
+    
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'gantt_list': ProjectIDObjectList ,'statuscode' : 200}), 200 
+
+
+
+# Route to fetch all budget for a specific project
+@monitoring_blueprint.route('/get_self_project_budget_history/<int:monitoringReportID>', methods=['GET'])
+# @jwt_required()  # Protect the route with JWT
+# @role_required([1 , 2, 3, 4, 5]) 
+def get_self_project_budget_history(monitoringReportID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT ProjectID FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
+    ProjectIDObject = cursor.fetchone()
+    ProjectID = ProjectIDObject['ProjectID']
+    
+    cursor.execute("SELECT * FROM BudgetPlanHistory ap WHERE ap.BudgetID IN ( SELECT pma.BudgetID FROM ProjectMonitoringReportBudget pma WHERE pma.ProjectMonitoringReportID = %s)", (monitoringReportID,))
+    ProjectIDObjectList = cursor.fetchall()
+    
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'budget_list': ProjectIDObjectList ,'statuscode' : 200}), 200 
+
+
+
 # ==========================================  Monitoring Related Routes END  =============================
