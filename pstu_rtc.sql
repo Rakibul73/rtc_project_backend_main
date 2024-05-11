@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2024 at 08:58 PM
+-- Generation Time: May 11, 2024 at 06:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `ActivityPlan` (
 INSERT INTO `ActivityPlan` (`ActivityID`, `ProjectID`, `Activity`, `StartDate`, `EndDate`, `ActivityStatus`) VALUES
 (18, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
 (19, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
-(20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Ongoing'),
+(20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
 (21, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
 (22, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
 (23, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
@@ -80,7 +80,13 @@ INSERT INTO `ActivityPlanHistory` (`ActivityID`, `ProjectID`, `Activity`, `Start
 (3, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Ongoing'),
 (4, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
 (5, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
-(6, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
+(6, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
+(7, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
+(8, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
+(9, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
+(10, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
+(11, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
+(12, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -147,7 +153,7 @@ INSERT INTO `BudgetPlan` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Quantity
 (12, 64, 8, 'h)Tool Box', 1, 1500, 1500),
 (13, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
 (14, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
-(15, 64, 0, '', 0, 0, 0),
+(15, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
 (16, 64, 0, '', 0, 0, 0),
 (17, 64, 0, '', 0, 0, 0),
 (18, 93, 1, 'this ', 1, 111, 111),
@@ -191,7 +197,20 @@ INSERT INTO `BudgetPlanHistory` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Q
 (10, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
 (11, 64, 0, '', 0, 0, 0),
 (12, 64, 0, '', 0, 0, 0),
-(13, 64, 0, '', 0, 0, 0);
+(13, 64, 0, '', 0, 0, 0),
+(14, 64, 1, 'a) Substrate Material', 3, 3000, 9000),
+(15, 64, 2, 'b) Fabrication Cost', 3, 2000, 6000),
+(16, 64, 3, 'c) Measurement Cost', 3, 2500, 7500),
+(17, 64, 4, 'd) Printer', 1, 10000, 10000),
+(18, 64, 5, 'e) USB Switch/Router', 2, 1000, 2000),
+(19, 64, 6, 'f) Soldering Iron ', 1, 1000, 1000),
+(20, 64, 7, 'g) SMA connector', 10, 100, 1000),
+(21, 64, 8, 'h)Tool Box', 1, 1500, 1500),
+(22, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
+(23, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
+(24, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
+(25, 64, 0, '', 0, 0, 0),
+(26, 64, 0, '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -473,7 +492,8 @@ CREATE TABLE `ProjectMonitoringReport` (
 --
 
 INSERT INTO `ProjectMonitoringReport` (`ProjectMonitoringReportID`, `ProjectID`, `ReportDate`, `ReportFileLocation`) VALUES
-(1, 64, 'Mon, 06 May 2024 12:55 AM', NULL);
+(1, 64, 'Mon, 06 May 2024 12:55 AM', NULL),
+(2, 64, 'Sat, 11 May 2024 09:59 PM', NULL);
 
 -- --------------------------------------------------------
 
@@ -496,7 +516,13 @@ INSERT INTO `ProjectMonitoringReportActivity` (`ProjectMonitoringReportID`, `Act
 (1, 3),
 (1, 4),
 (1, 5),
-(1, 6);
+(1, 6),
+(2, 7),
+(2, 8),
+(2, 9),
+(2, 10),
+(2, 11),
+(2, 12);
 
 -- --------------------------------------------------------
 
@@ -526,7 +552,20 @@ INSERT INTO `ProjectMonitoringReportBudget` (`ProjectMonitoringReportID`, `Budge
 (1, 10),
 (1, 11),
 (1, 12),
-(1, 13);
+(1, 13),
+(2, 14),
+(2, 15),
+(2, 16),
+(2, 17),
+(2, 18),
+(2, 19),
+(2, 20),
+(2, 21),
+(2, 22),
+(2, 23),
+(2, 24),
+(2, 25),
+(2, 26);
 
 -- --------------------------------------------------------
 
@@ -946,7 +985,7 @@ ALTER TABLE `ActivityPlan`
 -- AUTO_INCREMENT for table `ActivityPlanHistory`
 --
 ALTER TABLE `ActivityPlanHistory`
-  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `ActivityPlanOriginal`
@@ -964,7 +1003,7 @@ ALTER TABLE `BudgetPlan`
 -- AUTO_INCREMENT for table `BudgetPlanHistory`
 --
 ALTER TABLE `BudgetPlanHistory`
-  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `BudgetPlanOriginal`
@@ -1006,7 +1045,7 @@ ALTER TABLE `ProjectMonitoringFeedback`
 -- AUTO_INCREMENT for table `ProjectMonitoringReport`
 --
 ALTER TABLE `ProjectMonitoringReport`
-  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `Projects`
