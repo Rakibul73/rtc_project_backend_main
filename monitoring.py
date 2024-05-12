@@ -228,20 +228,173 @@ def get_self_project_budget_history(monitoringReportID):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT ProjectID FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
-    ProjectIDObject = cursor.fetchone()
-    ProjectID = ProjectIDObject['ProjectID']
+    # cursor.execute("SELECT ProjectID FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
+    # ProjectIDObject = cursor.fetchone()
+    # ProjectID = ProjectIDObject['ProjectID']
     
     cursor.execute("SELECT * FROM BudgetPlanHistory ap WHERE ap.BudgetID IN ( SELECT pma.BudgetID FROM ProjectMonitoringReportBudget pma WHERE pma.ProjectMonitoringReportID = %s)", (monitoringReportID,))
-    ProjectIDObjectList = cursor.fetchall()
+    budgetHistoryList = cursor.fetchall()
     
     
     conn.commit()
     cursor.close()
     conn.close()
     
-    return jsonify({'budget_list': ProjectIDObjectList ,'statuscode' : 200}), 200 
+    return jsonify({'budget_list': budgetHistoryList ,'statuscode' : 200}), 200 
 
 
+@monitoring_blueprint.route('/list_monitoring_feedback_project_and_pi_can_see', methods=['GET'])
+def list_monitoring_feedback_project_and_pi_can_see():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    # current_user_id = get_jwt_identity()
+    current_user_id = 5
+    # Get the project IDs associated with the current user from projectlistwithuserid table
+    cursor.execute("SELECT ProjectID FROM ProjectListWithUserID WHERE UserID = %s", (current_user_id,))
+    user_projects = cursor.fetchall()
+    if len(user_projects) == 0:
+        return jsonify({'ProjectFeedbackList': [] , "statuscode" : 200, "message" : "No projects found for this user"}) , 200
+    else:
+        print("Count how many of the user's projects are added in the review table")
+        # Count how many of the user's projects are added in the review table
+        myProjectList = [project['ProjectID'] for project in user_projects]
+        print(myProjectList)
+        print(len(myProjectList))
+    
+        cursor.execute("SELECT * FROM ProjectMonitoringFeedback WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID IN (SELECT ProjectID FROM ProjectListWithUserID WHERE UserID = %s)) AND PiCanViewOrNot = 1 GROUP BY ProjectMonitoringReportID HAVING COUNT(*) = 3", (current_user_id,))
+        ProjectMonitoringFeedbackList = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    if len(ProjectMonitoringFeedbackList) == 0:
+        return jsonify({'ProjectFeedbackList': [] , "statuscode" : 200, "message" : "No projects monitoring feedback found"}) , 200
+    return jsonify({'ProjectFeedbackList': ProjectMonitoringFeedbackList , "statuscode" : 200, "message" : "success"}) , 200
+
+
+
+
+# Route to get total number of review dashboard
+@monitoring_blueprint.route('/monitoring_panel_overview', methods=['GET'])
+# @jwt_required()  # Protect the route with JWT
+# @role_required([1])  # Only admin and supervisor can access this route
+def monitoring_panel_overview():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    
+    cursor.execute("SELECT COUNT(*) AS committee_gave_feedback FROM ( SELECT ProjectMonitoringReportID FROM ProjectMonitoringFeedback GROUP BY ProjectMonitoringReportID HAVING COUNT(*) = 3 ) AS MonitoringReportWithThreeFeedbacks")
+    committee_gave_feedback = cursor.fetchone()
+    
+    cursor.execute("SELECT COUNT(DISTINCT ProjectMonitoringReportID) AS assigned_monitoring_committee FROM ProjectReportListWithMonitoringCommitteeID")
+    assigned_monitoring_committee = cursor.fetchall()
+    
+    cursor.execute("SELECT COUNT(ProjectMonitoringReportID) AS need_to_assign_monitoring_committee FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID NOT IN (SELECT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID)")
+    need_to_assign_monitoring_committee = cursor.fetchall()
+
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({
+        'committee_gave_feedback': committee_gave_feedback['committee_gave_feedback'],
+        'need_to_assign_monitoring_committee': need_to_assign_monitoring_committee[0]['need_to_assign_monitoring_committee'],
+        'assigned_monitoring_committee': assigned_monitoring_committee[0]['assigned_monitoring_committee'],
+        'statuscode' : 200
+    }) , 200
+
+
+
+@monitoring_blueprint.route('/get_all_monitoring_report_need_to_assign_committee', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_all_monitoring_report_need_to_assign_committee():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID NOT IN (SELECT DISTINCT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID)")
+    NeedToAssignCommitteeList = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'MonitoringReportNeedToAssignCommitteeList': NeedToAssignCommitteeList , "statuscode" : 200}) , 200
+
+
+
+@monitoring_blueprint.route('/get_committeeuserid_for_specific_monitoring_report/<int:monitoringReportID>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def get_committeeuserid_for_specific_monitoring_report(monitoringReportID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT MonitoringCommitteeUserID FROM ProjectReportListWithMonitoringCommitteeID WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
+    committeeuserid = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'committeeuserid': committeeuserid , 'statuscode' : 200}), 200
+
+
+
+@monitoring_blueprint.route('/set_monitoring_committee_for_specific_project_monitoring_report', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def set_reviewer_for_specific_project():
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    insert_query = "INSERT INTO ProjectReportListWithMonitoringCommitteeID (ProjectMonitoringReportID, MonitoringCommitteeUserID) VALUES (%s, %s)"
+    review_data = (data['ProjectMonitoringReportID'], data['MonitoringCommitteeUserID'])
+    cursor.execute(insert_query, review_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Monitoring Committee Set successfully' , 'statuscode' : 201}), 201
+
+
+
+@monitoring_blueprint.route('/get_all_projects_have_to_monitor', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_all_projects_have_to_monitor():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    
+    cursor.execute("SELECT * FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s", (current_user_id,))
+    ProjectHaveToMonitorList = cursor.fetchall()
+    # retrieve all projects that have to be reviewed with ProjectHaveToMonitorList 
+    projects_in_monitor = [project['ProjectMonitoringReportID'] for project in ProjectHaveToMonitorList]
+    print(projects_in_monitor)
+    if len(projects_in_monitor) == 0:
+        ProjectHaveToMonitorList = []
+    else:
+        cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN ({})".format(
+            ', '.join(['%s']*len(projects_in_monitor))), projects_in_monitor)
+        
+        ProjectHaveToMonitorList = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'ProjectHaveToMonitorList': ProjectHaveToMonitorList , "statuscode" : 200}) , 200
+
+
+
+
+@monitoring_blueprint.route('/check_a_monitoring_report_feedback_given_or_not/<int:monitoringReportID>/<int:user_id>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def check_a_monitoring_report_feedback_given_or_not(monitoringReportID , user_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT * FROM ProjectMonitoringFeedback WHERE ProjectMonitoringReportID = %s AND MonitoringCommitteeUserID = %s", (monitoringReportID , user_id))
+    MonitoringReportFeedbackCheck = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    if MonitoringReportFeedbackCheck:
+        return jsonify({'MonitoringReportFeedbackCheck': "Yes" , "statuscode" : 200}) , 200
+    else:
+        return jsonify({'MonitoringReportFeedbackCheck': "No" , "statuscode" : 200}) , 200
+    
 
 # ==========================================  Monitoring Related Routes END  =============================

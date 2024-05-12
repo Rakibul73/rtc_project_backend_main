@@ -121,7 +121,7 @@ def get_specific_project(project_id):
 def get_specific_project_title(project_id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT ProjectTitle, CodeByRTC FROM Projects WHERE ProjectID = %s", (project_id,))
+    cursor.execute("SELECT StudentUserID, CoPiUserID , CreatorUserID , ProjectTitle, CodeByRTC FROM Projects WHERE ProjectID = %s", (project_id,))
     project_data = cursor.fetchone()
     print(project_data)
     cursor.close()
