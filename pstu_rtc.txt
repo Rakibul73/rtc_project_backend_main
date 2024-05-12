@@ -270,11 +270,11 @@ CREATE TABLE ProjectMonitoringFeedback (
   FOREIGN KEY (MonitoringCommitteeUserID) REFERENCES Users(UserID)
 );
 
--- Create ProjectListWithMonitoringCommitteeID table
-CREATE TABLE ProjectListWithMonitoringCommitteeID (
-  ProjectID INT,
+-- Create ProjectReportListWithMonitoringCommitteeID table
+CREATE TABLE ProjectReportListWithMonitoringCommitteeID (
+  ProjectMonitoringReportID INT,
   MonitoringCommitteeUserID INT,
-  FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+  FOREIGN KEY (ProjectMonitoringReportID) REFERENCES ProjectMonitoringReport(ProjectMonitoringReportID),
   FOREIGN KEY (MonitoringCommitteeUserID) REFERENCES Users(UserID)
 );
 

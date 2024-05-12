@@ -5,7 +5,7 @@
 # drop table ActivityPlanHistory;
 # drop table ActivityPlanOriginal;
 # drop table BudgetPlanOriginal;
-# drop table ProjectListWithMonitoringCommitteeID;
+# drop table ProjectReportListWithMonitoringCommitteeID;
 # drop table ProjectMonitoringFeedback;
 # drop table ProjectMonitoringReport;
 # drop table BudgetPlan;
@@ -54,7 +54,7 @@ table_name_mappings = {
     "activityplanhistory" : "ActivityPlanHistory",
     "activityplanoriginal" : "ActivityPlanOriginal",
     "budgetplanoriginal" : "BudgetPlanOriginal",
-    "projectlistwithmonitoringcommitteeid" : "ProjectListWithMonitoringCommitteeID",
+    "projectreportlistwithmonitoringcommitteeid" : "ProjectReportListWithMonitoringCommitteeID",
     "projectmonitoringfeedback" : "ProjectMonitoringFeedback",
     "projectmonitoringreport" : "ProjectMonitoringReport",
 

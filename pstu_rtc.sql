@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2024 at 06:09 PM
+-- Generation Time: May 12, 2024 at 07:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -389,17 +389,6 @@ INSERT INTO `ProjectFund` (`ProjectFundID`, `ProjectID`, `TotalBudget`, `Honorar
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ProjectListWithMonitoringCommitteeID`
---
-
-CREATE TABLE `ProjectListWithMonitoringCommitteeID` (
-  `ProjectID` int(11) DEFAULT NULL,
-  `MonitoringCommitteeUserID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ProjectListWithReviewerID`
 --
 
@@ -566,6 +555,26 @@ INSERT INTO `ProjectMonitoringReportBudget` (`ProjectMonitoringReportID`, `Budge
 (2, 24),
 (2, 25),
 (2, 26);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectReportListWithMonitoringCommitteeID`
+--
+
+CREATE TABLE `ProjectReportListWithMonitoringCommitteeID` (
+  `ProjectMonitoringReportID` int(11) DEFAULT NULL,
+  `MonitoringCommitteeUserID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ProjectReportListWithMonitoringCommitteeID`
+--
+
+INSERT INTO `ProjectReportListWithMonitoringCommitteeID` (`ProjectMonitoringReportID`, `MonitoringCommitteeUserID`) VALUES
+(1, 8),
+(1, 10),
+(1, 11);
 
 -- --------------------------------------------------------
 
@@ -885,13 +894,6 @@ ALTER TABLE `ProjectFund`
   ADD KEY `ProjectID` (`ProjectID`);
 
 --
--- Indexes for table `ProjectListWithMonitoringCommitteeID`
---
-ALTER TABLE `ProjectListWithMonitoringCommitteeID`
-  ADD KEY `ProjectID` (`ProjectID`),
-  ADD KEY `MonitoringCommitteeUserID` (`MonitoringCommitteeUserID`);
-
---
 -- Indexes for table `ProjectListWithReviewerID`
 --
 ALTER TABLE `ProjectListWithReviewerID`
@@ -934,6 +936,13 @@ ALTER TABLE `ProjectMonitoringReportActivity`
 ALTER TABLE `ProjectMonitoringReportBudget`
   ADD KEY `ProjectMonitoringReportID` (`ProjectMonitoringReportID`),
   ADD KEY `BudgetID` (`BudgetID`);
+
+--
+-- Indexes for table `ProjectReportListWithMonitoringCommitteeID`
+--
+ALTER TABLE `ProjectReportListWithMonitoringCommitteeID`
+  ADD KEY `ProjectMonitoringReportID` (`ProjectMonitoringReportID`),
+  ADD KEY `MonitoringCommitteeUserID` (`MonitoringCommitteeUserID`);
 
 --
 -- Indexes for table `Projects`
@@ -1137,13 +1146,6 @@ ALTER TABLE `ProjectFund`
   ADD CONSTRAINT `projectfund_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`);
 
 --
--- Constraints for table `ProjectListWithMonitoringCommitteeID`
---
-ALTER TABLE `ProjectListWithMonitoringCommitteeID`
-  ADD CONSTRAINT `projectlistwithmonitoringcommitteeid_ibfk_1` FOREIGN KEY (`ProjectID`) REFERENCES `Projects` (`ProjectID`),
-  ADD CONSTRAINT `projectlistwithmonitoringcommitteeid_ibfk_2` FOREIGN KEY (`MonitoringCommitteeUserID`) REFERENCES `Users` (`UserID`);
-
---
 -- Constraints for table `ProjectListWithReviewerID`
 --
 ALTER TABLE `ProjectListWithReviewerID`
@@ -1184,6 +1186,13 @@ ALTER TABLE `ProjectMonitoringReportActivity`
 ALTER TABLE `ProjectMonitoringReportBudget`
   ADD CONSTRAINT `projectmonitoringreportbudget_ibfk_1` FOREIGN KEY (`ProjectMonitoringReportID`) REFERENCES `ProjectMonitoringReport` (`ProjectMonitoringReportID`),
   ADD CONSTRAINT `projectmonitoringreportbudget_ibfk_2` FOREIGN KEY (`BudgetID`) REFERENCES `BudgetPlanHistory` (`BudgetID`);
+
+--
+-- Constraints for table `ProjectReportListWithMonitoringCommitteeID`
+--
+ALTER TABLE `ProjectReportListWithMonitoringCommitteeID`
+  ADD CONSTRAINT `projectreportlistwithmonitoringcommitteeid_ibfk_1` FOREIGN KEY (`ProjectMonitoringReportID`) REFERENCES `ProjectMonitoringReport` (`ProjectMonitoringReportID`),
+  ADD CONSTRAINT `projectreportlistwithmonitoringcommitteeid_ibfk_2` FOREIGN KEY (`MonitoringCommitteeUserID`) REFERENCES `Users` (`UserID`);
 
 --
 -- Constraints for table `Projects`
