@@ -442,4 +442,52 @@ def create_feedback_specific_monitoring_report():
 
 
 
+# Route to get all projects reviewer given review
+@monitoring_blueprint.route('/get_all_monitoring_report_committee_has_given_feedback', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1])
+def get_all_monitoring_report_committee_has_given_feedback():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT * FROM ProjectMonitoringFeedback GROUP BY ProjectMonitoringReportID HAVING COUNT(*) = 3")
+    feedback_list = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify({'feedback_list': feedback_list  , "statuscode" : 200}) , 200
+
+
+
+# Route to get all reviews for a specific project
+@monitoring_blueprint.route('/get_feedback_for_specific_monitoring_report/<int:monitoringReportID>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_feedback_for_specific_monitoring_report(monitoringReportID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM ProjectMonitoringFeedback WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
+    feedback = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'feedback': feedback , 'statuscode' : 200}), 200
+
+
+
+
+# Route to update a specific project review PiCanViewOrNot 0 means can not view 1 means can view
+@monitoring_blueprint.route('/update_picanviewornot_in_project_monitoring_feedback/<int:monitoringReportID>', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def update_picanviewornot_in_project_monitoring_feedback(monitoringReportID):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("UPDATE ProjectMonitoringFeedback SET PiCanViewOrNot = 1 WHERE ProjectMonitoringReportID = %s" , (monitoringReportID,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'ProjectMonitoringFeedback PiCanViewOrNot updated successfully' , 'statuscode' : 200}), 200
+
+
 # ==========================================  Monitoring Related Routes END  =============================
