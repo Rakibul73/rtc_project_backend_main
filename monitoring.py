@@ -198,15 +198,11 @@ def get_specific_project_monitoring_report(monitoringReportID):
 
 # Route to fetch all budget for a specific project
 @monitoring_blueprint.route('/get_self_project_gantt_history/<int:monitoringReportID>', methods=['GET'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1 , 2, 3, 4, 5]) 
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
 def get_self_project_gantt_history(monitoringReportID):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    
-    cursor.execute("SELECT ProjectID FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
-    ProjectIDObject = cursor.fetchone()
-    ProjectID = ProjectIDObject['ProjectID']
     
     cursor.execute("SELECT * FROM ActivityPlanHistory ap WHERE ap.ActivityID IN ( SELECT pma.ActivityID FROM ProjectMonitoringReportActivity pma WHERE pma.ProjectMonitoringReportID = %s)", (monitoringReportID,))
     ProjectIDObjectList = cursor.fetchall()
@@ -222,15 +218,11 @@ def get_self_project_gantt_history(monitoringReportID):
 
 # Route to fetch all budget for a specific project
 @monitoring_blueprint.route('/get_self_project_budget_history/<int:monitoringReportID>', methods=['GET'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1 , 2, 3, 4, 5]) 
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
 def get_self_project_budget_history(monitoringReportID):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    
-    # cursor.execute("SELECT ProjectID FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID = %s", (monitoringReportID,))
-    # ProjectIDObject = cursor.fetchone()
-    # ProjectID = ProjectIDObject['ProjectID']
     
     cursor.execute("SELECT * FROM BudgetPlanHistory ap WHERE ap.BudgetID IN ( SELECT pma.BudgetID FROM ProjectMonitoringReportBudget pma WHERE pma.ProjectMonitoringReportID = %s)", (monitoringReportID,))
     budgetHistoryList = cursor.fetchall()
@@ -244,6 +236,8 @@ def get_self_project_budget_history(monitoringReportID):
 
 
 @monitoring_blueprint.route('/list_monitoring_feedback_project_and_pi_can_see', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2, 3, 4, 5]) 
 def list_monitoring_feedback_project_and_pi_can_see():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -277,8 +271,8 @@ def list_monitoring_feedback_project_and_pi_can_see():
 
 # Route to get total number of review dashboard
 @monitoring_blueprint.route('/monitoring_panel_overview', methods=['GET'])
-# @jwt_required()  # Protect the route with JWT
-# @role_required([1])  # Only admin and supervisor can access this route
+@jwt_required()  # Protect the route with JWT
+@role_required([1])  # Only admin and supervisor can access this route
 def monitoring_panel_overview():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -395,6 +389,57 @@ def check_a_monitoring_report_feedback_given_or_not(monitoringReportID , user_id
         return jsonify({'MonitoringReportFeedbackCheck': "Yes" , "statuscode" : 200}) , 200
     else:
         return jsonify({'MonitoringReportFeedbackCheck': "No" , "statuscode" : 200}) , 200
+
+
+
+
+@monitoring_blueprint.route('/get_all_monitoring_report_already_assigned_committee', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_all_monitoring_report_already_assigned_committee():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
     
+    cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN (SELECT DISTINCT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID)")
+    MonitoringReportAssignedCommitteeList = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'MonitoringReportAssignedCommitteeList': MonitoringReportAssignedCommitteeList , "statuscode" : 200}) , 200
+
+
+
+# Route to get all reviews for a specific reviewer user
+@monitoring_blueprint.route('/get_all_feedback_for_specific_monitoring_committee_and_specific_report', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def get_all_feedback_for_specific_monitoring_committee_and_specific_report():
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM ProjectMonitoringFeedback WHERE ProjectMonitoringReportID = %s AND MonitoringCommitteeUserID = %s", (data['ProjectMonitoringReportID'], data['MonitoringCommitteeUserID']))
+    feedback = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'feedback': feedback , 'statuscode' : 200}), 200
+
+
+
+# Route to create a new review for a project
+@monitoring_blueprint.route('/create_feedback_specific_monitoring_report', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([2 , 3 , 4 , 5])
+def create_feedback_specific_monitoring_report():
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    insert_query = "INSERT INTO ProjectMonitoringFeedback (ProjectMonitoringReportID, ProjectID, MonitoringCommitteeUserID, Observation , Suggestions , Recommendations ,Endorsement, PiCanViewOrNot) VALUES (%s, %s, %s, %s , %s, %s, %s, %s)"
+    review_data = (data['ProjectMonitoringReportID'], data['ProjectID'], data['MonitoringCommitteeUserID'], data['Observation'] , data['Suggestions'], data['Recommendations'] , data['Endorsement'] , 0)
+    cursor.execute(insert_query, review_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Feedback created successfully' , 'statuscode' : 201}), 201
+
+
 
 # ==========================================  Monitoring Related Routes END  =============================

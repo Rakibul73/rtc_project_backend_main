@@ -430,8 +430,14 @@ def get_self_project_gantt_original(project_id):
     # check current user's role is Admin/1 or not
     cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (current_user_id,))
     check_role = cursor.fetchone()
+    
+    cursor.execute("SELECT * FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s AND ProjectMonitoringReportID in (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID = %s)", (current_user_id, project_id,))
+    check_monitoring = cursor.fetchall()
+    print("check_monitoring ==== ", check_monitoring)
+    
+    
     print(check_role['RoleID'])
-    if check_role['RoleID'] == 1 or check is not None:
+    if check_role['RoleID'] == 1 or check is not None or check_monitoring is not None:
         cursor.execute("SELECT * FROM ActivityPlanOriginal WHERE ProjectID = %s", (project_id,))
         gantt_list = cursor.fetchall()
     else:
@@ -515,7 +521,15 @@ def get_self_project_budget_original(project_id):
     # check current user's role is Admin/1 or not
     cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (current_user_id,))
     check_role = cursor.fetchone()
-    if check_role['RoleID'] == 1 or check is not None:
+    
+    cursor.execute("SELECT * FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s AND ProjectMonitoringReportID in (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID = %s)", (current_user_id, project_id,))
+    check_monitoring = cursor.fetchall()
+    print("check_monitoring ==== ", check_monitoring)
+    
+    
+    
+    
+    if check_role['RoleID'] == 1 or check is not None or check_monitoring is not None:
         cursor.execute("SELECT * FROM BudgetPlanOriginal WHERE ProjectID = %s", (project_id,))
         budget_list = cursor.fetchall()
     else:
