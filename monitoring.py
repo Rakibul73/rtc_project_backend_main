@@ -490,4 +490,22 @@ def update_picanviewornot_in_project_monitoring_feedback(monitoringReportID):
     return jsonify({'message': 'ProjectMonitoringFeedback PiCanViewOrNot updated successfully' , 'statuscode' : 200}), 200
 
 
+
+
+@monitoring_blueprint.route('/get_all_my_monitoring_report_history', methods=['GET'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1 , 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
+def get_all_my_monitoring_report_history():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    # Get the current user's ID from JWT
+    current_user_id = get_jwt_identity()
+    
+    cursor.execute("SELECT * FROM ProjectMonitoringReport pmr INNER JOIN Projects p ON pmr.ProjectID = p.ProjectID WHERE p.CreatorUserID = %s ORDER BY ProjectMonitoringReportID DESC", (current_user_id,))
+    MyProjectMonitoringHistoryList = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'MyProjectMonitoringHistoryList': MyProjectMonitoringHistoryList , "statuscode" : 200}) , 200
+
+
 # ==========================================  Monitoring Related Routes END  =============================
