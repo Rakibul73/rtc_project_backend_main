@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2024 at 07:27 PM
+-- Generation Time: Jun 06, 2024 at 10:03 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,7 @@ INSERT INTO `ActivityPlan` (`ActivityID`, `ProjectID`, `Activity`, `StartDate`, 
 (18, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
 (19, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
 (20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
-(21, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
+(21, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Completed'),
 (22, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
 (23, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
 (25, 93, 'Do this ', '2024-04-12', '2024-04-20', 'Ongoing'),
@@ -86,7 +86,13 @@ INSERT INTO `ActivityPlanHistory` (`ActivityID`, `ProjectID`, `Activity`, `Start
 (9, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
 (10, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Ongoing'),
 (11, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
-(12, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
+(12, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
+(13, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
+(14, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
+(15, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
+(16, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Completed'),
+(17, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
+(18, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -154,7 +160,7 @@ INSERT INTO `BudgetPlan` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Quantity
 (13, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
 (14, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
 (15, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
-(16, 64, 0, '', 0, 0, 0),
+(16, 64, 12, 'paper pen', 0, 9000, 9000),
 (17, 64, 0, '', 0, 0, 0),
 (18, 93, 1, 'this ', 1, 111, 111),
 (19, 93, 2, 'taht', 2, 222, 444),
@@ -210,7 +216,20 @@ INSERT INTO `BudgetPlanHistory` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Q
 (23, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
 (24, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
 (25, 64, 0, '', 0, 0, 0),
-(26, 64, 0, '', 0, 0, 0);
+(26, 64, 0, '', 0, 0, 0),
+(27, 64, 1, 'a) Substrate Material', 3, 3000, 9000),
+(28, 64, 2, 'b) Fabrication Cost', 3, 2000, 6000),
+(29, 64, 3, 'c) Measurement Cost', 3, 2500, 7500),
+(30, 64, 4, 'd) Printer', 1, 10000, 10000),
+(31, 64, 5, 'e) USB Switch/Router', 2, 1000, 2000),
+(32, 64, 6, 'f) Soldering Iron ', 1, 1000, 1000),
+(33, 64, 7, 'g) SMA connector', 10, 100, 1000),
+(34, 64, 8, 'h)Tool Box', 1, 1500, 1500),
+(35, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
+(36, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
+(37, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
+(38, 64, 12, 'paper pen', 0, 9000, 9000),
+(39, 64, 0, '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -491,7 +510,8 @@ CREATE TABLE `ProjectMonitoringReport` (
 
 INSERT INTO `ProjectMonitoringReport` (`ProjectMonitoringReportID`, `ProjectID`, `ReportDate`, `ReportFileLocation`) VALUES
 (1, 64, 'Mon, 06 May 2024 12:55 AM', NULL),
-(2, 64, 'Sat, 11 May 2024 09:59 PM', NULL);
+(2, 64, 'Sat, 11 May 2024 09:59 PM', NULL),
+(3, 64, 'Sun, 26 May 2024 11:33 AM', NULL);
 
 -- --------------------------------------------------------
 
@@ -520,7 +540,13 @@ INSERT INTO `ProjectMonitoringReportActivity` (`ProjectMonitoringReportID`, `Act
 (2, 9),
 (2, 10),
 (2, 11),
-(2, 12);
+(2, 12),
+(3, 13),
+(3, 14),
+(3, 15),
+(3, 16),
+(3, 17),
+(3, 18);
 
 -- --------------------------------------------------------
 
@@ -563,7 +589,20 @@ INSERT INTO `ProjectMonitoringReportBudget` (`ProjectMonitoringReportID`, `Budge
 (2, 23),
 (2, 24),
 (2, 25),
-(2, 26);
+(2, 26),
+(3, 27),
+(3, 28),
+(3, 29),
+(3, 30),
+(3, 31),
+(3, 32),
+(3, 33),
+(3, 34),
+(3, 35),
+(3, 36),
+(3, 37),
+(3, 38),
+(3, 39);
 
 -- --------------------------------------------------------
 
@@ -824,7 +863,7 @@ INSERT INTO `Users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglis
 (4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, 'Male', NULL, NULL, 'Faculty of Computer Science and Engineering', '', NULL, NULL, NULL, '01725225225', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (5, 4, 'sobujsir', 'pbkdf2:sha256:600000$NPKnJAgOJLFKPXf6$fd47733b28568ab00d054a2e5f6987a83a6fdff1722e7e2a2179c8283e3fd389', 'Professor', 'অধ্যাপক', '2019', 'rakibul16@cse.pstu.ac.bd', 'Dr. Md.', 'Samsuzzaman', 'মোঃ শামসুজ্জামান', 'Room No: 401 CSE Building (3rd Floor) Department of CCE,  Faculty of CSE , Dhumki , Patuakhali', 'Village: Rotidanga, Road: Rotidanga Road , Post Office : Boalia Bazar, Division : Khulna', 'Male', '1491370944', 'defaultnid.png', 'Faculty of Computer Science and Engineering', 'Department of Computer and Communication Engineering', 'Patuakhali Science & Technology University (PSTU)', 'Dumki, Patuakhali, Bangladesh', 'registrar@pstu.ac.bd', '01712653210', '1982-11-15 00:00:00.000', '50000-71200', 60400, 'Doctor of Philosophy', 'Universiti Kebangsaan Malaysia', 'Malaysia', 2015, 'Microwave Communication, Satellite Communication, Microwave Imaging, Antenna Technology for Microwave Applications', '1. Samsuzzaman, Md, Norbahiah Misran, Md Tarikul Islam, and Mohammad Tariqul Islam. \"Wideband 8× 8 patch antenna array for 5G wireless communications.\" Optoelectronics and Advanced Materials-Rapid Communications 14, no. March-April 2020 (2020): 163-171. ISSN: 1842-6573, (Impact Factor-0.445) Q4 (Indexed in ISI & SCOPUS).\n2. Hossain, Amran, Mohammad Tariqul Islam, Ali F. Almutairi, Mandeep Singh Jit Singh, Kamarulzaman Mat, and Md Samsuzzaman. \"An Octagonal Ring-shaped Parasitic Resonator Based Compact Ultrawideband Antenna for Microwave Imaging Applications.\" Sensors 20, no. 5 (2020): 1354.eISSN: 1424-8220, (Impact Factor-3.275) Q1 (Indexed in ISI & SCOPUS).\n3. Islam, Mohammad Shahidul, Md Samsuzzaman, Gan Kok Beng, Norbahiah Misran, Nowshad Amin, and Mohammad Tariqul Islam. \"A Gap Coupled Hexagonal Split Ring Resonator Based Metamaterial for S-Band and X-Band Microwave Applications.\" IEEE Access 8 (2020): 68239- 68253. ISSN: 2169-3536, (Impact Factor-3.745) Q1 (Indexed in ISI & SCOPUS).\n4. M. T. Islam, M. Samsuzzaman, M. Rahman, M. J. Singh, and M. T. Islam,. \"Asymmetric feed circularly polarized broadband printed antenna for wireless communication.\" Journal of Optoelectronics and Advanced Materials 22, no. 3-4 (2020): 129-135. ISSN: 1454-4164, (Impact Factor-0.631) Q4 (Indexed in ISI & SCOPUS).\n5. M. Tarikul Islam, Md Samsuzzaman, Salehin Kibria, Norbahiah Misran, and Mohammad Tariqul Islam. \"Metasurface Loaded High Gain Antenna based Microwave Imaging using Iteratively Corrected Delay Multiply and Sum Algorithm.\" Scientific reports 9, no. 1 (2019): 1-14. ISSN 2045-2322, (Indexed in ISI & SCOPUS) (Impact Factor-4.011) Q1', 6, 13, 'defaultprofilepic.png', '1.png', '7.png', 10, 29, 0, 0, '0', '0', '0'),
 (6, 4, 'muradsir', 'pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81', '', '', '', 'tuimorsala01@gmail.com', 'Golam Md. Muradul', 'Bashir', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01783242885', '1981-04-09 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '3.png', '9.png', 0, 0, 0, 0, '', '', ''),
-(8, 4, 'arpitamam', 'pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec', '', '', '', 'lovely.shanto.35@gmail.com', 'Arpita', 'Howlader', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01584563227', '1993-04-12 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '4.png', '10.png', 0, 0, 0, 0, '', '', ''),
+(8, 4, 'arpitamam', 'pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec', '', '', '', 'lovely.shanto.35@gmail.com', 'Arpita', 'Howlader', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', 'Department of Computer and Communication Engineering', 'Patuakhali Science & Technology University (PSTU)', '', '', '01584563227', '1993-04-12 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '4.png', '10.png', 0, 0, 0, 0, '', '', ''),
 (10, 4, 'sarnamam', 'pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b', '', '', '', 'raqibul.islam.17@gmail.com', 'Sarna', 'Majumder', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01767265119', '1991-04-18 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '5.png', '11.png', 0, 0, 0, 0, '', '', ''),
 (11, 4, 'masudsir', 'pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f', '', '', '', 'raqibul.islam.17@gmail.com', 'Dr. Md Abdul', 'Masud', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01915461874', '1981-04-09 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '2.png', '8.png', 0, 0, 0, 0, '', '', '');
 
@@ -1003,7 +1042,7 @@ ALTER TABLE `ActivityPlan`
 -- AUTO_INCREMENT for table `ActivityPlanHistory`
 --
 ALTER TABLE `ActivityPlanHistory`
-  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `ActivityPlanOriginal`
@@ -1021,7 +1060,7 @@ ALTER TABLE `BudgetPlan`
 -- AUTO_INCREMENT for table `BudgetPlanHistory`
 --
 ALTER TABLE `BudgetPlanHistory`
-  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `BudgetPlanOriginal`
@@ -1063,7 +1102,7 @@ ALTER TABLE `ProjectMonitoringFeedback`
 -- AUTO_INCREMENT for table `ProjectMonitoringReport`
 --
 ALTER TABLE `ProjectMonitoringReport`
-  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `Projects`
