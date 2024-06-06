@@ -123,31 +123,11 @@ def get_all_my_advance_funded_projects():
     
     current_user_id = get_jwt_identity()
     
-    cursor.execute("SELECT ProjectID FROM Projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s" , (current_user_id,))
-    my_project = cursor.fetchall()
-    print("my_project" , my_project)
-    project_list = [project['ProjectID'] for project in my_project]
-    
-    print("project_list" , project_list)
-    
-    cursor.execute("SELECT ProjectID FROM ProjectAdvanceFund WHERE ProjectID IN ({}) AND AdvanceFundSendDone > 0".format(
-            ', '.join(['%s']*len(project_list))), project_list)
-    
-    funded_project = cursor.fetchall()
-    print(funded_project)
-    
-    project_list = [project['ProjectID'] for project in funded_project]
-    print("ccccccccccccccccccccccccc ", project_list)
-    
-    cursor.execute("SELECT ProjectID , CodeByRTC , ProjectTitle FROM Projects WHERE ProjectID IN ({})".format(
-            ', '.join(['%s']*len(project_list))), project_list)
+    cursor.execute("SELECT ProjectID , CodeByRTC , ProjectTitle FROM Projects WHERE ProjectID IN (SELECT ProjectID FROM ProjectAdvanceFund WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s) AND AdvanceFundSendDone > 0)" , (current_user_id,))
     funded_project = cursor.fetchall()
     
     cursor.close()
     conn.close()
-    
-    if not funded_project:  # Check if funded_project is empty
-        return jsonify({'message': 'No advance funded projects found', 'statuscode': 404}), 404
     
     return jsonify({'projects': funded_project  , "statuscode" : 200}) , 200
 
