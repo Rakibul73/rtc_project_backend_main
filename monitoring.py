@@ -28,12 +28,27 @@ def my_monitoring_dashboard():
     feedback_from_committee = cursor.fetchone()
     print(feedback_from_committee['feedback_from_committee'])
     
+    cursor.execute("SELECT COUNT(DISTINCT ProjectID) as can_send_monitoring_report FROM Projects WHERE ProjectStatus = 'Approved' AND CreatorUserID = %s" , (current_user_id,))
+    can_send_monitoring_report = cursor.fetchone()
+    print(can_send_monitoring_report['can_send_monitoring_report'])
+    
+    cursor.execute("SELECT COUNT(*) AS feedback_sent FROM ProjectMonitoringFeedback WHERE MonitoringCommitteeUserID = %s AND Observation IS NOT NULL" , (current_user_id,))
+    feedback_sent = cursor.fetchone()
+    print(feedback_sent['feedback_sent'])
+    
+    cursor.execute("SELECT COUNT(*) AS no_of_report_assigned_to_me FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s)", (current_user_id,))
+    no_of_report_assigned_to_me = cursor.fetchone()
+    print(no_of_report_assigned_to_me['no_of_report_assigned_to_me'])
+    
     cursor.close()
     conn.close()
     
     return jsonify({
         'send_for_monitoring': send_for_monitoring['send_for_monitoring'],
         'feedback_from_committee': feedback_from_committee['feedback_from_committee'],
+        'can_send_monitoring_report': can_send_monitoring_report['can_send_monitoring_report'],
+        'no_of_report_assigned_to_me': no_of_report_assigned_to_me['no_of_report_assigned_to_me'],
+        'feedback_sent': feedback_sent['feedback_sent'],
         'statuscode' : 200
     }) , 200
 
@@ -354,19 +369,10 @@ def get_all_projects_have_to_monitor():
     cursor = conn.cursor(dictionary=True)
     # Get the current user's ID from JWT
     current_user_id = get_jwt_identity()
-    
-    cursor.execute("SELECT * FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s", (current_user_id,))
+
+    cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s)", (current_user_id,))
     ProjectHaveToMonitorList = cursor.fetchall()
-    # retrieve all projects that have to be reviewed with ProjectHaveToMonitorList 
-    projects_in_monitor = [project['ProjectMonitoringReportID'] for project in ProjectHaveToMonitorList]
-    print(projects_in_monitor)
-    if len(projects_in_monitor) == 0:
-        ProjectHaveToMonitorList = []
-    else:
-        cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN ({})".format(
-            ', '.join(['%s']*len(projects_in_monitor))), projects_in_monitor)
-        
-        ProjectHaveToMonitorList = cursor.fetchall()
+    
     cursor.close()
     conn.close()
     return jsonify({'ProjectHaveToMonitorList': ProjectHaveToMonitorList , "statuscode" : 200}) , 200
