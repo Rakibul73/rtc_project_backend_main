@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from auth_utils import role_required
+from db import get_db # local module
 
 upload_blueprint = Blueprint('upload', __name__)
 
@@ -121,3 +122,58 @@ def upload_notice():
     file.save('upload/notices/' + file.filename)
     
     return jsonify({'message': 'notice file uploaded successfully' , "statuscode" : 200}), 200
+
+
+
+@upload_blueprint.route('/monitoring_report_feedback/upload', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def upload_monitoring_report_feedback():
+    if 'pdf' not in request.files:
+        return jsonify({'error': 'No file part' , "statuscode" : 400}), 400
+    
+    pdf_file = request.files['pdf']
+    feedbackId = request.form.get('projectMonitoringReportID')
+    conn = get_db()
+    cursor = conn.cursor()
+    update_query = "UPDATE ProjectMonitoringFeedback SET MonitoringFeedbackFileLocation = %s WHERE ProjectMonitoringFeedbackID = %s"
+    user_data = (pdf_file.filename , feedbackId)
+    print(user_data)
+    cursor.execute(update_query, user_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    if pdf_file.filename == '':
+        return jsonify({'error': 'No selected file' , "statuscode" : 400}), 400
+    
+    pdf_file.save('upload/monitoringreportfile/' + pdf_file.filename)
+    
+    return jsonify({'message': 'Monitoring report file uploaded successfully' , "statuscode" : 200}), 200
+
+
+@upload_blueprint.route('/monitoring_report/upload', methods=['POST'])
+@jwt_required()  # Protect the route with JWT
+@role_required([1, 2 , 3 , 4 , 5])
+def upload_monitoring_report():
+    if 'pdf' not in request.files:
+        return jsonify({'error': 'No file part' , "statuscode" : 400}), 400
+    
+    pdf_file = request.files['pdf']
+    projectMonitoringReportID = request.form.get('projectMonitoringReportID')
+    conn = get_db()
+    cursor = conn.cursor()
+    update_query = "UPDATE ProjectMonitoringReport SET ReportFileLocation = %s WHERE ProjectMonitoringReportID = %s"
+    user_data = (pdf_file.filename , projectMonitoringReportID)
+    print(user_data)
+    cursor.execute(update_query, user_data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    if pdf_file.filename == '':
+        return jsonify({'error': 'No selected file' , "statuscode" : 400}), 400
+    
+    pdf_file.save('upload/monitoringreportfile/' + pdf_file.filename)
+    
+    return jsonify({'message': 'Monitoring report file uploaded successfully' , "statuscode" : 200}), 200

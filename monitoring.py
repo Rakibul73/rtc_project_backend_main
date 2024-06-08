@@ -24,7 +24,8 @@ def my_monitoring_dashboard():
     send_for_monitoring = cursor.fetchone()
     print(send_for_monitoring['send_for_monitoring'])
     
-    cursor.execute("SELECT COUNT(DISTINCT pmf.ProjectID) AS feedback_from_committee FROM ProjectMonitoringFeedback pmf INNER JOIN Projects p ON pmf.ProjectID = p.ProjectID WHERE p.CreatorUserID = %s" , (current_user_id,))
+    # cursor.execute("SELECT COUNT(DISTINCT pmf.ProjectID) AS feedback_from_committee FROM ProjectMonitoringFeedback pmf INNER JOIN Projects p ON pmf.ProjectID = p.ProjectID WHERE p.CreatorUserID = %s" , (current_user_id,))
+    cursor.execute("SELECT COUNT( DISTINCT ProjectMonitoringReportID) AS feedback_from_committee FROM projectmonitoringfeedback WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID IN (SELECT ProjectID FROM ProjectListWithUserID WHERE UserID = %s))" , (current_user_id,))
     feedback_from_committee = cursor.fetchone()
     print(feedback_from_committee['feedback_from_committee'])
     
@@ -370,7 +371,8 @@ def get_all_projects_have_to_monitor():
     # Get the current user's ID from JWT
     current_user_id = get_jwt_identity()
 
-    cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s)", (current_user_id,))
+    # cursor.execute("SELECT * FROM ProjectMonitoringReport WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectReportListWithMonitoringCommitteeID WHERE MonitoringCommitteeUserID = %s)", (current_user_id,))
+    cursor.execute("SELECT  pmr.ProjectMonitoringReportID, pmr.ProjectID, pmr.ReportDate, pmr.ReportFileLocation, pmf.MonitoringFeedbackFileLocation, pmf.MonitoringCommitteeUserID FROM  ProjectMonitoringReport pmr JOIN  ProjectReportListWithMonitoringCommitteeID prlmc  ON pmr.ProjectMonitoringReportID = prlmc.ProjectMonitoringReportID LEFT JOIN  ProjectMonitoringFeedback pmf  ON pmr.ProjectMonitoringReportID = pmf.ProjectMonitoringReportID AND prlmc.MonitoringCommitteeUserID = pmf.MonitoringCommitteeUserID WHERE  prlmc.MonitoringCommitteeUserID = %s", (current_user_id,))
     ProjectHaveToMonitorList = cursor.fetchall()
     
     cursor.close()
@@ -441,10 +443,11 @@ def create_feedback_specific_monitoring_report():
     insert_query = "INSERT INTO ProjectMonitoringFeedback (ProjectMonitoringReportID, ProjectID, MonitoringCommitteeUserID, Observation , Suggestions , Recommendations ,Endorsement, PiCanViewOrNot) VALUES (%s, %s, %s, %s , %s, %s, %s, %s)"
     review_data = (data['ProjectMonitoringReportID'], data['ProjectID'], data['MonitoringCommitteeUserID'], data['Observation'] , data['Suggestions'], data['Recommendations'] , data['Endorsement'] , 0)
     cursor.execute(insert_query, review_data)
+    feedback_id = cursor.lastrowid
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'Feedback created successfully' , 'statuscode' : 201}), 201
+    return jsonify({'message': 'Feedback created successfully' , 'statuscode' : 201, "feedback_id": feedback_id}), 201
 
 
 
