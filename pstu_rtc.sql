@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2024 at 06:22 PM
+-- Generation Time: Jun 12, 2024 at 08:15 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,7 @@ INSERT INTO `ActivityPlan` (`ActivityID`, `ProjectID`, `Activity`, `StartDate`, 
 (19, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
 (20, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
 (21, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Completed'),
-(22, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
+(22, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Completed'),
 (23, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
 (25, 93, 'Do this ', '2024-04-12', '2024-04-20', 'Ongoing'),
 (26, 93, 'Do that', '2024-04-28', '2024-04-30', 'Ongoing'),
@@ -92,7 +92,13 @@ INSERT INTO `ActivityPlanHistory` (`ActivityID`, `ProjectID`, `Activity`, `Start
 (15, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
 (16, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Completed'),
 (17, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Ongoing'),
-(18, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
+(18, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing'),
+(19, 64, 'Existing Literature review and antenna specification', '2020-07-01', '2020-08-31', 'Completed'),
+(20, 64, 'Antenna design in CST simulation software', '2020-09-01', '2020-11-30', 'Completed'),
+(21, 64, 'Compare the performance of high gain UWB antenna and with the existing one', '2020-11-01', '2020-12-30', 'Completed'),
+(22, 64, 'Fabricated and measured the antenna parameter', '2021-01-01', '2021-03-30', 'Completed'),
+(23, 64, 'Imaging analysis in CST simulator', '2021-03-01', '2021-04-30', 'Completed'),
+(24, 64, 'Project Completion , Journal and Report writing', '2021-03-01', '2021-06-30', 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -229,7 +235,20 @@ INSERT INTO `BudgetPlanHistory` (`BudgetID`, `ProjectID`, `SerialNo`, `Item`, `Q
 (36, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
 (37, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
 (38, 64, 12, 'paper pen', 0, 9000, 9000),
-(39, 64, 0, '', 0, 0, 0);
+(39, 64, 0, '', 0, 0, 0),
+(40, 64, 1, 'a) Substrate Material', 3, 3000, 9000),
+(41, 64, 2, 'b) Fabrication Cost', 3, 2000, 6000),
+(42, 64, 3, 'c) Measurement Cost', 3, 2500, 7500),
+(43, 64, 4, 'd) Printer', 1, 10000, 10000),
+(44, 64, 5, 'e) USB Switch/Router', 2, 1000, 2000),
+(45, 64, 6, 'f) Soldering Iron ', 1, 1000, 1000),
+(46, 64, 7, 'g) SMA connector', 10, 100, 1000),
+(47, 64, 8, 'h)Tool Box', 1, 1500, 1500),
+(48, 64, 9, 'j) Mouse, Keyboard', 2, 750, 1500),
+(49, 64, 10, 'k)UPS Battery', 1, 1500, 1500),
+(50, 64, 11, 'Simulation Soft CST', 1, 18000, 18000),
+(51, 64, 12, 'paper pen', 0, 9000, 9000),
+(52, 64, 0, '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -514,7 +533,8 @@ CREATE TABLE `ProjectMonitoringReport` (
 INSERT INTO `ProjectMonitoringReport` (`ProjectMonitoringReportID`, `ProjectID`, `ReportDate`, `ReportFileLocation`) VALUES
 (1, 64, 'Mon, 06 May 2024 12:55 AM', NULL),
 (2, 64, 'Sat, 11 May 2024 09:59 PM', NULL),
-(3, 64, 'Sun, 26 May 2024 11:33 AM', NULL);
+(3, 64, 'Sun, 26 May 2024 11:33 AM', NULL),
+(4, 64, 'Wed, 12 Jun 2024 11:58 PM', 'MonitoringReportID_4_PI_Name_Dr. Md. Samsuzzaman.pdf');
 
 -- --------------------------------------------------------
 
@@ -549,7 +569,13 @@ INSERT INTO `ProjectMonitoringReportActivity` (`ProjectMonitoringReportID`, `Act
 (3, 15),
 (3, 16),
 (3, 17),
-(3, 18);
+(3, 18),
+(4, 19),
+(4, 20),
+(4, 21),
+(4, 22),
+(4, 23),
+(4, 24);
 
 -- --------------------------------------------------------
 
@@ -605,7 +631,20 @@ INSERT INTO `ProjectMonitoringReportBudget` (`ProjectMonitoringReportID`, `Budge
 (3, 36),
 (3, 37),
 (3, 38),
-(3, 39);
+(3, 39),
+(4, 40),
+(4, 41),
+(4, 42),
+(4, 43),
+(4, 44),
+(4, 45),
+(4, 46),
+(4, 47),
+(4, 48),
+(4, 49),
+(4, 50),
+(4, 51),
+(4, 52);
 
 -- --------------------------------------------------------
 
@@ -863,7 +902,7 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglish`, `PositionBangla`, `PositionHeldSince`, `Email`, `FirstName`, `LastName`, `FullNameBangla`, `PresentAddress`, `PermanentAddress`, `Gender`, `Nid`, `NidLocation`, `FacultyName`, `DepartmentName`, `InstituteName`, `InstituteLocation`, `InstituteEmail`, `Phone`, `Dateofbirth`, `SalaryScale`, `BasicPay`, `HighestAcademicQualification`, `HighestAcademicQualificationUniversity`, `HighestAcademicQualificationCountry`, `HighestAcademicQualificationYear`, `AreaOfExpertise`, `ReferencesOfLatestPublications`, `ExperienceInResearch`, `Teaching`, `ProfilePicLocation`, `SignatureLocation`, `SealLocation`, `TotalNumberOfCompleteProjects`, `TotalNumberOfCompletePublications`, `OngoingProjects`, `StudentID`, `StudentRegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
-(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'Md. Rakibul', 'Islam', 'd', 'address', 'd', 'Male', 'd', '22.png', 'Faculty of Computer Science and Engineering', '', 'Patuakhali Science & Technology University (PSTU)', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', '0', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, '30000000.jpg', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
+(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'Md. Rakibul', 'Islam', 'd', 'address', 'd', 'Male', 'd', '22.png', '', '', 'Patuakhali Science & Technology University (PSTU)', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', '0', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, '30000000.jpg', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
 (2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', '', '', 'taj@gmail.com', 'Tahmidur', 'Rahman Taj', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01400000000', '2000-03-29 00:00:00.000', '0', 0, '', '', '', 0, '', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'defaultseal.png', 0, 0, 0, 1802038, '08483', 'semester 1', '3.5'),
 (3, 4, 'sobujsirsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', 'f', 'f', '5', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', 'hf', 'f', 'f', 'Male', 'ff', '', 'Faculty of Computer Science and Engineering', '', NULL, 'f', 'f', '01500000000', '2024-03-20 00:00:00.000', '0', 0, 'f', 'ff', 'f', 0, 'f', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'shanto  .jpg', 0, 0, 0, 0, '3', 'f', 'f'),
 (4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, 'Male', NULL, NULL, 'Faculty of Computer Science and Engineering', '', NULL, NULL, NULL, '01725225225', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1048,7 +1087,7 @@ ALTER TABLE `ActivityPlan`
 -- AUTO_INCREMENT for table `ActivityPlanHistory`
 --
 ALTER TABLE `ActivityPlanHistory`
-  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ActivityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `ActivityPlanOriginal`
@@ -1066,7 +1105,7 @@ ALTER TABLE `BudgetPlan`
 -- AUTO_INCREMENT for table `BudgetPlanHistory`
 --
 ALTER TABLE `BudgetPlanHistory`
-  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `BudgetPlanOriginal`
@@ -1108,7 +1147,7 @@ ALTER TABLE `ProjectMonitoringFeedback`
 -- AUTO_INCREMENT for table `ProjectMonitoringReport`
 --
 ALTER TABLE `ProjectMonitoringReport`
-  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ProjectMonitoringReportID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Projects`
