@@ -25,7 +25,7 @@ def my_monitoring_dashboard():
     print(send_for_monitoring['send_for_monitoring'])
     
     # cursor.execute("SELECT COUNT(DISTINCT pmf.ProjectID) AS feedback_from_committee FROM ProjectMonitoringFeedback pmf INNER JOIN Projects p ON pmf.ProjectID = p.ProjectID WHERE p.CreatorUserID = %s" , (current_user_id,))
-    cursor.execute("SELECT COUNT( DISTINCT ProjectMonitoringReportID) AS feedback_from_committee FROM projectmonitoringfeedback WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID IN (SELECT ProjectID FROM ProjectListWithUserID WHERE UserID = %s))" , (current_user_id,))
+    cursor.execute("SELECT COUNT( DISTINCT ProjectMonitoringReportID) AS feedback_from_committee FROM ProjectMonitoringFeedback WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID IN (SELECT ProjectID FROM ProjectListWithUserID WHERE UserID = %s))" , (current_user_id,))
     feedback_from_committee = cursor.fetchone()
     print(feedback_from_committee['feedback_from_committee'])
     
