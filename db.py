@@ -16,6 +16,7 @@ db_config = {
 }
 
 # Function to establish a database connection
+
+
 def get_db():
     return mysql.connector.connect(**db_config)
-

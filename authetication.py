@@ -1,5 +1,5 @@
-from flask import  render_template, request, jsonify , Blueprint
-from db import get_db # local module
+from flask import render_template, request, jsonify, Blueprint
+from db import get_db  # local module
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, unset_jwt_cookies
 import random
@@ -18,9 +18,10 @@ def send_email(email, reset_otp):
     sender_email = "raqib.185.17@gmail.com"  # Replace with Admin email address
     password = "ozct kzkj dgje aufs"  # Replace with Admin email password
     # To get this gmail password, Go to the App passwords of your Google account,
-    
+
     # Render the HTML template with the reset URL
-    email_body = render_template('email_template_passreset.html', reset_otp=reset_otp)
+    email_body = render_template(
+        'email_template_passreset.html', reset_otp=reset_otp)
 
     message = MIMEMultipart()
     message['From'] = sender_email
@@ -38,6 +39,8 @@ def send_email(email, reset_otp):
     server.quit()
 
 # Function to generate random string
+
+
 def generate_token(length=10):
     letters = string.ascii_letters + string.digits
     return ''.join(random.choice(letters) for _ in range(length))
@@ -60,7 +63,7 @@ def reset_password_request():
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'message': 'Email not found' , 'statuscode' : 404}), 404
+        return jsonify({'message': 'Email not found', 'statuscode': 404}), 404
 
     # Generate a random token
     token = generate_token()
@@ -81,7 +84,7 @@ def reset_password_request():
     # Send the email with the reset URL
     send_email(email, reset_otp)
 
-    return jsonify({'message': 'Password reset email sent' , 'statuscode' : 200}), 200
+    return jsonify({'message': 'Password reset email sent', 'statuscode': 200}), 200
 
 
 # Route to reset password
@@ -95,12 +98,12 @@ def reset_password(token):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM PassReset WHERE ResetToken = %s", (token,))
     result = cursor.fetchone()
-    
+
     if result is None:
         cursor.close()
         conn.close()
-        return jsonify({'message': 'Invalid token' , 'statuscode' : 404}), 404
-    
+        return jsonify({'message': 'Invalid token', 'statuscode': 404}), 404
+
     print(result)
     email = result[0]
     used = result[2]
@@ -108,21 +111,23 @@ def reset_password(token):
     if used == 0:
         cursor.close()
         conn.close()
-        return jsonify({'message': 'Token already used' , 'statuscode' : 400}), 400
+        return jsonify({'message': 'Token already used', 'statuscode': 400}), 400
 
     # Hash the new password
-    hashed_password = generate_password_hash(new_password, method='pbkdf2:sha256')
+    hashed_password = generate_password_hash(
+        new_password, method='pbkdf2:sha256')
     # Update the user's password
     cursor = conn.cursor()
     update_query = "UPDATE Users SET PASSWORD = %s WHERE Email = %s"
     user_data = (hashed_password, email)
     cursor.execute(update_query, user_data)
-    cursor.execute("UPDATE PassReset SET Used = 0 WHERE ResetToken = %s", (token,))
+    cursor.execute(
+        "UPDATE PassReset SET Used = 0 WHERE ResetToken = %s", (token,))
     conn.commit()
     cursor.close()
     conn.close()
 
-    return jsonify({'message': 'Password reset successfully' , 'statuscode' : 200 , 'email' : email}), 200
+    return jsonify({'message': 'Password reset successfully', 'statuscode': 200, 'email': email}), 200
 
 
 # Route for user registration
@@ -141,32 +146,38 @@ def register_user():
     if isUserExist is None and isEmailExist is None:
         # Hash the password before storing it in the database
         password = data.get('password')
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        hashed_password = generate_password_hash(
+            password, method='pbkdf2:sha256')
         insert_query = "INSERT INTO TempUsers (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
-        user_data = (data['username'], hashed_password, data['email'] , data["FirstName"] , data["LastName"] , data["Phone"] , data["RoleID"])
+        user_data = (data['username'], hashed_password, data['email'],
+                     data["FirstName"], data["LastName"], data["Phone"], data["RoleID"])
         cursor.execute(insert_query, user_data)
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'message': 'User registered successfully. Admin will activate your account soon' , 'statuscode' : 201 }), 201
+        return jsonify({'message': 'User registered successfully. Admin will activate your account soon', 'statuscode': 201}), 201
     elif isUserExist is not None:
-        return jsonify({'message': 'Username = ' + username + ' already exists', 'statuscode' : 409}), 409
+        return jsonify({'message': 'Username = ' + username + ' already exists', 'statuscode': 409}), 409
     elif isEmailExist is not None:
-        return jsonify({'message': 'Email = ' + email + ' already exists' , 'statuscode' : 409}), 409
+        return jsonify({'message': 'Email = ' + email + ' already exists', 'statuscode': 409}), 409
 
 # Route for user login
+
+
 @auth_blueprint.route('/login', methods=['POST'])
 def login_user():
     data = request.get_json()
     conn = get_db()
     cursor = conn.cursor()
     username = data.get('username')
-    cursor.execute("SELECT UserID, username, RoleID FROM Users WHERE username = %s", (username,))
+    cursor.execute(
+        "SELECT UserID, username, RoleID FROM Users WHERE username = %s", (username,))
     isUserExist = cursor.fetchone()
 
     if isUserExist:
         given_password = data.get('password')
-        cursor.execute("SELECT password FROM Users WHERE username = %s", (username,))
+        cursor.execute(
+            "SELECT password FROM Users WHERE username = %s", (username,))
         query_result = cursor.fetchone()
         hashed_password = query_result[0]
         if check_password_hash(hashed_password, given_password):
@@ -176,19 +187,19 @@ def login_user():
                 access_token = create_access_token(identity=isUserExist[0])
                 cursor.close()
                 conn.close()
-                return jsonify({'message': 'Login successful', 'user_id': isUserExist[0] , 'statuscode' : 200 , 'access_token': access_token}), 200
+                return jsonify({'message': 'Login successful', 'user_id': isUserExist[0], 'statuscode': 200, 'access_token': access_token}), 200
             else:
                 cursor.close()
                 conn.close()
-                return jsonify({'message': 'Invalid RoleID', 'statuscode' : 403}), 403
+                return jsonify({'message': 'Invalid RoleID', 'statuscode': 403}), 403
         else:
             cursor.close()
             conn.close()
-            return jsonify({'message': 'Invalid password', 'statuscode' : 401}), 401
+            return jsonify({'message': 'Invalid password', 'statuscode': 401}), 401
     else:
         cursor.close()
         conn.close()
-        return jsonify({'message': 'User not found' , 'statuscode' : 404}), 404
+        return jsonify({'message': 'User not found', 'statuscode': 404}), 404
 
 
 # Route for user logout
@@ -196,7 +207,7 @@ def login_user():
 @jwt_required()  # Protect the route with JWT
 def logout_user():
     # Clear the JWT token from the client-side cookies
-    response = jsonify({'message': 'Logout successful' , 'statuscode' : 200})
+    response = jsonify({'message': 'Logout successful', 'statuscode': 200})
     unset_jwt_cookies(response)
     return response, 200
 

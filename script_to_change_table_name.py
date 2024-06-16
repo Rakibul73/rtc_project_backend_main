@@ -23,7 +23,6 @@
 # drop table Notice;
 
 
-
 # use rakib73$final_project; source /home/rakib73/mysite/rtc_project_backend/pstu_rtc.sql;
 
 
@@ -48,15 +47,15 @@ table_name_mappings = {
     "role": "Role",
     "notice": "Notice",
     "projectadvancefund": "ProjectAdvanceFund",
-    "projectmonitoringreportbudget" : "ProjectMonitoringReportBudget",
-    "projectmonitoringreportactivity" : "ProjectMonitoringReportActivity",
-    "budgetplanhistory" : "BudgetPlanHistory",
-    "activityplanhistory" : "ActivityPlanHistory",
-    "activityplanoriginal" : "ActivityPlanOriginal",
-    "budgetplanoriginal" : "BudgetPlanOriginal",
-    "projectreportlistwithmonitoringcommitteeid" : "ProjectReportListWithMonitoringCommitteeID",
-    "projectmonitoringfeedback" : "ProjectMonitoringFeedback",
-    "projectmonitoringreport" : "ProjectMonitoringReport",
+    "projectmonitoringreportbudget": "ProjectMonitoringReportBudget",
+    "projectmonitoringreportactivity": "ProjectMonitoringReportActivity",
+    "budgetplanhistory": "BudgetPlanHistory",
+    "activityplanhistory": "ActivityPlanHistory",
+    "activityplanoriginal": "ActivityPlanOriginal",
+    "budgetplanoriginal": "BudgetPlanOriginal",
+    "projectreportlistwithmonitoringcommitteeid": "ProjectReportListWithMonitoringCommitteeID",
+    "projectmonitoringfeedback": "ProjectMonitoringFeedback",
+    "projectmonitoringreport": "ProjectMonitoringReport",
 
     # Add more mappings here if needed
 }
@@ -67,7 +66,8 @@ with open('pstu_rtc.sql', 'r', encoding='utf-8') as file:
 
 # Replace table names using regular expressions for all occurrences
 for old_table, new_table in table_name_mappings.items():
-    sql_content = re.sub(r'`{}`'.format(old_table), '`{}`'.format(new_table), sql_content, flags=re.IGNORECASE, count=0)
+    sql_content = re.sub(r'`{}`'.format(old_table), '`{}`'.format(
+        new_table), sql_content, flags=re.IGNORECASE, count=0)
 
 # Write the modified content to a new file
 with open('pstu_rtc_modified.sql', 'w', encoding='utf-8') as file:

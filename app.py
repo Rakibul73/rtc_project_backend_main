@@ -1,4 +1,4 @@
-from flask import Flask , session
+from flask import Flask, session
 from authetication import auth_blueprint
 from review import review_blueprint
 from projectuser import projectuser_blueprint
@@ -27,7 +27,8 @@ Compress(app)
 # Configure JWT
 app.config['JWT_SECRET_KEY'] = 'rakibpstusecretkey'
 # Set a longer token expiration time
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)  # Example: 24 hours
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(
+    hours=24)  # Example: 24 hours
 jwt = JWTManager(app)
 
 # Register the authentication blueprint
@@ -68,6 +69,7 @@ app.register_blueprint(monitoring_blueprint)
 
 # Register the Notice blueprint
 app.register_blueprint(notice_blueprint)
+
 
 @app.route('/', methods=['GET'])
 def index():
