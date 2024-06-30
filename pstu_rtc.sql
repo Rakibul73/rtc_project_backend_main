@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2024 at 03:01 PM
+-- Generation Time: Jun 30, 2024 at 07:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -828,10 +828,8 @@ CREATE TABLE `TempUsers` (
 
 INSERT INTO `TempUsers` (`UserID`, `RoleID`, `Username`, `PASSWORD`, `FirstName`, `LastName`, `Email`, `Phone`, `FacultyName`) VALUES
 (6, 4, 'manashsir', 'pbkdf2:sha256:600000$OmNEWPpV8PGIvf2u$0247cba8882f95b81cc8384b383c950dff86bca377c4ec6fd1f0942a3a5dfb7f', 'Manash', 'Sarker', 'raqibul.islam.17@gmail.com', '01712149555', 'Faculty of Computer Science and Engineering'),
-(9, 4, 'chinmaysir', 'pbkdf2:sha256:600000$s6D9rvvSDqmuuO5Z$62526ca926a11b516865206682cffa576200a2bd9b9d86252a202ae19cc3d00b', 'Chinmay', 'Bepery', 'raqibul.islam.17@gmail.com', '01710531024', 'Faculty of Computer Science and Engineering'),
 (10, 4, 'jamalsir', 'pbkdf2:sha256:600000$YuBhgqtVb1mAHGEi$1d6b6564a4087e56da87297b215008704bb1e7b43b7dea077f5c83a19ee5d602', 'Mohammad Jamal', 'Hossain', 'raqibul.islam.17@gmail.com', '01865102400', 'Faculty of Computer Science and Engineering'),
 (12, 4, 'atiksir', 'pbkdf2:sha256:600000$yHlCBhitz4C7wE4j$afa93360466f4e6dc65a0e659b293af5b239ae74cbe92a8bdbc3c22ce4d34177', 'Md Atikur', 'Rahman', 'raqibul.islam.17@gmail.com', '01915114929', 'Faculty of Computer Science and Engineering'),
-(13, 4, 'mahbubsir', 'pbkdf2:sha256:600000$z9tpFHVoKIbs917v$43701bfc20578fa8a045ac0cdd6d00cb489bec90dfa0b510c081a0eb7350a088', 'Md Mahbubur', 'Rahman', 'raqibul.islam.17@gmail.com', '01556449873', 'Faculty of Computer Science and Engineering'),
 (14, 4, 'sayedsir', 'pbkdf2:sha256:600000$0EhHhFL4NSP8BEaN$2c43dad63ced45e0accd56d6703e363babc7b097c9c41d291338c033ead6a797', 'Moinul Islam', 'Sayed', 'raqibul.islam.17@gmail.com', '+14372263887', 'Faculty of Computer Science and Engineering'),
 (15, 4, 'naimursir', 'pbkdf2:sha256:600000$p4W6IEtdO4XycVgO$6a8a6dad73a439fc760e2fc487f5583d398e92e523fcaecada983e8881117de1', 'Md. Naimur', 'Rahman', 'raqibul.islam.17@gmail.com', '01712442291', 'Faculty of Computer Science and Engineering'),
 (16, 4, 'taohidsir', 'pbkdf2:sha256:600000$BKfAbjNQFwLNm2oD$2ace8d3e527fd9cce293b9cc56e28abc94595c30b1738c395119837f1a2c7fc0', 'Dr. S.M. Taohidul', 'Islam', 'raqibul.islam.17@gmail.com', '01719018370', 'Faculty of Computer Science and Engineering'),
@@ -902,7 +900,7 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglish`, `PositionBangla`, `PositionHeldSince`, `Email`, `FirstName`, `LastName`, `FullNameBangla`, `PresentAddress`, `PermanentAddress`, `Gender`, `Nid`, `NidLocation`, `FacultyName`, `DepartmentName`, `InstituteName`, `InstituteLocation`, `InstituteEmail`, `Phone`, `Dateofbirth`, `SalaryScale`, `BasicPay`, `HighestAcademicQualification`, `HighestAcademicQualificationUniversity`, `HighestAcademicQualificationCountry`, `HighestAcademicQualificationYear`, `AreaOfExpertise`, `ReferencesOfLatestPublications`, `ExperienceInResearch`, `Teaching`, `ProfilePicLocation`, `SignatureLocation`, `SealLocation`, `TotalNumberOfCompleteProjects`, `TotalNumberOfCompletePublications`, `OngoingProjects`, `StudentID`, `StudentRegNo`, `FirstEnrollmentSemester`, `UndergraduateCGPALevel`) VALUES
-(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'Md. Rakibul', 'Islam', 'MD. Rakibul Islam', 'address', 'd', 'Male', 'd', '18.png', '', '', 'Patuakhali Science & Technology University (PSTU)', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', '0', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, 'Screenshot (410).png', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
+(1, 1, 'rakib', 'pbkdf2:sha256:600000$pBp6ozzOF62V7o4z$f715e4a4334b95bf32e8d6c7ee447933255bd0e9c5879c73f7b0c43ab894a7c4', 'd', 'd', 'd', 'rakib29185@gmail.com', 'Md. Rakibul', 'Islam', 'MD. Rakibul Islam', 'address', 'd', 'Male', 'd', '18.png', '', '', 'Patuakhali Science & Technology University (PSTU)', 'd', 'd', '01700000000', '2000-09-17 00:00:00.000', '0', 0, 'cse', 'pstu', 'bd', 2024, 'area', 'arearesearchgate , google scholars', 0, 0, '12.png', '17.png', 'shanto.jpg', 0, 0, 0, 0, 'd', 'd', 'd'),
 (2, 5, 'taj', 'pbkdf2:sha256:600000$fvGbCjbgaOWoIxxQ$c4f2a33ddf766eb6298948bcc01a67a8e9011418eabe1a9201a2cb552e3faf43', '', '', '', 'taj@gmail.com', 'Tahmidur', 'Rahman Taj', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01400000000', '2000-03-29 00:00:00.000', '0', 0, '', '', '', 0, '', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'defaultseal.png', 0, 0, 0, 1802038, '08483', 'semester 1', '3.5'),
 (3, 4, 'sobujsirsir', 'pbkdf2:sha256:600000$T9gF3PI05rPxPLm1$f79929f8dcd1d67904d504593b132d2542b739e4fefb0febae3ed44398b15123', 'f', 'f', '5', 'sobujsir@gmail.com', 'sobujsir', 'sobujsir', 'hf', 'f', 'f', 'Male', 'ff', '', 'Faculty of Computer Science and Engineering', '', NULL, 'f', 'f', '01500000000', '2024-03-20 00:00:00.000', '0', 0, 'f', 'ff', 'f', 0, 'f', 'researchgate , google scholars', 0, 0, 'defaultprofilepic.png', 'defaultsignature.png', 'shanto  .jpg', 0, 0, 0, 0, '3', 'f', 'f'),
 (4, 4, 'test', 'pbkdf2:sha256:600000$ro6WCinSg8T9e8tY$dd76510053f1b34d729d6d59b20e85fdde00ff56787340ee5471dba9f2ec63b6', '', '', '', 'test@gmail.com', 'test', 'test', NULL, NULL, NULL, 'Male', NULL, NULL, 'Faculty of Computer Science and Engineering', '', NULL, NULL, NULL, '01725225225', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 'researchgate , google scholars', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -910,7 +908,9 @@ INSERT INTO `Users` (`UserID`, `RoleID`, `Username`, `Password`, `PositionEnglis
 (6, 4, 'muradsir', 'pbkdf2:sha256:600000$4bGYQLpLjgEKH5VZ$12cf20e7fd80e442ca66d425f3d7741399ff1c7e7413c745864de4ec0bff4d81', '', '', '', 'tuimorsala01@gmail.com', 'Golam Md. Muradul', 'Bashir', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01783242885', '1981-04-09 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '3.png', '9.png', 0, 0, 0, 0, '', '', ''),
 (8, 4, 'arpitamam', 'pbkdf2:sha256:600000$Wp8ziS12tcJY689c$a3194f13647bab586bc9fa9b5046bda89906b69e8020230ddb481154b0e599ec', '', '', '', 'lovely.shanto.35@gmail.com', 'Arpita', 'Howlader', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', 'Department of Computer and Communication Engineering', 'Patuakhali Science & Technology University (PSTU)', '', '', '01584563227', '1993-04-12 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '4.png', '10.png', 0, 0, 0, 0, '', '', ''),
 (10, 4, 'sarnamam', 'pbkdf2:sha256:600000$Xv7Q8DrCtJFwqfoS$98d4769d8cb93405c25c74dca8c6816cc35a4aa4b9c47c2de3f70b7d05d2ed5b', '', '', '', 'raqibul.islam.17@gmail.com', 'Sarna', 'Majumder', '', '', '', 'Female', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01767265119', '1991-04-18 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '5.png', '11.png', 0, 0, 0, 0, '', '', ''),
-(11, 4, 'masudsir', 'pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f', '', '', '', 'raqibul.islam.17@gmail.com', 'Dr. Md Abdul', 'Masud', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01915461874', '1981-04-09 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '2.png', '8.png', 0, 0, 0, 0, '', '', '');
+(11, 4, 'masudsir', 'pbkdf2:sha256:600000$0pc6rnWWVCz8TXGw$63407c54518d4890f8006c3807dc12741fa7642c57c38017aa6ceaab8f23721f', '', '', '', 'raqibul.islam.17@gmail.com', 'Dr. Md Abdul', 'Masud', '', '', '', 'Male', '', 'defaultnid.png', 'Faculty of Computer Science and Engineering', '', '', '', '', '01915461874', '1981-04-09 00:00:00.000', '', 0, '', '', '', 0, '', NULL, 0, 0, 'defaultprofilepic.png', '2.png', '8.png', 0, 0, 0, 0, '', '', ''),
+(12, 4, 'chinmaysir', 'pbkdf2:sha256:600000$s6D9rvvSDqmuuO5Z$62526ca926a11b516865206682cffa576200a2bd9b9d86252a202ae19cc3d00b', '', '', '', 'raqibul.islam.17@gmail.com', 'Chinmay', 'Bepery', NULL, NULL, NULL, NULL, NULL, NULL, 'Faculty of Computer Science and Engineering', '', NULL, NULL, NULL, '01710531024', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(13, 4, 'mahbubsir', 'pbkdf2:sha256:600000$z9tpFHVoKIbs917v$43701bfc20578fa8a045ac0cdd6d00cb489bec90dfa0b510c081a0eb7350a088', '', '', '', 'raqibul.islam.17@gmail.com', 'Md Mahbubur', 'Rahman', NULL, NULL, NULL, NULL, NULL, NULL, 'Faculty of Computer Science and Engineering', '', NULL, NULL, NULL, '01556449873', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1177,7 +1177,7 @@ ALTER TABLE `TempUsers`
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
