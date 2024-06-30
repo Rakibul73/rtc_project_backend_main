@@ -17,7 +17,7 @@ from fund_advance import fund_advance_blueprint
 from monitoring import monitoring_blueprint
 from notice import notice_blueprint
 from flask_compress import Compress
-
+import git  # GitPython library
 
 app = Flask(__name__)
 CORS(app)  # Add this line
@@ -74,6 +74,22 @@ app.register_blueprint(notice_blueprint)
 @app.route('/', methods=['GET'])
 def index():
     return 'Welcome to the PSTU RTC Project Backend API!'
+
+@app.route('/git_update', methods=['POST'])
+def git_update():
+    """
+    Update the git repository with the latest changes from the remote and switch to the main branch.
+    Returns:
+        tuple: A tuple in the format (None, 200) indicating a successful update.
+    """
+    repo = git.Repo('./mysite/rtc_project_backend')
+    origin = repo.remotes.origin
+    # Stash local changes
+    repo.git.stash()
+    # repo.create_head('main', origin.refs.main).set_tracking_branch(origin.refs.main).checkout()
+    origin.pull()
+    return '', 200
+
 
 
 if __name__ == '__main__':
