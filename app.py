@@ -159,8 +159,8 @@ def mysql_db_update():
     conn = get_db()
     cursor = conn.cursor()
     tables = show_tables(conn, cursor)
-    # drop_tables(conn, cursor)
-    # import_sql_file(conn, cursor, sql_file_path)
+    drop_tables(conn, cursor)
+    import_sql_file(conn, cursor, sql_file_path)
     return jsonify(tables=tables), 200
 
 
