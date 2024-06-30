@@ -146,7 +146,7 @@ def import_sql_file(connection, cursor, sql_file_path):
 
 
 @app.route('/mysql_db_update', methods=['POST'])
-def git_update():
+def mysql_db_update():
     sql_file_path = './mysite/rtc_project_backend/pstu_rtc.sql'
     conn = get_db()
     cursor = conn.cursor()
