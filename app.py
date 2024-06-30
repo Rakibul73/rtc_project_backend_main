@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, jsonify, session
 from authetication import auth_blueprint
 from review import review_blueprint
 from projectuser import projectuser_blueprint
@@ -144,15 +144,24 @@ def import_sql_file(connection, cursor, sql_file_path):
     except FileNotFoundError as fnfe:
         print(f"File not found: {fnfe}")
 
+def show_tables(connection, cursor):
+    tables = []
+    try:
+        cursor.execute("SHOW TABLES;")
+        tables = cursor.fetchall()
+    except Error as e:
+        print(f"Error: {e}")
+    return [table[0] for table in tables]
 
 @app.route('/mysql_db_update', methods=['POST'])
 def mysql_db_update():
     sql_file_path = './mysite/rtc_project_backend/pstu_rtc.sql'
     conn = get_db()
     cursor = conn.cursor()
-    drop_tables(conn, cursor)
-    import_sql_file(conn, cursor, sql_file_path)
-    return '', 200
+    tables = show_tables(conn, cursor)
+    # drop_tables(conn, cursor)
+    # import_sql_file(conn, cursor, sql_file_path)
+    return jsonify(tables=tables), 200
 
 
 
