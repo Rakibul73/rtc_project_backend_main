@@ -14,7 +14,7 @@ jobs:
   
     - name: Countdown before reload
       run: |
-        for i in $(seq 30 -1 1); do
+        for i in $(seq 45 -1 1); do
           echo "Waiting $i seconds..."
           sleep 1
         done
