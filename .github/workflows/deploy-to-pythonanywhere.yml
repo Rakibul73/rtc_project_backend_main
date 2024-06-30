@@ -1,0 +1,33 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches:
+      - main  # or your default branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+  
+    - name: Countdown before reload
+      run: |
+        for i in $(seq 30 -1 1); do
+          echo "Waiting $i seconds..."
+          sleep 1
+        done
+    
+    - name: Reload pythonanywhere webapp
+      uses: jensvog/pythonanywhere-webapp-reload-action@v1
+      env:
+          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
+          USERNAME: ${{ secrets.USERNAME }}
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+      with:
+        host: 'www.pythonanywhere.com'
+        username: '${{ secrets.USERNAME }}'
+        api-token: '${{ secrets.PA_API_TOKEN }}'
+        domain-name: '${{ secrets.DOMAIN_NAME }}'
+        
