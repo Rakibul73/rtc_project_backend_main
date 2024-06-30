@@ -161,8 +161,6 @@ def mysql_db_update():
     cursor = conn.cursor()
     tables = show_tables(conn, cursor)
     drop_tables(conn, cursor)
-    # wait 15 seconds for the database to be ready
-    time.sleep(20)
     import_sql_file(conn, cursor, sql_file_path)
     return jsonify(tables=tables), 200
 
