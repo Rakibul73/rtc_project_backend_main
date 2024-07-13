@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import request, jsonify, Blueprint
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db  # local module
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from dateutil import parser
@@ -14,6 +14,7 @@ project_blueprint = Blueprint('project', __name__)
 # Route to get project status of a specified project
 @project_blueprint.route('/get_project_status_specific_project/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_project_status_specific_project(project_id):
     conn = get_db()
@@ -30,6 +31,7 @@ def get_project_status_specific_project(project_id):
 # Route to update project status & total points of specific project
 @project_blueprint.route('/update_projectstatus_point/<int:project_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_projectstatus_point(project_id):
     data = request.get_json()
@@ -48,6 +50,7 @@ def update_projectstatus_point(project_id):
 # Route to get all projects
 @project_blueprint.route('/projects', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_all_projects():
     conn = get_db()
@@ -65,6 +68,7 @@ def get_all_projects():
 # Route to create a new project
 @project_blueprint.route('/create_projects', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def create_project():
     data = request.get_json()
@@ -102,6 +106,7 @@ def create_project():
 # Route to get a specific project
 @project_blueprint.route('/projects/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def get_specific_project(project_id):
     conn = get_db()
@@ -120,6 +125,7 @@ def get_specific_project(project_id):
 # Route to get projecttitle from a specific project
 @project_blueprint.route('/projecttitle/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def get_specific_project_title(project_id):
     conn = get_db()
@@ -139,6 +145,7 @@ def get_specific_project_title(project_id):
 # # Route to update all fields of a project only if user is admin
 # @project_blueprint.route('/update_project_admin/<int:project_id>', methods=['PUT'])
 # @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # @role_required([1])
 # def update_project_admin(project_id):
 #     data = request.get_json()
@@ -157,6 +164,7 @@ def get_specific_project_title(project_id):
 # Route to delete a project
 @project_blueprint.route('/projects/<int:project_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def delete_project(project_id):
     conn = get_db()
@@ -189,6 +197,7 @@ def delete_project(project_id):
 # # Route to delete multiple projects by IDs
 # @project_blueprint.route('/projects/delete_multiple_projects', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # @role_required([1])
 # def delete_multiple_projects():
 #     try:
@@ -228,6 +237,7 @@ def delete_project(project_id):
 # Route to update basic info of a project of self
 @project_blueprint.route('/update_project/<int:project_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def update_project(project_id):
     data = request.get_json()
@@ -252,6 +262,7 @@ def update_project(project_id):
 # Route to get admin project dashboard
 @project_blueprint.route('/get_admin_project_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin can access this route
 def get_admin_project_dashboard():
     conn = get_db()
@@ -309,6 +320,7 @@ def get_admin_project_dashboard():
 # Route to get all projects for a  self specific user
 @project_blueprint.route('/myprojects/user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 def get_projects_for_user(user_id):
     # Get the current user's ID from JWT
     current_user_id = get_jwt_identity()
@@ -334,6 +346,7 @@ def get_projects_for_user(user_id):
 # Route to create project gantt for a specific project
 @project_blueprint.route('/create_project_gantt/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def create_project_gantt(project_id):
     data = request.get_json()
@@ -367,6 +380,7 @@ def create_project_gantt(project_id):
 
 @project_blueprint.route('/create_project_budget/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def create_project_budget(project_id):
     data = request.get_json()
@@ -399,6 +413,7 @@ def create_project_budget(project_id):
 # Route to fetch all gantt for a specific project
 @project_blueprint.route('/get_self_project_gantt/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_gantt(project_id):
     conn = get_db()
@@ -432,6 +447,7 @@ def get_self_project_gantt(project_id):
 # Route to fetch all gantt for a specific project
 @project_blueprint.route('/get_self_project_gantt_original/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_gantt_original(project_id):
     conn = get_db()
@@ -470,6 +486,7 @@ def get_self_project_gantt_original(project_id):
 # Route to update project status & total points of specific project
 @project_blueprint.route('/update_project_gantt/<int:project_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_project_gantt(project_id):
     data = request.get_json()
@@ -496,6 +513,7 @@ def update_project_gantt(project_id):
 # Route to fetch all budget for a specific project
 @project_blueprint.route('/get_self_project_budget/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_budget(project_id):
     conn = get_db()
@@ -528,6 +546,7 @@ def get_self_project_budget(project_id):
 # Route to fetch all budget for a specific project
 @project_blueprint.route('/get_self_project_budget_original/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_budget_original(project_id):
     conn = get_db()
@@ -565,6 +584,7 @@ def get_self_project_budget_original(project_id):
 # Route to update budget of specific project
 @project_blueprint.route('/update_project_budget/<int:project_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_project_budget(project_id):
     data = request.get_json()

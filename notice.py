@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, send_from_directory
 from flask_jwt_extended import jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db
 
 notice_blueprint = Blueprint('notice', __name__)
@@ -9,6 +9,7 @@ notice_blueprint = Blueprint('notice', __name__)
 # Route to get all notices
 @notice_blueprint.route('/notices', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_projects():
     conn = get_db()
@@ -26,6 +27,7 @@ def get_all_projects():
 # Route to create a new project
 @notice_blueprint.route('/create_notice', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def create_notice():
     data = request.get_json()
@@ -46,6 +48,7 @@ def create_notice():
 # Route to get all reviews for a specific project
 @notice_blueprint.route('/get_notice/<int:notice_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_notice(notice_id):
     conn = get_db()
@@ -60,6 +63,7 @@ def get_notice(notice_id):
 # Route to update basic info of a project of self
 @notice_blueprint.route('/update_notice/<int:notice_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def update_notice(notice_id):
     data = request.get_json()
@@ -80,6 +84,7 @@ def update_notice(notice_id):
 # Route to delete a notice
 @notice_blueprint.route('/notice/<int:notice_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def delete_project(notice_id):
     conn = get_db()

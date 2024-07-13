@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt, get_jwt_identity
 from db import get_db  # local module
 from functools import wraps
 
@@ -28,3 +28,15 @@ def get_role_id_from_database(user_id):
     cursor.execute("SELECT RoleID FROM Users WHERE UserID = %s", (user_id,))
     RoleID = cursor.fetchone()
     return RoleID[0]
+
+
+# Custom JWT verifier to check the origin URL
+def origin_verifier(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        claims = get_jwt()
+        origin = request.headers.get('Origin')
+        if claims.get('origin') != origin:
+            return jsonify({'message': 'Unauthorized origin'}), 403
+        return fn(*args, **kwargs)
+    return wrapper

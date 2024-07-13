@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db
 
 fund_blueprint = Blueprint('fund', __name__)
@@ -9,6 +9,7 @@ fund_blueprint = Blueprint('fund', __name__)
 # Route to get total number of all dashboard
 @fund_blueprint.route('/get_my_fund_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_my_fund_dashboard():
     conn = get_db()
@@ -61,6 +62,7 @@ def get_my_fund_dashboard():
 # Route to get all projects
 @fund_blueprint.route('/get_all_myprojects_can_apply_fund', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_myprojects_can_apply_fund():
     conn = get_db()
@@ -82,6 +84,7 @@ def get_all_myprojects_can_apply_fund():
 # Route to get wether a project reviewed or not
 @fund_blueprint.route('/check_a_project_fund_applied_or_not/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def check_a_project_fund_applied_or_not(project_id):
@@ -102,6 +105,7 @@ def check_a_project_fund_applied_or_not(project_id):
 # Route to get a specific project for fund self
 @fund_blueprint.route('/get_specific_project_for_fund_self/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def get_specific_project_for_fund_self(project_id):
     conn = get_db()
@@ -130,6 +134,7 @@ def get_specific_project_for_fund_self(project_id):
 # Route to create a new fund request for a project
 @fund_blueprint.route('/create_fund_request_for_specific_project', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def create_fund_request_for_specific_project():
     data = request.get_json()
@@ -148,6 +153,7 @@ def create_fund_request_for_specific_project():
 # Route to get a ProjectFund detail for a specific project
 @fund_blueprint.route('/get_fund_details_for_specific_project/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def get_fund_details_for_specific_project(project_id):
     conn = get_db()
@@ -166,6 +172,7 @@ def get_fund_details_for_specific_project(project_id):
 # Route to get all projects
 @fund_blueprint.route('/get_all_my_funded_projects', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_my_funded_projects():
     conn = get_db()
@@ -185,6 +192,7 @@ def get_all_my_funded_projects():
 # Route to get wether a project reviewed or not
 @fund_blueprint.route('/check_a_project_fund_confirmation_send_or_not/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def check_a_project_fund_confirmation_send_or_not(project_id):
@@ -206,6 +214,7 @@ def check_a_project_fund_confirmation_send_or_not(project_id):
 # Route to update a specific project fund recieved confirmation FundRecievedDone 0 = not Received , 1 = 1st Received
 @fund_blueprint.route('/update_confirm_fund_recieved/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_confirm_fund_recieved(project_id):
     conn = get_db()
@@ -221,6 +230,7 @@ def update_confirm_fund_recieved(project_id):
 # Route to get total number of all dashboard
 @fund_blueprint.route('/get_admin_fund_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_admin_fund_dashboard():
     conn = get_db()
@@ -257,6 +267,7 @@ def get_admin_fund_dashboard():
 # Route to get all projects
 @fund_blueprint.route('/get_admin_fund_queue_list', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_admin_fund_queue_list():
     conn = get_db()
@@ -276,6 +287,7 @@ def get_admin_fund_queue_list():
 # Route to get wether a project reviewed or not
 @fund_blueprint.route('/check_a_project_fund_send_or_not/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def check_a_project_fund_send_or_not(project_id):
@@ -296,6 +308,7 @@ def check_a_project_fund_send_or_not(project_id):
 # Route to update a specific project fund send FundSendDone 0 = not Received , 1 = 1st Received
 @fund_blueprint.route('/update_fund_send/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_fund_send(project_id):
     conn = get_db()
@@ -311,6 +324,7 @@ def update_fund_send(project_id):
 # Route to get all projects
 @fund_blueprint.route('/get_admin_fund_confirm_list', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_admin_fund_confirm_list():
     conn = get_db()

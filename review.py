@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db  # Assuming get_db is a local module providing database connection
 
 review_blueprint = Blueprint('review', __name__)
@@ -11,6 +11,7 @@ review_blueprint = Blueprint('review', __name__)
 # Route to create a new review for a project
 @review_blueprint.route('/set_reviewer_for_specific_project', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def set_reviewer_for_specific_project():
     data = request.get_json()
@@ -28,6 +29,7 @@ def set_reviewer_for_specific_project():
 # Route to get all revieweruserid for a specific project
 @review_blueprint.route('/get_revieweruserid_for_specific_project/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_revieweruserid_for_specific_project(project_id):
     conn = get_db()
@@ -43,6 +45,7 @@ def get_revieweruserid_for_specific_project(project_id):
 # Route to get total number of review dashboard
 @review_blueprint.route('/review_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def review_dashboard():
@@ -111,6 +114,7 @@ def review_dashboard():
 # Route to update a specific project review PiCanViewOrNot 0 means can not view 1 means can view
 @review_blueprint.route('/update_picanviewornot/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_picanviewornot(project_id):
     conn = get_db()
@@ -127,6 +131,7 @@ def update_picanviewornot(project_id):
 
 @review_blueprint.route('/get_all_projects_pi_can_view_review', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_projects_pi_can_view_review():
@@ -146,6 +151,7 @@ def get_all_projects_pi_can_view_review():
 # Route to get all projects have to review for current user
 @review_blueprint.route('/get_all_projects_have_to_review', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_projects_have_to_review():
@@ -175,6 +181,7 @@ def get_all_projects_have_to_review():
 # Route to get wether a project reviewed or not
 @review_blueprint.route('/check_a_project_reviewed_or_not/<int:project_id>/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def check_a_project_reviewed_or_not(project_id, user_id):
@@ -195,6 +202,7 @@ def check_a_project_reviewed_or_not(project_id, user_id):
 # Route to get all reviews for a specific project
 @review_blueprint.route('/get_reviews_for_specific_project/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_reviews_for_specific_project(project_id):
     conn = get_db()
@@ -210,6 +218,7 @@ def get_reviews_for_specific_project(project_id):
 
 @review_blueprint.route('/create_reviews_specific_project', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([2, 3, 4, 5])
 def create_reviews_specific_project():
     data = request.get_json()
@@ -227,6 +236,7 @@ def create_reviews_specific_project():
 # # Route to update a specific project review
 # @review_blueprint.route('/update_specific_project_review/<int:review_id>', methods=['PUT'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def update_specific_project_review(review_id):
 #     data = request.get_json()
@@ -243,6 +253,7 @@ def create_reviews_specific_project():
 # # Route to delete a specific project review
 # @review_blueprint.route('/delete_specific_project_review/<int:review_id>', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def delete_specific_project_review(review_id):
 #     conn = get_db()
@@ -257,6 +268,7 @@ def create_reviews_specific_project():
 # Route to get all reviews for a specific reviewer user
 @review_blueprint.route('/get_all_reviews_for_specific_reviewer', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_reviews_for_specific_reviewer():
     data = request.get_json()
@@ -273,6 +285,7 @@ def get_all_reviews_for_specific_reviewer():
 # # Route to delete all reviews for a specific project
 # @review_blueprint.route('/delete_all_reviews_for_specific_project/<int:project_id>', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def delete_all_reviews_for_specific_project(project_id):
 #     conn = get_db()
@@ -287,6 +300,7 @@ def get_all_reviews_for_specific_reviewer():
 # Route to get total number of review dashboard
 @review_blueprint.route('/review_panel_overview', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def review_panel_overview():
@@ -322,6 +336,7 @@ def review_panel_overview():
 # Route to get all projects have to review for current user
 @review_blueprint.route('/get_all_projects_have_to_set_reviewer', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_projects_have_to_set_reviewer():
@@ -340,6 +355,7 @@ def get_all_projects_have_to_set_reviewer():
 
 @review_blueprint.route('/get_all_projects_reviewer_given_review', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_all_projects_reviewer_given_review():
     conn = get_db()
@@ -358,6 +374,7 @@ def get_all_projects_reviewer_given_review():
 # Route to fetch all gantt for a specific project that need to be reviewed by assigned reviewer
 @review_blueprint.route('/get_review_project_gantt/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_review_project_gantt(project_id):
     conn = get_db()
@@ -385,6 +402,7 @@ def get_review_project_gantt(project_id):
 # Route to fetch all budget for a specific project that need to be reviewed by assigned reviewer
 @review_blueprint.route('/get_review_project_budget/<int:project_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_review_project_budget(project_id):
     conn = get_db()

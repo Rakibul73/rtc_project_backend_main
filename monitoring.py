@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db  # Assuming get_db is a local module providing database connection
 from dateutil import parser
 
@@ -12,6 +12,7 @@ monitoring_blueprint = Blueprint('monitoring', __name__)
 # Route to get total number of monitoring dashboard
 @monitoring_blueprint.route('/my_monitoring_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def my_monitoring_dashboard():
     conn = get_db()
@@ -57,6 +58,7 @@ def my_monitoring_dashboard():
 # Route to get all projects
 @monitoring_blueprint.route('/get_all_myprojects_can_send_monitoring_report', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_myprojects_can_send_monitoring_report():
     conn = get_db()
@@ -78,6 +80,7 @@ def get_all_myprojects_can_send_monitoring_report():
 # Route to create a new fund request for a project
 @monitoring_blueprint.route('/create_monitoring_request_for_specific_project', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def create_monitoring_request_for_specific_project():
     data = request.get_json()
@@ -96,6 +99,7 @@ def create_monitoring_request_for_specific_project():
 # Route to update project status & total points of specific project
 @monitoring_blueprint.route('/update_project_gantt_for_report/<int:projectMonitoringReportID>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_project_gantt_for_report(projectMonitoringReportID):
     data = request.get_json()
@@ -138,6 +142,7 @@ def update_project_gantt_for_report(projectMonitoringReportID):
 # Route to update budget of specific project
 @monitoring_blueprint.route('/update_project_budget_for_report/<int:projectMonitoringReportID>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_project_budget_for_report(projectMonitoringReportID):
     data = request.get_json()
@@ -173,6 +178,7 @@ def update_project_budget_for_report(projectMonitoringReportID):
 # Route to get all projects
 @monitoring_blueprint.route('/get_single_project_monitoring_history/<int:projectID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_single_project_monitoring_history(projectID):
     conn = get_db()
@@ -194,6 +200,7 @@ def get_single_project_monitoring_history(projectID):
 # Route to get a specific project for fund self
 @monitoring_blueprint.route('/get_specific_project_monitoring_report/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def get_specific_project_monitoring_report(monitoringReportID):
     conn = get_db()
@@ -214,6 +221,7 @@ def get_specific_project_monitoring_report(monitoringReportID):
 # Route to fetch all budget for a specific project
 @monitoring_blueprint.route('/get_self_project_gantt_history/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_gantt_history(monitoringReportID):
     conn = get_db()
@@ -232,6 +240,7 @@ def get_self_project_gantt_history(monitoringReportID):
 # Route to fetch all budget for a specific project
 @monitoring_blueprint.route('/get_self_project_budget_history/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_budget_history(monitoringReportID):
     conn = get_db()
@@ -249,6 +258,7 @@ def get_self_project_budget_history(monitoringReportID):
 
 @monitoring_blueprint.route('/list_monitoring_feedback_project_and_pi_can_see', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def list_monitoring_feedback_project_and_pi_can_see():
     conn = get_db()
@@ -283,6 +293,7 @@ def list_monitoring_feedback_project_and_pi_can_see():
 # Route to get total number of review dashboard
 @monitoring_blueprint.route('/monitoring_panel_overview', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin and supervisor can access this route
 def monitoring_panel_overview():
     conn = get_db()
@@ -311,6 +322,7 @@ def monitoring_panel_overview():
 
 @monitoring_blueprint.route('/get_all_monitoring_report_need_to_assign_committee', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_monitoring_report_need_to_assign_committee():
@@ -326,6 +338,7 @@ def get_all_monitoring_report_need_to_assign_committee():
 
 @monitoring_blueprint.route('/get_committeeuserid_for_specific_monitoring_report/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_committeeuserid_for_specific_monitoring_report(monitoringReportID):
     conn = get_db()
@@ -340,6 +353,7 @@ def get_committeeuserid_for_specific_monitoring_report(monitoringReportID):
 
 @monitoring_blueprint.route('/set_monitoring_committee_for_specific_project_monitoring_report', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def set_reviewer_for_specific_project():
     data = request.get_json()
@@ -357,6 +371,7 @@ def set_reviewer_for_specific_project():
 
 @monitoring_blueprint.route('/get_all_projects_have_to_monitor', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_projects_have_to_monitor():
@@ -376,6 +391,7 @@ def get_all_projects_have_to_monitor():
 
 @monitoring_blueprint.route('/check_a_monitoring_report_feedback_given_or_not/<int:monitoringReportID>/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def check_a_monitoring_report_feedback_given_or_not(monitoringReportID, user_id):
@@ -395,6 +411,7 @@ def check_a_monitoring_report_feedback_given_or_not(monitoringReportID, user_id)
 
 @monitoring_blueprint.route('/get_all_monitoring_report_already_assigned_committee', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_monitoring_report_already_assigned_committee():
@@ -411,6 +428,7 @@ def get_all_monitoring_report_already_assigned_committee():
 # Route to get all reviews for a specific reviewer user
 @monitoring_blueprint.route('/get_all_feedback_for_specific_monitoring_committee_and_specific_report', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_feedback_for_specific_monitoring_committee_and_specific_report():
     data = request.get_json()
@@ -427,6 +445,7 @@ def get_all_feedback_for_specific_monitoring_committee_and_specific_report():
 # Route to create a new review for a project
 @monitoring_blueprint.route('/create_feedback_specific_monitoring_report', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([2, 3, 4, 5])
 def create_feedback_specific_monitoring_report():
     data = request.get_json()
@@ -446,6 +465,7 @@ def create_feedback_specific_monitoring_report():
 # Route to get all projects reviewer given review
 @monitoring_blueprint.route('/get_all_monitoring_report_committee_has_given_feedback', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_all_monitoring_report_committee_has_given_feedback():
     conn = get_db()
@@ -464,6 +484,7 @@ def get_all_monitoring_report_committee_has_given_feedback():
 # Route to get all reviews for a specific project
 @monitoring_blueprint.route('/get_feedback_for_specific_monitoring_report/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_feedback_for_specific_monitoring_report(monitoringReportID):
     conn = get_db()
@@ -479,6 +500,7 @@ def get_feedback_for_specific_monitoring_report(monitoringReportID):
 # Route to update a specific project review PiCanViewOrNot 0 means can not view 1 means can view
 @monitoring_blueprint.route('/update_picanviewornot_in_project_monitoring_feedback/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_picanviewornot_in_project_monitoring_feedback(monitoringReportID):
     conn = get_db()
@@ -493,6 +515,7 @@ def update_picanviewornot_in_project_monitoring_feedback(monitoringReportID):
 
 @monitoring_blueprint.route('/get_all_my_monitoring_report_history', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_all_my_monitoring_report_history():

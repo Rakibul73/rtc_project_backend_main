@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db  # local module
 
 upload_blueprint = Blueprint('upload', __name__)
@@ -9,6 +9,7 @@ upload_blueprint = Blueprint('upload', __name__)
 
 @upload_blueprint.route('/seal/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_seal():
     if 'file' not in request.files:
@@ -28,6 +29,7 @@ def upload_seal():
 
 @upload_blueprint.route('/signature/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_signature():
     if 'file' not in request.files:
@@ -48,6 +50,7 @@ def upload_signature():
 
 @upload_blueprint.route('/profile-pic/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_profile_pic():
     if 'file' not in request.files:
@@ -68,6 +71,7 @@ def upload_profile_pic():
 
 @upload_blueprint.route('/methodology/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_methodology():
     if 'file' not in request.files:
@@ -88,6 +92,7 @@ def upload_methodology():
 
 @upload_blueprint.route('/nid/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_nid():
     if 'file' not in request.files:
@@ -107,6 +112,7 @@ def upload_nid():
 
 @upload_blueprint.route('/project_softcopy/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_project_softcopy():
     if 'file' not in request.files:
@@ -127,6 +133,7 @@ def upload_project_softcopy():
 
 @upload_blueprint.route('/notice/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def upload_notice():
     if 'file' not in request.files:
@@ -146,6 +153,7 @@ def upload_notice():
 
 @upload_blueprint.route('/monitoring_report_feedback/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_monitoring_report_feedback():
     if 'pdf' not in request.files:
@@ -175,6 +183,7 @@ def upload_monitoring_report_feedback():
 
 @upload_blueprint.route('/monitoring_report/upload', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def upload_monitoring_report():
     if 'pdf' not in request.files:

@@ -184,7 +184,8 @@ def login_user():
             # Check if the role ID in the request matches the role ID in the database
             if 'RoleID' in data and data['RoleID'] == isUserExist[2]:
                 # create an access token with the user ID and return it
-                access_token = create_access_token(identity=isUserExist[0])
+                access_token = create_access_token(identity=isUserExist[0], additional_claims={'origin': request.headers.get('Origin')})
+
                 cursor.close()
                 conn.close()
                 return jsonify({'message': 'Login successful', 'user_id': isUserExist[0], 'statuscode': 200, 'access_token': access_token}), 200

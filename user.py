@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 import smtplib
 from flask import render_template, request, jsonify, Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db  # local module
 
 
@@ -16,6 +16,7 @@ user_blueprint = Blueprint('user', __name__)
 # # Route to get total number of users
 # @user_blueprint.route('/get_total_number_of_users', methods=['GET'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])  # Only admin and supervisor can access this route
 # def get_total_number_of_users():
 #     conn = get_db()
@@ -31,6 +32,7 @@ user_blueprint = Blueprint('user', __name__)
 # Route to get all pending users
 @user_blueprint.route('/get_all_pending_users', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin and supervisor can access this route
 def get_all_pending_users():
     conn = get_db()
@@ -45,6 +47,7 @@ def get_all_pending_users():
 # Route to get a specific pending user
 @user_blueprint.route('/get_specific_pending_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def get_specific_pending_user(user_id):
     conn = get_db()
@@ -63,6 +66,7 @@ def get_specific_pending_user(user_id):
 # Route to update a specific pending user
 @user_blueprint.route('/update_pending_user/<int:user_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_pending_user(user_id):
     data = request.get_json()
@@ -83,6 +87,7 @@ def update_pending_user(user_id):
 
 @user_blueprint.route('/get_all_users_minimum_user_management_overview', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin can access this route
 def get_all_users():
     conn = get_db()
@@ -98,6 +103,7 @@ def get_all_users():
 # # Route to create a new user / register
 # @user_blueprint.route('/create_users', methods=['POST'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1])  # Only admin can access this route
 # def create_user():
 #     data = request.get_json()
@@ -115,6 +121,7 @@ def get_all_users():
 # Route to get a specific user
 @user_blueprint.route('/get_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_specific_user(user_id):
     conn = get_db()
@@ -134,6 +141,7 @@ def get_specific_user(user_id):
 
 @user_blueprint.route('/update_user/<int:user_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def update_user(user_id):
     data = request.get_json()
@@ -154,6 +162,7 @@ def update_user(user_id):
 
 @user_blueprint.route('/delete_temp_user/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def delete_temp_user(user_id):
     conn = get_db()
@@ -168,6 +177,7 @@ def delete_temp_user(user_id):
 # # Route to delete a user
 # @user_blueprint.route('/delete_user/<int:user_id>', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1])
 # def delete_user(user_id):
 #     conn = get_db()
@@ -183,6 +193,7 @@ def delete_temp_user(user_id):
 # Route to get user role
 @user_blueprint.route('/get_user_name_of_specific_user/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_user_name_of_specific_user(user_id):
     conn = get_db()
@@ -200,6 +211,7 @@ def get_user_name_of_specific_user(user_id):
 # Route to get all user names and IDs excluding users with the student role
 @user_blueprint.route('/get_all_users_except_students', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_all_users_except_students():
     conn = get_db()
@@ -216,6 +228,7 @@ def get_all_users_except_students():
 # Route to get all user names and IDs only with the student role
 @user_blueprint.route('/get_only_student_users', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_only_student_users():
     conn = get_db()
@@ -270,6 +283,7 @@ def send_email(email, username, roleid):
 # Route to Approve a Temp user means to move it from TempUsers to Users
 @user_blueprint.route('/approve_temp_user/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def approve_temp_user(user_id):
     conn = get_db()
@@ -298,6 +312,7 @@ def approve_temp_user(user_id):
 # Route to get total number of all dashboard
 @user_blueprint.route('/user_management_overview', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin and supervisor can access this route
 def user_management_overview():
     conn = get_db()
@@ -354,6 +369,7 @@ def user_management_overview():
 # Route to get a specific user
 @user_blueprint.route('/get_specific_user_minimum/<int:user_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_specific_user_minimum(user_id):
     conn = get_db()
@@ -373,6 +389,7 @@ def get_specific_user_minimum(user_id):
 # Route to update a specific pending user
 @user_blueprint.route('/update_user_admin_mode/<int:user_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])
 def update_user_admin_mode(user_id):
     data = request.get_json()

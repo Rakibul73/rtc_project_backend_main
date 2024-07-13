@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db
 
 notification_blueprint = Blueprint('notification', __name__)
@@ -10,6 +10,7 @@ notification_blueprint = Blueprint('notification', __name__)
 
 @notification_blueprint.route('/request_project_deletion_to_admin/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([2, 3, 4, 5])  # Only teachers can request project deletion
 def request_project_deletion_to_admin(project_id):
     conn = get_db()
@@ -61,6 +62,7 @@ def extract_ids_from_notification(notification_message):
 
 @notification_blueprint.route('/delete_project_request/<int:notification_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin can delete project requests
 def delete_project_request(notification_id):
     conn = get_db()
@@ -123,6 +125,7 @@ def delete_project_request(notification_id):
 #  Route for get self notification in  descending order based on timestamp
 @notification_blueprint.route('/get_self_notification', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_self_notification():
@@ -140,6 +143,7 @@ def get_self_notification():
 
 @notification_blueprint.route('/mark_as_unread/<int:notification_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])  # Only teachers can request project deletion
 def mark_as_unread(notification_id):
     conn = get_db()
@@ -155,6 +159,7 @@ def mark_as_unread(notification_id):
 
 @notification_blueprint.route('/mark_as_read/<int:notification_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])  # Only teachers can request project deletion
 def mark_as_read(notification_id):
     conn = get_db()
@@ -171,6 +176,7 @@ def mark_as_read(notification_id):
 
 @notification_blueprint.route('/get_all_notification', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1])  # Only admin and supervisor can access this route
 def get_all_notification():
     conn = get_db()
@@ -184,6 +190,7 @@ def get_all_notification():
 
 @notification_blueprint.route('/mark_all_as_read', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def mark_all_as_read():
     conn = get_db()
@@ -202,6 +209,7 @@ def mark_all_as_read():
 # Route to get a specific notification
 @notification_blueprint.route('/get_specific_notification/<int:notification_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4])
 def get_specific_notification(notification_id):
     conn = get_db()

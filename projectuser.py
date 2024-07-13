@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from auth_utils import role_required
+from auth_utils import origin_verifier, role_required
 from db import get_db  # local module
 
 
@@ -13,6 +13,7 @@ projectuser_blueprint = Blueprint('projectuser', __name__)
 
 @projectuser_blueprint.route('/get_total_number_of_all_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 # Only admin and supervisor can access this route
 @role_required([1, 2, 3, 4, 5])
 def get_total_number_of_all_dashboard():
@@ -76,6 +77,7 @@ def get_total_number_of_all_dashboard():
 # Route to get self project dashboard
 @projectuser_blueprint.route('/get_self_project_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
+@origin_verifier
 @role_required([1, 2, 3, 4, 5])
 def get_self_project_dashboard():
     conn = get_db()
@@ -135,6 +137,7 @@ def get_self_project_dashboard():
 # # Route to get all projectID and ProjectTitle for specific userID from FROM projectlistwithuserid
 # @projectuser_blueprint.route('/get_all_projects_for_specific_user/<int:user_id>', methods=['GET'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def get_all_projects_for_specific_user(user_id):
 #     conn = get_db()
@@ -149,6 +152,7 @@ def get_self_project_dashboard():
 # # Route to get a specific project with userID
 # @projectuser_blueprint.route('/get_specific_project_for_specific_user/<int:project_id>/<int:user_id>', methods=['GET'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def get_specific_project_for_specific_user(project_id, user_id):
 #     conn = get_db()
@@ -166,6 +170,7 @@ def get_self_project_dashboard():
 # # Route to delete a project with user ID
 # @projectuser_blueprint.route('/delete_project_with_user/<int:project_id>/<int:user_id>', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def delete_project_with_user(project_id, user_id):
 #     conn = get_db()
@@ -181,6 +186,7 @@ def get_self_project_dashboard():
 # # Route to delete all projects for a specific user
 # @projectuser_blueprint.route('/delete_projects_for_specific_user/<int:user_id>', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
+# @origin_verifier
 # @role_required([1, 2 , 3 , 4 , 5])
 # def delete_projects_for_specific_user(user_id):
 #     conn = get_db()
