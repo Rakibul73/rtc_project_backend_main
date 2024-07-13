@@ -23,7 +23,7 @@ from db import get_db
 from mysql.connector import Error
 
 app = Flask(__name__)
-CORS(app)  # Add this line
+CORS(app, resources={r"/*": {"origins": ["https://pstu-rtc.netlify.app", "https://anotherdomain.com"]}})
 Compress(app)
 
 
