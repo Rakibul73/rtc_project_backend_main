@@ -1,3 +1,4 @@
+import os
 from flask import render_template, request, jsonify, Blueprint
 from db import get_db  # local module
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,8 +16,8 @@ auth_blueprint = Blueprint('auth', __name__)
 
 # Function to send email
 def send_email(email, reset_otp):
-    sender_email = "raqib.185.17@gmail.com"  # Replace with Admin email address
-    password = "ozct kzkj dgje aufs"  # Replace with Admin email password
+    sender_email = os.environ.get('SENDER_EMAIL')  # Replace with Admin email address
+    password = os.environ.get('SENDER_EMAIL_APP_PASSWORD')  # Replace with Admin email password
     # To get this gmail password, Go to the App passwords of your Google account,
 
     # Render the HTML template with the reset URL
@@ -38,9 +39,8 @@ def send_email(email, reset_otp):
     server.sendmail(sender_email, email, text)
     server.quit()
 
+
 # Function to generate random string
-
-
 def generate_token(length=10):
     letters = string.ascii_letters + string.digits
     return ''.join(random.choice(letters) for _ in range(length))
@@ -161,9 +161,8 @@ def register_user():
     elif isEmailExist is not None:
         return jsonify({'message': 'Email = ' + email + ' already exists', 'statuscode': 409}), 409
 
+
 # Route for user login
-
-
 @auth_blueprint.route('/login', methods=['POST'])
 def login_user():
     data = request.get_json()

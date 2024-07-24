@@ -9,13 +9,10 @@ projectuser_blueprint = Blueprint('projectuser', __name__)
 # ==========================================  Project_User Related Routes START =============================
 
 # Route to get total number of all dashboard
-
-
 @projectuser_blueprint.route('/get_total_number_of_all_dashboard', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier
-# Only admin and supervisor can access this route
-@role_required([1, 2, 3, 4, 5])
+@role_required([1, 2, 3, 4, 5])  # Only admin and supervisor can access this route
 def get_total_number_of_all_dashboard():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)

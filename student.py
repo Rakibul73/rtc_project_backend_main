@@ -22,9 +22,8 @@ def get_all_students():
     conn.close()
     return jsonify({'students': students})
 
+
 # Route to create a new student
-
-
 @student_blueprint.route('/create_student', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier
@@ -42,9 +41,8 @@ def create_student():
     conn.close()
     return jsonify({'message': 'Student created successfully'}), 201
 
+
 # Route to get a specific student
-
-
 @student_blueprint.route('/get_specific_student/<int:student_id>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier

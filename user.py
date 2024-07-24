@@ -1,5 +1,6 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
 import smtplib
 from flask import render_template, request, jsonify, Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
@@ -82,9 +83,8 @@ def update_pending_user(user_id):
     conn.close()
     return jsonify({'message': 'TempUser updated successfully', 'statuscode': 200}), 200
 
+
 # Route to get all users
-
-
 @user_blueprint.route('/get_all_users_minimum_user_management_overview', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier
@@ -136,9 +136,8 @@ def get_specific_user(user_id):
     else:
         return jsonify({'message': 'User not found'}), 404
 
+
 # Route to update a self user
-
-
 @user_blueprint.route('/update_user/<int:user_id>', methods=['PUT'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier
@@ -157,9 +156,8 @@ def update_user(user_id):
     conn.close()
     return jsonify({'message': 'User updated successfully', 'statuscode': 200}), 200
 
+
 # Route to delete a Temp user
-
-
 @user_blueprint.route('/delete_temp_user/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier
@@ -244,8 +242,8 @@ def get_only_student_users():
 
 # Function to send email
 def send_email(email, username, roleid):
-    sender_email = "raqib.185.17@gmail.com"  # Replace with Admin email address
-    password = "ozct kzkj dgje aufs"  # Replace with Admin email password
+    sender_email = os.environ.get('SENDER_EMAIL')  # Replace with Admin email address
+    password = os.environ.get('SENDER_EMAIL_APP_PASSWORD')  # Replace with Admin email password
     # To get this gmail password, Go to the App passwords of your Google account,
 
     rolename = "Admin"

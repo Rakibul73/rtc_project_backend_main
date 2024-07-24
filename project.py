@@ -145,7 +145,7 @@ def get_specific_project_title(project_id):
 # # Route to update all fields of a project only if user is admin
 # @project_blueprint.route('/update_project_admin/<int:project_id>', methods=['PUT'])
 # @jwt_required()  # Protect the route with JWT
-@origin_verifier
+# @origin_verifier
 # @role_required([1])
 # def update_project_admin(project_id):
 #     data = request.get_json()
@@ -197,7 +197,7 @@ def delete_project(project_id):
 # # Route to delete multiple projects by IDs
 # @project_blueprint.route('/projects/delete_multiple_projects', methods=['DELETE'])
 # @jwt_required()  # Protect the route with JWT
-@origin_verifier
+# @origin_verifier
 # @role_required([1])
 # def delete_multiple_projects():
 #     try:
@@ -375,9 +375,9 @@ def create_project_gantt(project_id):
 
     return jsonify({'message': 'Project Gantt created successfully', 'statuscode': 201}), 201
 
+
+
 # Route to create project budget for a specific project
-
-
 @project_blueprint.route('/create_project_budget/<int:project_id>', methods=['POST'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier

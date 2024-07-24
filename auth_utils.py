@@ -20,8 +20,6 @@ def role_required(allowed_roles):
     return decorator
 
 # Replace this function with your logic to get the role ID from the database
-
-
 def get_role_id_from_database(user_id):
     conn = get_db()
     cursor = conn.cursor()

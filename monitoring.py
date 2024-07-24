@@ -339,7 +339,7 @@ def get_all_monitoring_report_need_to_assign_committee():
 @monitoring_blueprint.route('/get_committeeuserid_for_specific_monitoring_report/<int:monitoringReportID>', methods=['GET'])
 @jwt_required()  # Protect the route with JWT
 @origin_verifier
-@role_required([1])
+@role_required([1, 2 , 3 , 4])
 def get_committeeuserid_for_specific_monitoring_report(monitoringReportID):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
