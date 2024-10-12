@@ -148,9 +148,9 @@ def register_user():
         password = data.get('password')
         hashed_password = generate_password_hash(
             password, method='pbkdf2:sha256')
-        insert_query = "INSERT INTO TempUsers (Username, Password, Email , FirstName , LastName , Phone ,  RoleID) VALUES (%s, %s , %s , %s , %s , %s , %s)"
+        insert_query = "INSERT INTO TempUsers (Username, Password, Email , FirstName , LastName , Phone ,  RoleID, FacultyName) VALUES (%s, %s , %s , %s , %s , %s , %s, %s)"
         user_data = (data['username'], hashed_password, data['email'],
-                     data["FirstName"], data["LastName"], data["Phone"], data["RoleID"])
+                     data["FirstName"], data["LastName"], data["Phone"], data["RoleID"], data["FacultyName"])
         cursor.execute(insert_query, user_data)
         conn.commit()
         cursor.close()
