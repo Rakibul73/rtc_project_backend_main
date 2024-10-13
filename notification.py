@@ -21,7 +21,7 @@ def request_project_deletion_to_admin(project_id):
 
     # Check if the project exists and is current user is the creator
     cursor.execute("SELECT * FROM Projects WHERE ProjectID = %s AND CreatorUserID = %s",
-                   (project_id, current_user_id))
+                    (project_id, current_user_id))
     project = cursor.fetchone()
     if project is None:
         cursor.close()
@@ -33,11 +33,11 @@ def request_project_deletion_to_admin(project_id):
     reason = data.get('reasonForDelete', '')
     print(reason)
 
-    # Create a notification for admin
+    # Create a notification for admin by putting null in ReceiverUserID
     try:
         notification_msg = f"ProjectDeletionRequest: Teacher ID: {current_user_id} requests deletion of Project ID: {project_id} for reason: {reason}"
-        cursor.execute("INSERT INTO Notification (SenderUserID, ReceiverUserID, Message , IsRead) VALUES (%s, %s, %s , %s)",
-                       (current_user_id, 1, notification_msg, False))
+        cursor.execute("INSERT INTO Notification (SenderUserID, Message , IsRead) VALUES (%s, %s, %s)",
+                        (current_user_id, notification_msg, False))
         conn.commit()
     except Exception as e:
         cursor.close()
