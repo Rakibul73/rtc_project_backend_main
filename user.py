@@ -293,9 +293,9 @@ def approve_temp_user(user_id):
     print(TempUser[2])
     # save it in a Users table and delete it from TempUsers table
     if TempUser:
-        insert_query = "INSERT INTO Users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID , FacultyName) VALUES (%s, %s , %s , %s , %s , %s , %s , %s)"
+        insert_query = "INSERT INTO Users (Username, Password, Email , FirstName , LastName , Phone ,  RoleID , FacultyName, ProfilePicLocation, SignatureLocation, SealLocation, NidLocation) VALUES (%s, %s , %s , %s , %s , %s , %s , %s, %s, %s, %s, %s)"
         user_data = (TempUser[2], TempUser[3], TempUser[6], TempUser[4],
-                     TempUser[5], TempUser[7], TempUser[1], TempUser[8])
+                     TempUser[5], TempUser[7], TempUser[1], TempUser[8], "defaultprofilepic.png", "defaultsignature.png", "defaultseal.png", "defaultnid.png")
         cursor.execute(insert_query, user_data)
 
     delete_query = "DELETE FROM TempUsers WHERE Userid = %s"
