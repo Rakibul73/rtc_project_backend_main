@@ -69,17 +69,24 @@ def delete_project_request(notification_id):
     cursor = conn.cursor()
 
     # Get the current user's ID from JWT (admin)
-    admin_id = get_jwt_identity()
+    # admin_id = get_jwt_identity()
 
-    # Check if the notification exists and if the admin has access to it
-    cursor.execute("SELECT Message FROM Notification WHERE NotificationID = %s AND ReceiverUserID = %s",
-                   (notification_id, admin_id))
-    notificationMessage = cursor.fetchone()
+    # Check if the notification exists
+    cursor.execute("SELECT Message FROM Notification WHERE NotificationID = %s",
+                   (notification_id,))
+    notificationMessage = cursor.fetchone()[0]
+    cursor.execute("SELECT IsDeleted FROM Notification WHERE NotificationID = %s",
+                   (notification_id,))
+    isDeleted = cursor.fetchone()[0]
     if notificationMessage is None:
         cursor.close()
         conn.close()
-        return jsonify({'error': 'Notification not found or unauthorized access', 'statuscode': 404}), 404
-
+        return jsonify({'error': 'Notification not found', 'statuscode': 404}), 404
+    if isDeleted == 1:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Project already deleted', 'statuscode': 200}), 200
+    print(notificationMessage)
     # Extract project and sender IDs from the notification message
     sender_id, project_id = extract_ids_from_notification(notificationMessage)
     print(sender_id, project_id)
@@ -91,25 +98,70 @@ def delete_project_request(notification_id):
     if project is None:
         cursor.close()
         conn.close()
-        return jsonify({'error': 'Project not found or unauthorized deletion', 'statuscode': 404}), 404
+        return jsonify({'error': 'Project not found or not created by the sender', 'statuscode': 404}), 404
 
     # Delete the project
     try:
         # Remove from ActivityPlan table based on ProjectID
-        delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
-        cursor.execute(delete_activity_query, (project_id,))
-        # Remove from BudgetPlan table based on ProjectID
-        delete_activity_query = "DELETE FROM BudgetPlan WHERE ProjectID = %s"
-        cursor.execute(delete_activity_query, (project_id,))
-        # Remove from Review table based on ProjectID
-        delete_review_query = "DELETE FROM Review WHERE ProjectID = %s"
-        cursor.execute(delete_review_query, (project_id,))
-        # Remove from ProjectListWithUserID table based on ProjectID
-        delete_project_list_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
-        cursor.execute(delete_project_list_query, (project_id,))
-        # Remove from Projects table based on ProjectID
-        delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
-        cursor.execute(delete_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ActivityPlan WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ActivityPlanHistory WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ActivityPlanOriginal WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # # Remove from BudgetPlan table based on ProjectID
+        # delete_activity_query = "DELETE FROM BudgetPlan WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM BudgetPlanHistory WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM BudgetPlanOriginal WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ProjectAdvanceFund WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ProjectFund WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ProjectListWithReviewerID WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ProjectMonitoringFeedback WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM ProjectMonitoringReport WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        # delete_activity_query = "DELETE FROM Review WHERE ProjectID = %s"
+        # cursor.execute(delete_activity_query, (project_id,))
+        
+        
+        
+        
+        
+        # # Remove from Projects table based on ProjectID
+        # delete_query = "DELETE FROM Projects WHERE ProjectID = %s"
+        # cursor.execute(delete_query, (project_id,))
+        
+        delete_statements = [
+            "DELETE FROM ProjectMonitoringReportBudget WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID = %s)",
+            "DELETE FROM ProjectMonitoringReportActivity WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID = %s)",
+            "DELETE FROM ProjectReportListWithMonitoringCommitteeID WHERE ProjectMonitoringReportID IN (SELECT ProjectMonitoringReportID FROM ProjectMonitoringReport WHERE ProjectID = %s)",
+            "DELETE FROM ProjectMonitoringFeedback WHERE ProjectID = %s",
+            "DELETE FROM ProjectMonitoringReport WHERE ProjectID = %s",
+            "DELETE FROM Review WHERE ProjectID = %s",
+            "DELETE FROM projectlistwithreviewerID WHERE ProjectID = %s",
+            "DELETE FROM ProjectListWithUserID WHERE ProjectID = %s",
+            "DELETE FROM ProjectFund WHERE ProjectID = %s",
+            "DELETE FROM ProjectAdvanceFund WHERE ProjectID = %s",
+            "DELETE FROM BudgetPlanOriginal WHERE ProjectID = %s",
+            "DELETE FROM BudgetPlanHistory WHERE ProjectID = %s",
+            "DELETE FROM BudgetPlan WHERE ProjectID = %s",
+            "DELETE FROM ActivityPlanOriginal WHERE ProjectID = %s",
+            "DELETE FROM ActivityPlanHistory WHERE ProjectID = %s",
+            "DELETE FROM ActivityPlan WHERE ProjectID = %s",
+            "DELETE FROM Projects WHERE ProjectID = %s"
+        ]
+
+        # Execute each delete statement
+        for statement in delete_statements:
+            cursor.execute(statement, (project_id,))
 
         conn.commit()
     except Exception as e:
@@ -117,6 +169,9 @@ def delete_project_request(notification_id):
         conn.close()
         return jsonify({'error': str(e), 'statuscode': 500}), 500
 
+    cursor.execute("UPDATE Notification SET IsDeleted = 1 WHERE NotificationID = %s", (notification_id,))
+    conn.commit()
+    
     cursor.close()
     conn.close()
     return jsonify({'message': 'Project with id ' + str(project_id) + ' deleted successfully', 'statuscode': 200}), 200
