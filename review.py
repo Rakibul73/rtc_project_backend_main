@@ -75,6 +75,7 @@ def review_dashboard():
     if len(user_projects) == 0:
         review_queue = {'review_queue': 0}
         review_done = {'review_done': 0}
+        my_total_project = {'my_total_project': 0}
     else:
         print("Count how many of the user's projects are added in the review table")
         # Count how many of the user's projects are added in the review table
